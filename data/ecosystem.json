@@ -1,0 +1,7 @@
+{
+  "_DEPRECATED": true,
+  "_note": "This file was a second copy of the dataset and had already drifted (65 orgs vs 78) within a day. A second copy is the thing CLAUDE.md most explicitly forbids.",
+  "_canonical": "prototype/data.js",
+  "_ifYouNeedJson": "Generate it from data.js at the point of use. Do not check a copy back in.",
+  "_safeToDelete": true
+}

@@ -1,0 +1,95 @@
+# 03 — Tech spec
+
+## The direct answers to "do we have to build this from scratch?"
+
+**No.** Constellation-style 3D graph navigation is a solved, off-the-shelf
+component. You are not writing a renderer, a physics engine, or camera
+controls. The library does force layout in 3D, mouse picking, hover, click,
+camera fly-to with easing, curved edges, and animated particles along edges.
+
+Realistic budget for the 3D layer: **6–10 hours**, including learning it.
+
+## The options, and why we picked what we picked
+
+| Option | What it is | Good for | Why not / why yes |
+|---|---|---|---|
+| **[3d-force-graph](https://github.com/vasturiano/3d-force-graph)** v1.80 | three.js + d3-force-3d, one script tag, no build | Exactly our case: <5k nodes, 3D, click-to-fly | **Chosen.** Zero build step. Every P0 interaction is a config option. Bundles its own three.js so there's one renderer, not two. |
+| [react-force-graph](https://github.com/vasturiano/react-force-graph) | Same engine, React bindings | If the app is already React | Adds a build pipeline and npm for no gain here. Would revisit only if we add routing and many views. |
+| [Cosmograph](https://cosmograph.app/) | GPU-accelerated graph layout | 100k+ nodes | Built for scale we don't have, and is primarily 2D. Wrong tool. |
+| [Sigma.js](https://www.sigmajs.org/) | Mature 2D WebGL graphs | Large 2D networks, good defaults | 2D only. This is our **fallback** if 3D tests badly with users. |
+| [deck.gl](https://deck.gl/) | Layered GPU viz, geospatial roots | Data on maps, huge point clouds | Overkill; the ecosystem isn't geographic. |
+| Raw [three.js](https://threejs.org/) | The renderer underneath | Fully custom scenes, shaders, bloom | Only if you need a look the library can't express. You'd re-implement picking, layout, and camera easing — that's the "from scratch" path, and it's 40+ hours. |
+| d3-force + SVG | 2D, no WebGL | Maximum compatibility, print/export | The safe boring option. Keep it in your pocket. |
+
+## Architecture
+
+```
+prototype/index.html      one file, three layers stacked by z-index
+├── z0  <canvas id="stars">   2D canvas starfield  (plain Canvas API)
+├── z0  <div id="wash">       CSS radial-gradient nebula
+├── z1  <div id="graph">      3d-force-graph's WebGL canvas, transparent bg
+└── z3+ .hud / #detail        plain DOM: title, search, legend, detail panel
+```
+
+Two decisions in there worth understanding, because they're the kind of thing
+that sinks a first project:
+
+**1. The starfield is 2D canvas, not three.js.** The obvious move is to add
+`THREE.Points` to the graph's scene. That requires a global `THREE`, which
+means a second copy of three.js on the page — and two copies break
+`instanceof` checks in ways that produce blank screens and no error message.
+Recent three.js versions also dropped their UMD build, so the naive script tag
+doesn't work anymore. A 2D canvas behind a transparent WebGL canvas gets the
+same look in 30 lines with zero risk, and the parallax-free starfield actually
+reads *better* because it doesn't rotate with the graph.
+
+**2. Data is a script, not a fetch.** `fetch('data.json')` fails under `file://`
+because of CORS. Since a P0 requirement is "opens by double-clicking the file,"
+the data has to arrive as JavaScript. So the canonical dataset lives in
+`prototype/data.js` as `window.AD = {...}` and both views pull it in with a
+plain `<script src="data.js">` — script tags are not subject to the CORS rule
+that blocks `fetch`.
+
+This is better than the alternative we first reached for (inlining the data
+into each HTML file), because two views over one dataset must not have two
+copies of it. We briefly had both, and they drifted within a day.
+
+## Defensive detail
+
+The graph is constructed through a wrapper:
+
+```js
+function makeGraph(el) {
+  try { return new ForceGraph3D(el); }      // v1.7x+
+  catch (e) { return ForceGraph3D()(el); }  // older builds
+}
+```
+
+The library changed its constructor style mid-life and most tutorials online
+show the old form. Supporting both means a CDN version bump can't silently
+blank the page. This is the general pattern: **when you pin a CDN dependency,
+pin the version AND handle the API you might get anyway.**
+
+## Performance
+
+At 65 nodes / 233 edges this is nowhere near a limit. Numbers to know:
+
+- Comfortable: up to ~2,000 nodes with `nodeResolution` at 14.
+- Needs `nodeResolution: 6–8` and no particles: ~5,000 nodes.
+- Beyond that, switch to Cosmograph or instanced meshes.
+
+Do not optimize before you're at 500 nodes.
+
+## Deployment
+
+Static files. Pick one, all free at our scale:
+
+| Host | Setup | Free tier |
+|---|---|---|
+| **Cloudflare Pages** | Drag folder onto dashboard, or connect GitHub | Unlimited requests, 500 builds/mo |
+| Netlify | Drag folder onto dashboard | 100 GB bandwidth/mo |
+| Vercel | Connect GitHub | 100 GB bandwidth/mo |
+| GitHub Pages | Push to `gh-pages` branch | 100 GB/mo, 1 GB repo |
+
+Custom domain ~$12/yr. No server means nothing to patch, nothing to pay for,
+and nothing to take down at 2am.

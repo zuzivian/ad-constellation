@@ -1,0 +1,5 @@
+# Working draft shared by link with the GSB Aerospace interest group.
+# Coverage percentages and risk ratings are analyst estimates, not published
+# statistics. Not for indexing while in this state.
+User-agent: *
+Disallow: /

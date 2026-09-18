@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>A&amp;D Value Chain — coverage &amp; chokepoints</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+<meta name="theme-color" content="#05070e" />
+<meta name="description" content="Ten segments of the US aerospace &amp; defense value chain: domestic coverage, chokepoints, players and unbuilt opportunities. Working draft." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="A&amp;D Value Chain — coverage &amp; chokepoints" />
+<meta property="og:description" content="Ten segments of the US aerospace &amp; defense value chain: domestic coverage, chokepoints, players and unbuilt opportunities. Working draft." />
+<meta name="twitter:card" content="summary" />
+<style>
+  :root {
+    --bg: #05070e;
+    --ink: #e8ecf8;
+    --dim: #8b95b2;
+    --dimmer: #5d6684;
+    --edge: #1c2232;
+    --edge2: #2a3346;
+    --panel: #0a0e1a;
+    --crit: #ff4d5e;
+    --high: #ff9d3d;
+    --med:  #ffd93d;
+    --low:  #4ade80;
+    --inst: #b388ff;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Inter, sans-serif;
+    font-size: 14px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased; }
+
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 0 28px 90px; }
+  body.adfb-ribbon-on { padding-top: var(--adfb-top, 0px); }
+
+  /* ── top bar ── */
+  nav { position: sticky; top: var(--adfb-top, 0px); z-index: 20; background: rgba(5,7,14,.93);
+    backdrop-filter: blur(12px); border-bottom: 1px solid var(--edge); }
+  .nav-in { max-width: 1320px; margin: 0 auto; padding: 13px 28px;
+    display: flex; align-items: center; gap: 22px; }
+  .brand { font-size: 12px; font-weight: 640; letter-spacing: .16em;
+    text-transform: uppercase; }
+  .views { display: flex; gap: 3px; margin-left: auto;
+    background: #0b0f1c; border: 1px solid var(--edge); border-radius: 9px; padding: 3px; }
+  .views a { padding: 6px 15px; border-radius: 6px; font-size: 12.5px;
+    color: var(--dim); text-decoration: none; }
+  .views a:hover { color: var(--ink); }
+  .views a.on { background: #1a2236; color: var(--ink); }
+
+  /* ── header ── */
+  header { padding: 46px 0 8px; }
+  h1 { margin: 0 0 12px; font-size: 30px; font-weight: 620; letter-spacing: -.018em; }
+  .lede { margin: 0; max-width: 780px; color: var(--dim); font-size: 15px; line-height: 1.62; }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  /* ── insight strip ── */
+  .reads { display: grid; grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
+    gap: 1px; background: var(--edge); border: 1px solid var(--edge);
+    border-radius: 12px; overflow: hidden; margin: 30px 0 8px; }
+  .read { background: var(--panel); padding: 15px 16px; }
+  .read .rt { font-size: 12.5px; font-weight: 620; margin-bottom: 6px; line-height: 1.4; }
+  .read .rd { font-size: 12px; color: var(--dim); line-height: 1.55; }
+
+  /* ── lens switcher ── */
+  .toolbar { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    margin: 42px 0 16px; }
+  .toolbar h2 { margin: 0; font-size: 11px; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--dim); }
+  .lenses { display: flex; gap: 3px; margin-left: auto;
+    background: #0b0f1c; border: 1px solid var(--edge); border-radius: 8px; padding: 3px; }
+  .lenses button { padding: 5px 12px; border: none; border-radius: 5px; cursor: pointer;
+    background: none; color: var(--dim); font: inherit; font-size: 12px; }
+  .lenses button:hover { color: var(--ink); }
+  .lenses button.on { background: #1a2236; color: var(--ink); }
+
+  /* ── the spine ── */
+  .spine-scroll { overflow-x: auto; padding-bottom: 8px; margin: 0 -28px; padding-left: 28px; padding-right: 28px; }
+  .spine { display: flex; gap: 0; min-width: 1100px; position: relative; }
+  .seg { flex: 1 1 0; min-width: 0; background: var(--panel);
+    border: 1px solid var(--edge); border-right: none; padding: 13px 12px 15px;
+    cursor: pointer; position: relative; transition: background .16s; }
+  .seg:first-child { border-radius: 11px 0 0 11px; }
+  .seg:last-child { border-right: 1px solid var(--edge); border-radius: 0 11px 11px 0; }
+  .seg:hover { background: #0e1424; }
+  .seg.on { background: #131b2e; }
+  .seg.on::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px;
+    height: 2px; background: currentColor; }
+  .seg .num { font-family: var(--mono); font-size: 10px; color: var(--dimmer); }
+  .seg .nm { font-size: 12.5px; font-weight: 580; line-height: 1.32; margin: 5px 0 11px;
+    min-height: 33px; color: var(--ink); }
+  .gauge { display: flex; gap: 2px; margin-bottom: 9px; }
+  .gauge i { flex: 1; height: 16px; border-radius: 1.5px; background: #182031; }
+  .gauge i.f { background: currentColor; }
+  .seg .foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .pct { font-family: var(--mono); font-size: 12px; color: var(--ink); }
+  .pct s { text-decoration: none; color: var(--dimmer); font-size: 10px; }
+  .pct.word { font-family: inherit; font-size: 11px; color: currentColor;
+    font-weight: 580; }
+
+  /* key for the categorical lens */
+  .bindkey { display: none; gap: 18px; flex-wrap: wrap; margin: -4px 0 16px;
+    font-size: 11.5px; color: var(--dim); }
+  .bindkey.show { display: flex; }
+  .bindkey span { display: flex; align-items: center; gap: 7px; }
+  .bindkey b { width: 8px; height: 8px; border-radius: 2px; }
+  .chip { font-size: 9.5px; letter-spacing: .07em; text-transform: uppercase;
+    font-weight: 640; padding: 2.5px 6px; border-radius: 4px;
+    background: color-mix(in srgb, currentColor 16%, transparent);
+    color: currentColor; white-space: nowrap; }
+  .flowlbl { display: flex; justify-content: space-between; min-width: 1100px;
+    margin-top: 9px; font-size: 10.5px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--dimmer); }
+
+  /* ── detail ── */
+  .detail { margin-top: 34px; border: 1px solid var(--edge); border-radius: 13px;
+    background: var(--panel); overflow: hidden; }
+  .dhead { padding: 24px 26px 20px; border-bottom: 1px solid var(--edge); }
+  .dhead .eyebrow { font-family: var(--mono); font-size: 11px; color: var(--dimmer);
+    margin-bottom: 7px; }
+  .dhead h3 { margin: 0 0 14px; font-size: 22px; font-weight: 620; letter-spacing: -.012em; }
+  .dstats { display: flex; gap: 26px; flex-wrap: wrap; margin-bottom: 18px; }
+  .stat .sl { font-size: 10px; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--dimmer); margin-bottom: 4px; }
+  .stat .sv { font-family: var(--mono); font-size: 17px; }
+  .dprose { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+    gap: 20px; }
+  .dprose div { font-size: 13px; color: var(--dim); line-height: 1.6; }
+  .dprose .lab { font-size: 10px; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--dimmer); margin-bottom: 6px; }
+  .dprose .verdict { color: var(--ink); }
+
+  /* tabs */
+  .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--edge);
+    padding: 0 26px; overflow-x: auto; }
+  .tabs button { padding: 13px 0; margin-right: 26px; border: none; background: none;
+    color: var(--dim); font: inherit; font-size: 12.5px; cursor: pointer;
+    border-bottom: 2px solid transparent; white-space: nowrap; }
+  .tabs button:hover { color: var(--ink); }
+  .tabs button.on { color: var(--ink); border-bottom-color: var(--ink); }
+  .tabs button em { font-style: normal; font-family: var(--mono); font-size: 10.5px;
+    color: var(--dimmer); margin-left: 5px; }
+
+  .pane { padding: 22px 26px 28px; }
+  .pane.hide { display: none; }
+
+  /* chokepoint rows */
+  .filters { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+  .filters button { padding: 4.5px 11px; border-radius: 6px; cursor: pointer;
+    border: 1px solid var(--edge); background: #0b0f1c; color: var(--dim);
+    font: inherit; font-size: 11.5px; }
+  .filters button:hover { border-color: var(--edge2); color: var(--ink); }
+  .filters button.on { background: #1a2236; color: var(--ink); border-color: var(--edge2); }
+
+  .cp { display: grid; grid-template-columns: 220px 128px 1fr; gap: 20px;
+    padding: 15px 0; border-top: 1px solid var(--edge); align-items: start; }
+  .cp:first-of-type { border-top: none; }
+  .cp .k { font-size: 13.5px; font-weight: 580; }
+  .cp .u { font-size: 11.5px; color: var(--dimmer); margin-top: 3px; line-height: 1.45; }
+  .cp .bar { display: flex; gap: 1.5px; margin-bottom: 6px; }
+  .cp .bar i { flex: 1; height: 11px; border-radius: 1.5px; background: #182031; }
+  .cp .bar i.f { background: currentColor; }
+  .cp .meta { display: flex; align-items: center; gap: 7px; }
+  .cp .n { font-size: 12.5px; color: var(--dim); line-height: 1.6; }
+  .cp .n b { color: var(--ink); font-weight: 580; }
+  .cp .ctrl { font-size: 11.5px; color: var(--ink); margin-bottom: 5px; }
+  .cp .src { font-size: 10.5px; color: var(--dimmer); margin-top: 7px;
+    font-family: var(--mono); }
+
+  /* players */
+  .pgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(236px, 1fr)); gap: 22px; }
+  .pgrid h4 { margin: 0 0 10px; font-size: 10.5px; letter-spacing: .13em;
+    text-transform: uppercase; color: var(--dimmer); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 11.5px; padding: 4px 9px; border-radius: 999px;
+    border: 1px solid var(--edge); background: #0d1220; color: var(--ink); }
+  .tag.lk { cursor: pointer; }
+  .tag.lk:hover { border-color: var(--edge2); background: #151d30; }
+
+  /* whitespace */
+  .ws { border-top: 1px solid var(--edge); padding: 17px 0; }
+  .ws:first-of-type { border-top: none; padding-top: 2px; }
+  .ws .wh { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 7px; }
+  .ws .wt { font-size: 14.5px; font-weight: 600; }
+  .ws .wd { font-size: 13px; color: var(--dim); line-height: 1.62; max-width: 860px; }
+  .heat { font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase;
+    font-weight: 640; padding: 2.5px 7px; border-radius: 4px; }
+  .heat.Hot { background: rgba(255,77,94,.15); color: #ff8b97; }
+  .heat.Contrarian { background: rgba(179,136,255,.15); color: #c9aaff; }
+  .heat.Early { background: rgba(77,208,225,.14); color: #7fdfe9; }
+  .kind { font-size: 11px; color: var(--dimmer); font-family: var(--mono); }
+
+  /* footer */
+  .note { margin-top: 44px; padding: 18px 20px; border: 1px solid var(--edge);
+    border-left: 2px solid var(--high); border-radius: 10px; background: #0a0e1a;
+    font-size: 12.5px; color: var(--dim); line-height: 1.62; max-width: 900px; }
+  .note b { color: var(--ink); }
+  .srcs { margin-top: 30px; }
+  .srcs h2 { font-size: 11px; letter-spacing: .15em; text-transform: uppercase;
+    color: var(--dim); margin: 0 0 12px; }
+  .srcs ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 34px; }
+  .srcs li { font-size: 12px; color: var(--dim); margin-bottom: 7px;
+    break-inside: avoid; }
+  .srcs a { color: #7fb0ff; text-decoration: none; }
+  .srcs a:hover { text-decoration: underline; }
+
+  kbd { border: 1px solid var(--edge2); border-radius: 4px; padding: 1px 5px;
+    font-size: 10.5px; font-family: var(--mono); color: var(--dim); }
+
+  @media (max-width: 760px) {
+    .wrap { padding: 0 16px 60px; } .nav-in { padding: 11px 16px; }
+    h1 { font-size: 23px; } .cp { grid-template-columns: 1fr; gap: 9px; }
+    .srcs ol { columns: 1; }
+  }
+</style>
+</head>
+<body>
+
+<nav><div class="nav-in">
+  <span class="brand">A&amp;D Constellation</span>
+  <span class="views">
+    <a href="index.html">Constellation</a>
+    <a href="valuechain.html" class="on">Value chain</a>
+  </span>
+</div></nav>
+
+<div class="wrap">
+<header>
+  <h1>Where the aerospace &amp; defense value chain is thin</h1>
+  <p class="lede">Ten segments, raw inputs on the left to fielded capability on the right.
+    Each bar is an estimate of how much of US demand can be met from US or reliable
+    allied sources. <b>Risk concentrates on the left; American advantage concentrates
+    on the right.</b> Click any segment for its chokepoints, its players, and what
+    nobody has built yet.</p>
+
+  <div class="reads" id="reads"></div>
+</header>
+
+<div class="toolbar">
+  <h2>Colour by</h2>
+  <span class="lenses" id="lenses">
+    <button data-l="risk" class="on">Supply risk</button>
+    <button data-l="cover">Domestic coverage</button>
+    <button data-l="bind">Binding constraint</button>
+  </span>
+</div>
+
+<div class="bindkey" id="bindkey"></div>
+
+<div class="spine-scroll">
+  <div class="spine" id="spine"></div>
+  <div class="flowlbl"><span>← atoms · least substitutable</span>
+    <span>bits · US advantage →</span></div>
+</div>
+
+<div class="detail" id="detail"></div>
+
+<div class="note" id="caveat"></div>
+
+<div class="srcs">
+  <h2>Sources</h2>
+  <ol id="srclist"></ol>
+</div>
+
+<p style="margin-top:26px;font-size:12px;color:#5d6684">
+  <kbd>←</kbd> <kbd>→</kbd> move between segments &nbsp;·&nbsp; <kbd>1</kbd>–<kbd>9</kbd>,<kbd>0</kbd> jump
+</p>
+</div>
+
+<script src="data.js"></script>
+<script>
+const { SEGMENTS, READS, META } = window.AD;
+
+const RISK_VAR = { Critical:'var(--crit)', High:'var(--high)', Medium:'var(--med)', Low:'var(--low)' };
+const RISK_ORD = { Critical:0, High:1, Medium:2, Low:3 };
+
+/* The third lens is categorical, not a score. It answers "what KIND of thing
+   is stopping this segment" — which turns out to be the most decision-relevant
+   question on the page, because the four answers need four different responses:
+   foreign control needs substitution or allies, single-supplier needs a second
+   source, process capacity needs capital and permits, institutional needs a
+   standard nobody owns yet. (The first version of this lens scored "opportunity
+   density" and coloured nine of ten segments identically — it was measuring how
+   much we'd written, not the world. See docs/07-decision-log.md.) */
+const BIND_VAR = { 'Foreign control':'var(--crit)', 'Single supplier':'var(--high)',
+  'Process capacity':'var(--med)', 'Institutional':'var(--inst)' };
+
+let lens = 'risk';
+function segColor(s) {
+  if (lens === 'risk') return RISK_VAR[s.risk];
+  if (lens === 'bind') return BIND_VAR[s.bind];
+  return s.domestic >= 80 ? 'var(--low)'
+    : s.domestic >= 55 ? 'var(--med)' : s.domestic >= 30 ? 'var(--high)' : 'var(--crit)';
+}
+function segMetric(s) {
+  return lens === 'bind'
+    ? { v: s.bind, suffix: '', chip: s.risk }
+    : { v: s.domestic, suffix: '%', chip: s.risk };
+}
+
+/* ── headline reads ── */
+document.getElementById('reads').innerHTML = READS.map(r =>
+  `<div class="read"><div class="rt">${r.t}</div><div class="rd">${r.d}</div></div>`).join('');
+
+/* ── the spine ── */
+let sel = 0;
+const spine = document.getElementById('spine');
+function drawSpine() {
+  spine.innerHTML = SEGMENTS.map((s, i) => {
+    const c = segColor(s), m = segMetric(s);
+    const filled = Math.round(s.domestic / 10);
+    return `<div class="seg${i === sel ? ' on' : ''}" data-i="${i}" style="color:${c}">
+      <div class="num">${String(s.n).padStart(2, '0')}</div>
+      <div class="nm">${s.short}</div>
+      <div class="gauge">${Array.from({length:10},(_,k)=>
+        `<i class="${k < filled ? 'f' : ''}"></i>`).join('')}</div>
+      <div class="foot">
+        <span class="pct${lens === 'bind' ? ' word' : ''}">${m.v}<s>${m.suffix}</s></span>
+        ${lens === 'bind' ? '' : `<span class="chip">${s.risk}</span>`}
+      </div></div>`;
+  }).join('');
+}
+spine.addEventListener('click', e => {
+  const t = e.target.closest('.seg'); if (!t) return;
+  sel = +t.dataset.i; drawSpine(); drawDetail();
+});
+
+/* ── detail ── */
+let tab = 'cp', riskFilter = 'all';
+const detail = document.getElementById('detail');
+
+function drawDetail() {
+  const s = SEGMENTS[sel], c = RISK_VAR[s.risk];
+  const nCrit = s.chokepoints.filter(x => x.risk === 'Critical').length;
+
+  detail.innerHTML = `
+    <div class="dhead">
+      <div class="eyebrow">SEGMENT ${String(s.n).padStart(2,'0')} / 10</div>
+      <h3>${s.name}</h3>
+      <div class="dstats">
+        <div class="stat"><div class="sl">Domestic coverage</div>
+          <div class="sv" style="color:${c}">${s.domestic}<span style="font-size:12px;color:var(--dimmer)">%</span></div></div>
+        <div class="stat"><div class="sl">Headline risk</div>
+          <div class="sv" style="color:${c}">${s.risk}</div></div>
+        <div class="stat"><div class="sl">Chokepoints</div>
+          <div class="sv">${s.chokepoints.length}<span style="font-size:12px;color:var(--dimmer)"> · ${nCrit} critical</span></div></div>
+        <div class="stat"><div class="sl">Binding constraint</div>
+          <div class="sv" style="font-family:inherit;font-size:15px;color:${BIND_VAR[s.bind]}">${s.bind}</div></div>
+        <div class="stat"><div class="sl">Open opportunities</div>
+          <div class="sv">${s.whitespace.length}</div></div>
+      </div>
+      <div class="dprose">
+        <div><div class="lab">What happens here</div>${s.what}</div>
+        <div><div class="lab">Why it matters</div>${s.why}</div>
+        <div><div class="lab">What actually binds</div>${s.bindWhy}</div>
+        <div><div class="lab">Verdict</div><span class="verdict">${s.verdict}</span></div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button data-t="cp" class="${tab==='cp'?'on':''}">Chokepoints<em>${s.chokepoints.length}</em></button>
+      <button data-t="pl" class="${tab==='pl'?'on':''}">Players</button>
+      <button data-t="ws" class="${tab==='ws'?'on':''}">What else could be done<em>${s.whitespace.length}</em></button>
+    </div>
+    <div class="pane${tab==='cp'?'':' hide'}" id="pane-cp">${paneCp(s)}</div>
+    <div class="pane${tab==='pl'?'':' hide'}" id="pane-pl">${panePl(s)}</div>
+    <div class="pane${tab==='ws'?'':' hide'}" id="pane-ws">${paneWs(s)}</div>`;
+
+  detail.querySelector('.tabs')?.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    tab = b.dataset.t; drawDetail();
+  });
+  detail.querySelector('.filters')?.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    riskFilter = b.dataset.r; drawDetail();
+  });
+}
+
+function paneCp(s) {
+  const counts = s.chokepoints.reduce((a,x)=>(a[x.risk]=(a[x.risk]||0)+1,a),{});
+  const btn = (r, label) => `<button data-r="${r}" class="${riskFilter===r?'on':''}">${label}${
+    r==='all' ? ` (${s.chokepoints.length})` : counts[r] ? ` (${counts[r]})` : ' (0)'}</button>`;
+  const rows = s.chokepoints
+    .filter(x => riskFilter === 'all' || x.risk === riskFilter)
+    .slice().sort((a,b) => RISK_ORD[a.risk] - RISK_ORD[b.risk] || a.domestic - b.domestic)
+    .map(x => {
+      const c = RISK_VAR[x.risk], filled = Math.round(x.domestic / 10);
+      return `<div class="cp" style="color:${c}">
+        <div><div class="k">${x.k}</div><div class="u">${x.use}</div></div>
+        <div>
+          <div class="bar">${Array.from({length:10},(_,k)=>`<i class="${k<filled?'f':''}"></i>`).join('')}</div>
+          <div class="meta"><span class="pct" style="color:var(--ink)">${x.domestic}<s>%</s></span>
+            <span class="chip">${x.risk}</span></div>
+        </div>
+        <div><div class="ctrl">${x.control}</div>
+          <div class="n">${x.note}</div>
+          ${x.src ? `<div class="src">src · ${x.src}</div>` : ''}</div>
+      </div>`;
+    }).join('');
+  return `<div class="filters">${btn('all','All')}${btn('Critical','Critical')}${
+    btn('High','High')}${btn('Medium','Medium')}${btn('Low','Low')}</div>
+    ${rows || '<div class="n" style="color:var(--dim)">Nothing at this risk level in this segment.</div>'}`;
+}
+
+function panePl(s) {
+  const heads = { incumbents:'Incumbents', challengers:'Challengers', capital:'Capital', gov:'Government' };
+  // link through to the constellation view where the org exists as a node
+  const known = new Set(window.AD.nodes.map(n => n.id));
+  return `<div class="pgrid">` + Object.entries(heads).map(([k, h]) =>
+    `<div><h4>${h}</h4><div class="tags">${(s.players[k]||[]).map(p =>
+      known.has(p)
+        ? `<a class="tag lk" href="index.html?focus=${encodeURIComponent(p)}">${p}</a>`
+        : `<span class="tag">${p}</span>`).join('')}</div></div>`).join('') + `</div>
+    <div style="margin-top:20px;font-size:11.5px;color:var(--dimmer)">
+      Underlined names open in the constellation view, centred on that organisation.</div>`;
+}
+
+function paneWs(s) {
+  return s.whitespace.map(w => `<div class="ws">
+    <div class="wh"><span class="wt">${w.t}</span>
+      <span class="heat ${w.heat}">${w.heat}</span>
+      <span class="kind">${w.kind}</span></div>
+    <div class="wd">${w.d}</div></div>`).join('');
+}
+
+/* ── lens switcher ── */
+const bindkey = document.getElementById('bindkey');
+bindkey.innerHTML = Object.entries(BIND_VAR).map(([k, c]) =>
+  `<span><b style="background:${c}"></b>${k}</span>`).join('');
+
+document.getElementById('lenses').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  lens = b.dataset.l;
+  [...e.currentTarget.children].forEach(x => x.classList.toggle('on', x === b));
+  bindkey.classList.toggle('show', lens === 'bind');
+  drawSpine();
+});
+
+/* ── keyboard ── */
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowRight') sel = Math.min(SEGMENTS.length - 1, sel + 1);
+  else if (e.key === 'ArrowLeft') sel = Math.max(0, sel - 1);
+  else if (/^[0-9]$/.test(e.key)) sel = e.key === '0' ? 9 : +e.key - 1;
+  else return;
+  e.preventDefault(); drawSpine(); drawDetail();
+});
+
+/* ── provenance ── */
+document.getElementById('caveat').innerHTML =
+  `<b>Read the scores as judgement, not measurement.</b> Facts carrying a
+   <span style="font-family:var(--mono);font-size:11px">src ·</span> line were checked
+   against the named public source on ${META.verified}. The coverage percentages and
+   risk ratings are a defensible reading of those facts, not a published statistic —
+   so cite the facts, not the bars. ${META.caveat}`;
+document.getElementById('srclist').innerHTML = META.sources
+  .map(([pub, title, url]) => `<li>${pub} — <a href="${url}" target="_blank" rel="noopener">${title}</a></li>`)
+  .join('');
+
+/* ── deep link: ?seg=energetics ── */
+const q = new URLSearchParams(location.search).get('seg');
+if (q) { const i = SEGMENTS.findIndex(s => s.id === q); if (i >= 0) sel = i; }
+
+drawSpine(); drawDetail();
+
+// what the feedback widget reports as context
+window.AD_CONTEXT = () => 'segment ' + SEGMENTS[sel].n + ' ' + SEGMENTS[sel].short
+  + ' · ' + lens + ' lens · ' + tab + ' tab';
+</script>
+<script src="feedback.js"></script>
+</body>
+</html>
