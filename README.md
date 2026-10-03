@@ -21,11 +21,11 @@ CORS-blocked there). There is exactly one copy of the data; do not add a second.
 
 ## Stack
 
-Plain HTML + CSS + vanilla JS. The constellation view loads
-`3d-force-graph@1.80.0` from jsDelivr; the value chain view has no dependencies
-at all and works offline. Node logos are local SVGs in `prototype/logos/`
+Plain HTML + CSS + vanilla JS. The constellation view uses `3d-force-graph@1.80.0`,
+vendored in `prototype/vendor/` with its MIT license; the value chain view has no
+dependencies at all. The site makes no third-party requests and works offline. Node logos are local SVGs in `prototype/logos/`
 (each with a source in `LOGOS`), so nothing is fetched from a logo service.
-Total payload is about 790 KB.
+Total payload is about 2080 KB (the 3D library is ~1.3 MB of that, gzipped in transit).
 
 ## Data honesty
 

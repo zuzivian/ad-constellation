@@ -27,7 +27,8 @@ four companies they'd never heard of.
 - All data in `prototype/data.js`, loaded by both views via `<script src>`.
   A script tag works under `file://` where `fetch()` is CORS-blocked — that is
   the whole reason for this shape. **Never add a second copy of the data.**
-- `index.html` uses `3d-force-graph@1.80.0` from jsDelivr (bundles its own three.js).
+- `index.html` uses `3d-force-graph@1.80.0`, vendored in `prototype/vendor/` (bundles its
+  own three.js). No runtime CDN: the site makes zero third-party requests.
 - `valuechain.html` uses **no libraries at all** — it is a layout problem, not a
   spatial one. Do not add three.js or a charting library to it because the other
   view has one.

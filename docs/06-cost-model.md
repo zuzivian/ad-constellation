@@ -7,7 +7,7 @@
 | Hosting — Vercel (Hobby) | **$0** | Static site, served from `prototype/` by the root `vercel.json`. Cloudflare Pages/Netlify/GitHub Pages equivalent. |
 | Domain | **$12/yr** | Cloudflare Registrar at cost, or Namecheap. |
 | SSL | **$0** | Included by every host above. |
-| Libraries — 3d-force-graph, three.js | **$0** | MIT licensed, served from jsDelivr. |
+| Libraries — 3d-force-graph, three.js | **$0** | MIT licensed, vendored in `prototype/vendor/`. |
 | Data | **$0** | USAspending, SBIR, SAM, EDGAR are all free and unmetered. |
 | AI coding assistant | **$20–100/mo per person** | The only meaningful line. One shared seat works if one person does the building. |
 | Analytics — Plausible (optional) | **$9/mo** | Or nothing. You'll learn more from five user sessions than from any dashboard. |

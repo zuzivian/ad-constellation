@@ -22,9 +22,12 @@ no build command, no root directory, no output directory. Import and deploy.
 | `prototype/robots.txt` | `Disallow: /` while it's a draft |
 | `prototype/favicon.svg` | So the browser tab isn't a blank page icon |
 
-Total payload: about 135 KB. One external request at runtime —
-`3d-force-graph` from jsDelivr, used only by the constellation view. The value
-chain view has zero dependencies and works offline.
+Total payload: about 2080 KB, most of it the vendored 3D library in
+`prototype/vendor/`. **No external requests at runtime**: the library, the data and the logos are
+all served from the site itself, so the graph can't go blank because a CDN is blocked.
+`vercel.json` also sets a strict Content-Security-Policy (`'self'` only), so if a
+future change adds a third-party script, it fails loudly instead of quietly
+phoning out.
 
 ---
 
@@ -89,8 +92,8 @@ account and no CLI — drag in `prototype/`. Same $0 static hosting. Note that
 
 Open the URL on a machine that has never seen the project and confirm:
 
-- [ ] Constellation loads and nodes appear (this is the one that needs the CDN —
-      if the graph is blank, jsDelivr is blocked on that network)
+- [ ] Constellation loads, nodes show logos, and hovering a node doesn't stutter
+- [ ] DevTools console shows no `Content-Security-Policy` errors
 - [ ] The **Value chain** link in the top bar works
 - [ ] The amber **Working draft** ribbon is at the top
 - [ ] The **Feedback** button is bottom-right, and opens the panel
@@ -98,8 +101,8 @@ Open the URL on a machine that has never seen the project and confirm:
 - [ ] Open it on your phone — it should be usable, not beautiful
 - [ ] `yoursite.vercel.app/robots.txt` shows `Disallow: /`
 
-If the constellation is blank but the value chain works, that's the CDN, not
-your code. Worth knowing before someone tells you "it's broken."
+If the constellation is blank but the value chain works, the browser has no
+WebGL (rare, usually a locked-down machine or a disabled GPU).
 
 ---
 

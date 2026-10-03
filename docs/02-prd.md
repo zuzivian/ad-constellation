@@ -61,9 +61,8 @@ four rounds of "hmm, not quite."
 | V10 | Both views link to each other in a persistent top bar | Switch back and forth |
 | V11 | Opens by double-clicking the file, no server, no install, and works with no network | Turn off wifi and open `valuechain.html` |
 
-> V11 holds for the value chain view and **not** for the constellation, which
-> pulls a library from a CDN. That asymmetry is deliberate and worth knowing
-> before you demo on conference wifi.
+> V11 now holds for both views: the constellation's library was vendored on
+> 2026-10-03 (see `docs/07-decision-log.md`), so conference wifi is no longer a risk.
 
 ## P2 — only after five users have touched it
 

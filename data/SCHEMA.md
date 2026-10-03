@@ -3,7 +3,7 @@
 **Canonical dataset: `prototype/data.js`.** Both views read it via a plain
 `<script src>`, which works under `file://` where `fetch()` is CORS-blocked.
 
-`data/ecosystem.json` is **deprecated and safe to delete**. It was a second copy
+`data/ecosystem.json` was deleted on 2026-10-03. It was a second copy
 of the dataset and had already drifted (65 orgs vs 78) within a day — a second
 copy is the thing `CLAUDE.md` most explicitly forbids. If you want JSON for
 another tool, generate it from `data.js` at the point of use rather than

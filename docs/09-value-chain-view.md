@@ -45,8 +45,8 @@ row is a layout-and-typography problem. Reaching for three.js here — because t
 other view uses it — would be cargo-culting the stack instead of choosing it.
 The whole view is plain DOM and about 240 lines of JavaScript.
 
-That is also why it will load instantly and work offline, which the constellation
-will not, since it pulls a library from a CDN.
+That is also why it loads instantly. (Since 2026-10-03 the constellation's library is
+vendored too, so both views work offline.)
 
 ---
 
