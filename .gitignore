@@ -14,3 +14,6 @@ node_modules/
 
 # Local Claude Code permissions (machine-specific)
 .claude/settings.local.json
+
+# scratch research output (source checks, logo manifests) — not deployed
+.research/

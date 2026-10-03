@@ -21,14 +21,14 @@
     // The site is noindex + unlisted, so scraping exposure is low, but if
     // you'd rather not publish it, swap in an alias.
     to: 'natwong@stanford.edu',
-    subject: 'A&D map — feedback',
+    subject: 'Aerospace & Defense map — feedback',
 
     // Optional Google Form upgrade. Leave formAction '' to stay on email.
     formAction: '',
     entry: { learned: '', named: '', wanted: '', context: '' },
 
     // Shown in the ribbon
-    draftNote: 'Working draft. Coverage percentages and risk ratings are our ' +
+    draftNote: 'Coverage percentages and risk ratings are our ' +
                'estimates, not published statistics — the underlying facts are sourced. ' +
                'Tell us what looks wrong.',
   };
@@ -121,7 +121,11 @@
       <button title="Dismiss" aria-label="Dismiss">&times;</button>`;
     document.body.appendChild(rib);
     document.body.classList.add('adfb-ribbon-on');
+    // the ribbon wraps to several lines on narrow screens: reserve its real height
+    const fit = () => document.body.style.setProperty('--adfb-top', rib.offsetHeight + 'px');
+    fit(); addEventListener('resize', fit);
     rib.querySelector('button').onclick = () => {
+      removeEventListener('resize', fit); document.body.style.removeProperty('--adfb-top');
       rib.remove(); document.body.classList.remove('adfb-ribbon-on');
       try { sessionStorage.setItem('adfb-ribbon', 'off'); } catch (e) {}
     };

@@ -1,4 +1,4 @@
-# A&D Constellation
+# Aerospace & Defense Constellation
 
 A two-view explorer of the US aerospace & defense ecosystem, built for Stanford
 GSB first-years figuring out where to recruit.
@@ -23,11 +23,14 @@ CORS-blocked there). There is exactly one copy of the data; do not add a second.
 
 Plain HTML + CSS + vanilla JS. The constellation view loads
 `3d-force-graph@1.80.0` from jsDelivr; the value chain view has no dependencies
-at all and works offline. Total payload is about 135 KB.
+at all and works offline. Node logos are local SVGs in `prototype/logos/`
+(each with a source in `LOGOS`), so nothing is fetched from a logo service.
+Total payload is about 790 KB.
 
 ## Data honesty
 
-Every row carries a `source` URL. Chokepoint **facts** have a `src` field and
+Every row carries a `source` URL, and every investor and buyer edge carries its
+own evidence URL (`EDGE_SRC`) — an edge without one is not drawn. Chokepoint **facts** have a `src` field and
 were checked against a named public source. `domestic` percentages and `risk`
 ratings are **analyst judgement**, and the UI says so wherever it shows them.
 Unverified relationships are left out rather than guessed.

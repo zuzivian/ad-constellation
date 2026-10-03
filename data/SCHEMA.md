@@ -43,6 +43,21 @@ This file is the *contract* — the shape `data.js` must satisfy.
 `autonomy` · `launch` · `space` · `c2` · `ew` · `hyper` · `cuas` · `maritime`
 · `mfg`
 
+## How `data.js` stores it
+
+`ORGS` rows are tuples: `[name, type, caps[], investors[], buyers[], hq, stage, note, source]`.
+`verified` is the date of the last full source check (currently 2026-10-03), set when the
+graph is derived.
+
+`EDGE_SRC` maps `'Org>key'` to the URL that evidences that investor or buyer edge.
+**An investor/buyer edge with no `EDGE_SRC` entry is not drawn.**
+
+`LOGOS` maps an org name to `{ file, kind, src }`, where `file` is under `prototype/logos/`,
+`kind` is `symbol` or `wordmark`, and `src` is where the file came from. No entry means a monogram.
+
+Value-chain players are a bare name, or `[name, line, src]` where `line` says what that
+player does in that segment.
+
 ## Edges
 
 Derived, never stored. Three kinds:

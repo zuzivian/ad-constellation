@@ -4,7 +4,7 @@
 
 | Item | Cost | Notes |
 |---|---|---|
-| Hosting — Cloudflare Pages | **$0** | Static site. Free tier is unlimited requests. Netlify/Vercel/GitHub Pages equivalent. |
+| Hosting — Vercel (Hobby) | **$0** | Static site, served from `prototype/` by the root `vercel.json`. Cloudflare Pages/Netlify/GitHub Pages equivalent. |
 | Domain | **$12/yr** | Cloudflare Registrar at cost, or Namecheap. |
 | SSL | **$0** | Included by every host above. |
 | Libraries — 3d-force-graph, three.js | **$0** | MIT licensed, served from jsDelivr. |

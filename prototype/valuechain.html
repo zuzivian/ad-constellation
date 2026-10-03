@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>A&amp;D Value Chain — coverage &amp; chokepoints</title>
+<title>Aerospace &amp; Defense Value Chain — where the supply chain is thin</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 <meta name="theme-color" content="#05070e" />
 <meta name="description" content="Ten segments of the US aerospace &amp; defense value chain: domestic coverage, chokepoints, players and unbuilt opportunities. Working draft." />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="A&amp;D Value Chain — coverage &amp; chokepoints" />
+<meta property="og:title" content="Aerospace &amp; Defense Value Chain — where the supply chain is thin" />
 <meta property="og:description" content="Ten segments of the US aerospace &amp; defense value chain: domestic coverage, chokepoints, players and unbuilt opportunities. Working draft." />
 <meta name="twitter:card" content="summary" />
 <style>
@@ -45,12 +45,27 @@
     display: flex; align-items: center; gap: 22px; }
   .brand { font-size: 12px; font-weight: 640; letter-spacing: .16em;
     text-transform: uppercase; }
-  .views { display: flex; gap: 3px; margin-left: auto;
-    background: #0b0f1c; border: 1px solid var(--edge); border-radius: 9px; padding: 3px; }
-  .views a { padding: 6px 15px; border-radius: 6px; font-size: 12.5px;
-    color: var(--dim); text-decoration: none; }
-  .views a:hover { color: var(--ink); }
-  .views a.on { background: #1a2236; color: var(--ink); }
+  /* Two pages, one switch. Each tab carries the question its view answers, so it
+     reads as navigation rather than a pair of buttons. Same rules in index.html. */
+  .views { display: flex; gap: 4px; margin-left: auto;
+    background: #0b0f1c; border: 1px solid var(--edge2); border-radius: 11px; padding: 4px; }
+  .views a { display: block; padding: 8px 18px 9px; border-radius: 8px; min-width: 176px;
+    border: 1px solid transparent; color: var(--dim); text-decoration: none; }
+  .views a b { display: block; font-size: 13px; font-weight: 620; letter-spacing: .02em; }
+  .views a span { display: block; margin-top: 2px; font-size: 11.5px; color: var(--dimmer); }
+  .views a:hover { color: var(--ink); background: rgba(255,255,255,.04); }
+  .views a.on { background: #1d2740; border-color: #3a4a72; color: var(--ink); }
+  .views a.on span { color: var(--dim); }
+  .views a.on b::before { content: ''; display: inline-block; width: 6px; height: 6px;
+    margin: 0 8px 1px 0; border-radius: 50%; background: var(--ink); }
+  @media (max-width: 820px) {
+    .nav-in { padding: 10px 16px; gap: 12px; }
+    .brand { font-size: 10.5px; letter-spacing: .12em; }
+    .views a { min-width: 0; padding: 7px 11px; }
+    .views a b { font-size: 12px; white-space: nowrap; }
+    .views a span, .views a.on b::before { display: none; } }
+  abbr[title] { text-decoration: underline dotted rgba(139,149,178,.6); text-underline-offset: 3px;
+    cursor: help; }
 
   /* ── header ── */
   header { padding: 46px 0 8px; }
@@ -180,6 +195,17 @@
     border: 1px solid var(--edge); background: #0d1220; color: var(--ink); }
   .tag.lk { cursor: pointer; }
   .tag.lk:hover { border-color: var(--edge2); background: #151d30; }
+  /* player rows: name, one sourced line on what they do in THIS segment, provenance */
+  .pl { padding: 11px 0; border-top: 1px solid var(--edge); }
+  .pl:first-of-type { border-top: none; padding-top: 0; }
+  .pl .pn { font-size: 13px; font-weight: 600; color: var(--ink); text-decoration: none; }
+  a.pn:hover { text-decoration: underline; text-underline-offset: 3px; }
+  a.pn::after { content: ' ↗'; font-weight: 400; color: var(--dimmer); font-size: 11.5px; }
+  .pl .pm { font-size: 11.5px; color: var(--dimmer); margin-left: 6px; }
+  .pl .pd { font-size: 11.5px; color: var(--dim); line-height: 1.5; margin-top: 3px; }
+  .pl .src { font-size: 10.5px; color: var(--dimmer); margin-top: 4px; font-family: var(--mono); }
+  .pl .src a { color: inherit; }
+  .pl .src a:hover { color: var(--dim); }
 
   /* whitespace */
   .ws { border-top: 1px solid var(--edge); padding: 17px 0; }
@@ -222,10 +248,10 @@
 <body>
 
 <nav><div class="nav-in">
-  <span class="brand">A&amp;D Constellation</span>
-  <span class="views">
-    <a href="index.html">Constellation</a>
-    <a href="valuechain.html" class="on">Value chain</a>
+  <span class="brand">Aerospace &amp; Defense Constellation</span>
+  <span class="views" role="navigation" aria-label="Views">
+    <a href="index.html"><b>Constellation</b><span>Who works on which problem</span></a>
+    <a href="valuechain.html" class="on" aria-current="page"><b>Value chain</b><span>Where the supply chain is thin</span></a>
   </span>
 </div></nav>
 
@@ -274,7 +300,7 @@
 
 <script src="data.js"></script>
 <script>
-const { SEGMENTS, READS, META } = window.AD;
+const { SEGMENTS, READS, META, gloss } = window.AD;
 
 const RISK_VAR = { Critical:'var(--crit)', High:'var(--high)', Medium:'var(--med)', Low:'var(--low)' };
 const RISK_ORD = { Critical:0, High:1, Medium:2, Low:3 };
@@ -305,7 +331,7 @@ function segMetric(s) {
 
 /* ── headline reads ── */
 document.getElementById('reads').innerHTML = READS.map(r =>
-  `<div class="read"><div class="rt">${r.t}</div><div class="rd">${r.d}</div></div>`).join('');
+  `<div class="read"><div class="rt">${r.t}</div><div class="rd">${gloss(r.d)}</div></div>`).join('');
 
 /* ── the spine ── */
 let sel = 0;
@@ -355,9 +381,9 @@ function drawDetail() {
           <div class="sv">${s.whitespace.length}</div></div>
       </div>
       <div class="dprose">
-        <div><div class="lab">What happens here</div>${s.what}</div>
-        <div><div class="lab">Why it matters</div>${s.why}</div>
-        <div><div class="lab">What actually binds</div>${s.bindWhy}</div>
+        <div><div class="lab">What happens here</div>${gloss(s.what)}</div>
+        <div><div class="lab">Why it matters</div>${gloss(s.why)}</div>
+        <div><div class="lab">What actually binds</div>${gloss(s.bindWhy)}</div>
         <div><div class="lab">Verdict</div><span class="verdict">${s.verdict}</span></div>
       </div>
     </div>
@@ -397,7 +423,7 @@ function paneCp(s) {
             <span class="chip">${x.risk}</span></div>
         </div>
         <div><div class="ctrl">${x.control}</div>
-          <div class="n">${x.note}</div>
+          <div class="n">${gloss(x.note)}</div>
           ${x.src ? `<div class="src">src · ${x.src}</div>` : ''}</div>
       </div>`;
     }).join('');
@@ -409,14 +435,25 @@ function paneCp(s) {
 function panePl(s) {
   const heads = { incumbents:'Incumbents', challengers:'Challengers', capital:'Capital', gov:'Government' };
   // link through to the constellation view where the org exists as a node
-  const known = new Set(window.AD.nodes.map(n => n.id));
-  return `<div class="pgrid">` + Object.entries(heads).map(([k, h]) =>
-    `<div><h4>${h}</h4><div class="tags">${(s.players[k]||[]).map(p =>
-      known.has(p)
-        ? `<a class="tag lk" href="index.html?focus=${encodeURIComponent(p)}">${p}</a>`
-        : `<span class="tag">${p}</span>`).join('')}</div></div>`).join('') + `</div>
+  const known = new Map(window.AD.nodes.map(n => [n.id, n]));
+  const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return u; } };
+  // a player is a bare name, or [name, line, src] once its role here has been sourced
+  const row = p => {
+    const [name, line, src] = Array.isArray(p) ? p : [p];
+    const n = known.get(name);
+    const meta = n ? [n.hq, n.stage].filter(Boolean).join(' · ') : '';
+    return `<div class="pl">
+      ${n ? `<a class="pn" href="index.html?focus=${encodeURIComponent(name)}">${name}</a>`
+          : `<span class="pn">${name}</span>`}${meta ? `<span class="pm">${meta}</span>` : ''}
+      ${line ? `<div class="pd">${gloss(line)}</div>` : ''}
+      ${src ? `<div class="src">src · <a href="${src}" target="_blank" rel="noopener">${host(src)}</a></div>` : ''}
+    </div>`;
+  };
+  return `<div class="pgrid">` + Object.entries(heads).filter(([k]) => (s.players[k] || []).length).map(([k, h]) =>
+    `<div><h4>${h}</h4>${s.players[k].map(row).join('')}</div>`).join('') + `</div>
     <div style="margin-top:20px;font-size:11.5px;color:var(--dimmer)">
-      Underlined names open in the constellation view, centred on that organisation.</div>`;
+      Names marked ↗ open in the constellation view, centred on that organisation.
+      Each line says what the player does in this segment and links to where we checked it.</div>`;
 }
 
 function paneWs(s) {
@@ -424,7 +461,7 @@ function paneWs(s) {
     <div class="wh"><span class="wt">${w.t}</span>
       <span class="heat ${w.heat}">${w.heat}</span>
       <span class="kind">${w.kind}</span></div>
-    <div class="wd">${w.d}</div></div>`).join('');
+    <div class="wd">${gloss(w.d)}</div></div>`).join('');
 }
 
 /* ── lens switcher ── */
@@ -454,7 +491,7 @@ addEventListener('keydown', e => {
 document.getElementById('caveat').innerHTML =
   `<b>Read the scores as judgement, not measurement.</b> Facts carrying a
    <span style="font-family:var(--mono);font-size:11px">src ·</span> line were checked
-   against the named public source on ${META.verified}. The coverage percentages and
+   against the named public source: chokepoints on ${META.verified}, players on 2026-10-03. The coverage percentages and
    risk ratings are a defensible reading of those facts, not a published statistic —
    so cite the facts, not the bars. ${META.caveat}`;
 document.getElementById('srclist').innerHTML = META.sources

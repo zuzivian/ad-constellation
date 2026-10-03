@@ -216,10 +216,10 @@ separates something that feels designed from something that feels generated.
 
 **Deploy (2 hrs, $0).** It's a static site, so:
 
-- **Cloudflare Pages** or **Netlify** — drag the folder onto the dashboard,
-  get a URL. Genuinely that simple, free tier is more than enough.
-- **Vercel** if you later want a framework. Same free tier.
-- **GitHub Pages** if you want the repo to be the source of truth.
+- **Vercel** — what we use. Import the GitHub repo; the root `vercel.json`
+  serves `prototype/`, so no settings change. Steps in `DEPLOY.md`.
+- **Cloudflare Pages**, **Netlify** or **GitHub Pages** would serve a static
+  site equally well. We chose Vercel on 18 Sep (see `docs/07-decision-log.md`).
 - Custom domain: ~$12/yr at Cloudflare or Namecheap.
 
 **Then the part that matters (8–13 hrs).** Sit next to five first-years. Give
@@ -233,7 +233,7 @@ match the backlog you would have written yourselves.
 
 | Item | Cost |
 |---|---|
-| Hosting (Cloudflare Pages / Netlify free tier) | **$0** |
+| Hosting (Vercel Hobby tier) | **$0** |
 | Domain | **$12/yr** |
 | Data | **$0** (free federal sources + hand curation) |
 | AI coding tool, per person | **$20–100/mo** |

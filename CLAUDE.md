@@ -1,4 +1,4 @@
-# Standing brief — A&D Constellation
+# Standing brief — Aerospace & Defense Constellation
 
 Read this at the start of every session. It is the contract.
 
@@ -31,7 +31,7 @@ four companies they'd never heard of.
 - `valuechain.html` uses **no libraries at all** — it is a layout problem, not a
   spatial one. Do not add three.js or a charting library to it because the other
   view has one.
-- Static hosting (Cloudflare Pages). No server, no database, no auth.
+- Static hosting (Vercel; see `DEPLOY.md`). No server, no database, no auth.
 
 ## Hard constraints
 - Must run by double-clicking the HTML file — **no local server**. This is why

@@ -83,7 +83,7 @@ is a navigation problem rather than a content problem.
 
 ### Email — for anyone not in the channel
 
-> **Subject:** A&D ecosystem map — 2 minutes, and we want you to poke holes in it
+> **Subject:** Aerospace & defense ecosystem map — 2 minutes, and we want you to poke holes in it
 >
 > Hi <name>,
 >

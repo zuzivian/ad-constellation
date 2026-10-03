@@ -60,7 +60,7 @@ in week 3.
   one palette. Write them into `CLAUDE.md`.
 - **Tue–Thu (10h):** Phase 5. Motion, easing, the starfield, the panel, the
   dimming. This is where the hours convert to "feels designed."
-- **Fri (2h):** Deploy. Cloudflare Pages, custom domain. You'll have a live
+- **Fri (2h):** Deploy. Vercel (see `DEPLOY.md`), custom domain. You'll have a live
   URL in under an hour; budget the rest for the DNS wait.
 
 > Week 4 exit test: show it to one stranger for 60 seconds. Do they orbit the
