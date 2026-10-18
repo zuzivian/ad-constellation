@@ -89,7 +89,7 @@ to kill the riskiest unknown before you plan around it.
 Your riskiest unknown was: *can you even navigate an ecosystem in 3D space, or
 is that a six-month engineering project?*
 
-**That spike is already done — open `prototype/index.html` in a browser.**
+**That spike is already done — open `prototype/constellation.html` in a browser.**
 
 What it proves: the 3D constellation navigation is roughly **6–10 hours of
 work**, not six months, because [`3d-force-graph`](https://github.com/vasturiano/3d-force-graph)
@@ -98,7 +98,7 @@ on edges — all library features. The custom code is the starfield, the detail
 panel, and the styling.
 
 What it also proves, and this is the real finding: **the visualization is the
-cheap part. The data is the expensive part.** Look at `prototype/index.html`
+cheap part. The data is the expensive part.** Look at `prototype/constellation.html`
 — the visual engine is ~150 lines. The dataset is ~120 lines of hand-typed
 facts covering 65 nodes and 233 edges, and it took longer than the engine. Scaling to 300
 verified, sourced nodes is 12–20 hours. That reallocation of the roadmap is
@@ -253,7 +253,8 @@ ad-constellation/
 ├── CLAUDE.md                 ← standing brief the AI reads every session
 ├── prototype/
 │   ├── data.js               ← ONE dataset, read by both views
-│   ├── index.html            ← view 1: 3D constellation. Open this.
+│   ├── index.html            ← view 0: the drone inquiry (landing page, added 2026-10-18)
+│   ├── constellation.html    ← view 1: 3D constellation
 │   └── valuechain.html       ← view 2: value chain coverage & gaps
 ├── data/
 │   └── SCHEMA.md             ← the shape everything must fit
@@ -274,6 +275,9 @@ DEPLOY.md                     ← (root) exact Vercel steps + post-deploy checkl
 Start with `docs/01-product-brief.md`. Replace our answers with yours.
 
 ---
+
+> **2026-10-18:** the site has since been re-oriented into an RDI inquiry into US
+> drones, with a third view as the landing page. See `docs/12-inquiry-view.md`.
 
 ## A note on the second view
 

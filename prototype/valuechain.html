@@ -46,7 +46,7 @@
   .brand { font-size: 12px; font-weight: 640; letter-spacing: .16em;
     text-transform: uppercase; }
   /* Two pages, one switch. Each tab carries the question its view answers, so it
-     reads as navigation rather than a pair of buttons. Same rules in index.html. */
+     reads as navigation rather than a pair of buttons. Same rules in constellation.html and index.html. */
   .views { display: flex; gap: 4px; margin-left: auto;
     background: #0b0f1c; border: 1px solid var(--edge2); border-radius: 11px; padding: 4px; }
   .views a { display: block; padding: 8px 18px 9px; border-radius: 8px; min-width: 176px;
@@ -248,9 +248,10 @@
 <body>
 
 <nav><div class="nav-in">
-  <span class="brand">Aerospace &amp; Defense Constellation</span>
+  <span class="brand">US Drones · Open Inquiry</span>
   <span class="views" role="navigation" aria-label="Views">
-    <a href="index.html"><b>Constellation</b><span>Who works on which problem</span></a>
+    <a href="index.html"><b>Inquiry</b><span>What to ask next, and whom</span></a>
+    <a href="constellation.html"><b>Constellation</b><span>Who works on which problem</span></a>
     <a href="valuechain.html" class="on" aria-current="page"><b>Value chain</b><span>Where the supply chain is thin</span></a>
   </span>
 </div></nav>
@@ -263,6 +264,10 @@
     allied sources. <b>Risk concentrates on the left; American advantage concentrates
     on the right.</b> Click any segment for its chokepoints, its players, and what
     nobody has built yet.</p>
+  <p class="lede" style="margin-top:10px;font-size:13px">This chain still covers the whole of
+    aerospace &amp; defense. The drone inquiry’s own component chokepoints (magnets, cells,
+    motors, radios) are in its <a href="index.html#s-parts" style="color:var(--ink)">components sub-space</a>
+    for now; a drone-specific chain is the next slice.</p>
 
   <div class="reads" id="reads"></div>
 </header>
@@ -443,7 +448,7 @@ function panePl(s) {
     const n = known.get(name);
     const meta = n ? [n.hq, n.stage].filter(Boolean).join(' · ') : '';
     return `<div class="pl">
-      ${n ? `<a class="pn" href="index.html?focus=${encodeURIComponent(name)}">${name}</a>`
+      ${n ? `<a class="pn" href="constellation.html?focus=${encodeURIComponent(name)}">${name}</a>`
           : `<span class="pn">${name}</span>`}${meta ? `<span class="pm">${meta}</span>` : ''}
       ${line ? `<div class="pd">${gloss(line)}</div>` : ''}
       ${src ? `<div class="src">src · <a href="${src}" target="_blank" rel="noopener">${host(src)}</a></div>` : ''}

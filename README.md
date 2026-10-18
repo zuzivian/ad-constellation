@@ -1,21 +1,26 @@
-# Aerospace & Defense Constellation
+# US Drones — an open inquiry
 
-A two-view explorer of the US aerospace & defense ecosystem, built for Stanford
-GSB first-years figuring out where to recruit.
+A research-driven inquiry into US drones and counter-drone, built on a
+three-view explorer of the wider US aerospace & defense ecosystem. It started
+as a recruiting map for Stanford GSB first-years; on 2026-10-18 it was
+re-oriented into an investigation tool for the desk-research phase of a
+Research Driven Inspiration (RDI) inquiry.
 
 | View | Question it answers |
 |---|---|
-| [`prototype/index.html`](prototype/index.html) | *Who else works on this problem?* — a 3D constellation. Nine capability clusters act as gravity wells; companies, investors and buyers orbit the problems they touch. |
-| [`prototype/valuechain.html`](prototype/valuechain.html) | *Where are the gaps?* — the value chain from raw materials to fielded capability. Ten segments with coverage, chokepoints, players and unbuilt opportunities. |
+| [`prototype/index.html`](prototype/index.html) | *What should I go ask, and of whom?* — the inquiry: flag, forces of change, sub-spaces, hypotheses with evidence for and against, who to learn from, interview questions, watering holes, vocabulary, a dated log. |
+| [`prototype/constellation.html`](prototype/constellation.html) | *Who else works on this problem?* — a 3D constellation. Opens on the drone clusters; "All A&D" shows the full map. |
+| [`prototype/valuechain.html`](prototype/valuechain.html) | *Where are the gaps?* — the A&D value chain from raw materials to fielded capability. A drone-specific chain is next. |
 
 One question per view. See [`CLAUDE.md`](CLAUDE.md) for the standing brief and
-[`docs/`](docs/) for the product and data thinking behind it.
+[`docs/`](docs/) for the product and data thinking behind it
+(start with [`docs/12-inquiry-view.md`](docs/12-inquiry-view.md)).
 
 ## Run it locally
 
-Double-click `prototype/index.html`. That's it — no build, no server, no npm.
+Double-click `prototype/index.html` (the inquiry). That's it — no build, no server, no npm.
 
-All data lives in `prototype/data.js` and is loaded by both views with a
+All data lives in `prototype/data.js` and is loaded by all three views with a
 `<script src>` tag, which is what makes `file://` work (`fetch()` is
 CORS-blocked there). There is exactly one copy of the data; do not add a second.
 

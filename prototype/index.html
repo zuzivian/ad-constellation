@@ -3,672 +3,539 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Aerospace &amp; Defense Constellation — who works on what</title>
+<title>US Drones — an open inquiry</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
 <meta name="theme-color" content="#05070e" />
-<meta name="description" content="A 3D map of the US aerospace &amp; defense ecosystem: capability clusters, companies, investors and buyers. Working draft." />
+<meta name="description" content="A desk-research primer on the US drone industry, built for the first phase of a research-driven inquiry: what is changing, what we think, what we don't know, and who to ask. Working draft." />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Aerospace &amp; Defense Constellation — who works on what" />
-<meta property="og:description" content="A 3D map of the US aerospace &amp; defense ecosystem: capability clusters, companies, investors and buyers. Working draft." />
+<meta property="og:title" content="US Drones — an open inquiry" />
+<meta property="og:description" content="What is changing in US drones, what we think, what we don't know, and who to ask. Every fact sourced; every judgement labelled." />
 <meta name="twitter:card" content="summary" />
+<script>
+  // Old deep links (index.html?focus=X) pointed at the constellation, which now
+  // lives in constellation.html. Forward them before anything renders.
+  if (/[?&]focus=/.test(location.search)) location.replace('constellation.html' + location.search);
+</script>
 <style>
   :root {
+    --bg: #05070e;
     --ink: #e8ecf8;
     --dim: #8b95b2;
-    --edge: #1e2436;
-    --panel: rgba(9, 12, 22, 0.82);
-    --prime: #ffb347;
-    --dtech: #4dd0e1;
-    --space: #b388ff;
-    --investor: #7cffb2;
-    --gov: #ff7b72;
-    --cap: #cdd7ff;
+    --dimmer: #5d6684;
+    --edge: #1c2232;
+    --edge2: #2a3346;
+    --panel: #0a0e1a;
+    /* the six node-type colours from the constellation, reused with the same
+       meaning: an established player is amber here because it is amber there */
+    --prime: #ffb347; --dtech: #4dd0e1; --space: #b388ff;
+    --investor: #7cffb2; --gov: #ff7b72; --cap: #cdd7ff;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; overflow: hidden;
-    background: #05070e; color: var(--ink);
-    font-family: ui-sans-serif, -apple-system, "Segoe UI", Inter, sans-serif; }
+  html { scroll-behavior: smooth; scroll-padding-top: 190px; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font-family: ui-sans-serif, -apple-system, "Segoe UI", Inter, sans-serif;
+    font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  body.adfb-ribbon-on { padding-top: var(--adfb-top, 0px); }
+  a { color: inherit; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px 90px; }
 
-  /* layer 0: animated starfield behind the WebGL canvas */
-  #stars { position: fixed; inset: 0; z-index: 0; display: block; }
-  /* subtle nebula wash so pure black doesn't read as "empty div" */
-  #wash { position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background:
-      radial-gradient(60% 45% at 22% 18%, rgba(78, 60, 160, .28), transparent 70%),
-      radial-gradient(50% 40% at 82% 76%, rgba(20, 90, 120, .24), transparent 70%),
-      radial-gradient(70% 60% at 50% 50%, rgba(0,0,0,0), rgba(0,0,0,.55) 100%);
-  }
-  #graph { position: fixed; inset: 0; z-index: 1; }
-
-  /* name labels: plain DOM projected from the 3D scene, so no second three.js */
-  #labels { position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
-  #labels span { position: absolute; left: 0; top: 0; white-space: nowrap;
-    font-size: 11.5px; color: var(--ink); opacity: 0; will-change: transform, opacity;
-    text-shadow: 0 0 6px #05070e, 0 0 3px #05070e; transition: opacity .25s; }
-  /* node badges: each node is drawn as a disk glowing in its type colour with
-     the organisation's mark cut into it as a dark stencil. Dark-on-colour reads on
-     all six colours (white marks vanish on the pale ones) and adds no new colour. */
-  #badges { position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
-  .bdg { position: absolute; left: 0; top: 0; width: 100px; height: 100px; border-radius: 50%;
-    display: grid; place-items: center; opacity: 0; will-change: transform, opacity;
-    transform-origin: 0 0; transition: opacity .25s, filter .25s;
-    /* lit from the centre outward: emitted light, not a glossy highlight */
-    background: radial-gradient(circle, color-mix(in srgb, var(--c) 55%, #fff) 0%, var(--c) 52%,
-      color-mix(in srgb, var(--c) 58%, #05070e) 100%); }
-  .bdg img { width: 60%; height: 60%; object-fit: contain; filter: brightness(0);
-    opacity: .82; }
-  .bdg svg { width: 58%; height: 58%; color: #05070e; opacity: .78; }
-  .bdg b { font: 700 25px/1 ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
-    letter-spacing: .04em; color: #05070e; opacity: .8; }
-  .bdg.dim { filter: saturate(0) brightness(.3); }
-  .bdg.dim > *, .bdg.bare > * { display: none; }
-  /* wordmarks are unreadable small: show initials until the node is big enough */
-  .bdg.wm img { width: 78%; }
-  .bdg.wm:not(.big) img, .bdg.wm.big b { display: none; }
-
-  #labels span.cap { font-size: 10.5px; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--cap); }
-
-  /* HUD */
-  .hud { position: fixed; z-index: 3; }
-
-  /* view switcher — shared with valuechain.html */
-  /* Two pages, one switch. Each tab carries the question its view answers, so it
-     reads as navigation rather than a pair of buttons. Same rules in valuechain.html. */
-  #nav { position: fixed; z-index: 6; top: calc(18px + var(--adfb-top, 0px)); left: 50%;
-    transform: translateX(-50%); display: flex; gap: 4px;
-    background: rgba(9,12,22,.9); border: 1px solid #2a3346;
-    border-radius: 11px; padding: 4px; backdrop-filter: blur(10px); }
-  #nav a { display: block; padding: 8px 18px 9px; border-radius: 8px; min-width: 176px;
+  /* ── top bar: same rules as the other two views ── */
+  nav.top { position: sticky; top: var(--adfb-top, 0px); z-index: 20; background: rgba(5,7,14,.93);
+    backdrop-filter: blur(12px); border-bottom: 1px solid var(--edge); }
+  .nav-in { max-width: 1320px; margin: 0 auto; padding: 13px 28px;
+    display: flex; align-items: center; gap: 22px; }
+  .brand { font-size: 12px; font-weight: 640; letter-spacing: .16em; text-transform: uppercase; }
+  .views { display: flex; gap: 4px; margin-left: auto;
+    background: #0b0f1c; border: 1px solid var(--edge2); border-radius: 11px; padding: 4px; }
+  .views a { display: block; padding: 8px 18px 9px; border-radius: 8px; min-width: 176px;
     border: 1px solid transparent; color: var(--dim); text-decoration: none; }
-  #nav a b { display: block; font-size: 13px; font-weight: 620; letter-spacing: .02em; }
-  #nav a span { display: block; margin-top: 2px; font-size: 11.5px; color: #5d6684; }
-  #nav a:hover { color: var(--ink); background: rgba(255,255,255,.04); }
-  #nav a.on { background: #1d2740; border-color: #3a4a72; color: var(--ink); }
-  #nav a.on span { color: var(--dim); }
-  #nav a.on b::before { content: ''; display: inline-block; width: 6px; height: 6px;
+  .views a b { display: block; font-size: 13px; font-weight: 620; letter-spacing: .02em; }
+  .views a span { display: block; margin-top: 2px; font-size: 11.5px; color: var(--dimmer); }
+  .views a:hover { color: var(--ink); background: rgba(255,255,255,.04); }
+  .views a.on { background: #1d2740; border-color: #3a4a72; color: var(--ink); }
+  .views a.on span { color: var(--dim); }
+  .views a.on b::before { content: ''; display: inline-block; width: 6px; height: 6px;
     margin: 0 8px 1px 0; border-radius: 50%; background: var(--ink); }
-  abbr[title] { text-decoration: underline dotted rgba(139,149,178,.6); text-underline-offset: 3px;
-    cursor: help; }
+  @media (max-width: 980px) {
+    .nav-in { padding: 10px 16px; gap: 12px; }
+    .brand { display: none; }
+    .views { margin-left: 0; }
+    .views a { min-width: 0; padding: 7px 11px; }
+    .views a b { font-size: 12px; white-space: nowrap; }
+    .views a span, .views a.on b::before { display: none; } }
+  abbr[title] { text-decoration: underline dotted rgba(139,149,178,.6); text-underline-offset: 3px; cursor: help; }
 
-  #title { top: calc(22px + var(--adfb-top, 0px)); left: 26px; max-width: 330px; }
-  #title h1 { margin: 0; font-size: 15px; font-weight: 620; letter-spacing: .14em;
-    text-transform: uppercase; }
-  #title p { margin: 7px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--dim); }
+  /* ── in-page index ── */
+  .toc { position: sticky; top: calc(var(--adfb-top, 0px) + var(--navh, 63px)); z-index: 15;
+    background: rgba(5,7,14,.93); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--edge); }
+  .toc-in { max-width: 1180px; margin: 0 auto; padding: 0 28px; display: flex; gap: 22px;
+    overflow-x: auto; scrollbar-width: none; }
+  .toc a { padding: 11px 0 10px; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--dimmer); text-decoration: none; white-space: nowrap; border-bottom: 2px solid transparent; }
+  .toc a:hover { color: var(--ink); }
+  .toc a.on { color: var(--ink); border-bottom-color: var(--ink); }
+  .toc a em { font-style: normal; font-family: var(--mono); margin-left: 5px; color: var(--dimmer); letter-spacing: 0; }
+  @media (max-width: 980px) { .toc-in { padding: 0 16px; } }
 
-  #controls { top: calc(22px + var(--adfb-top, 0px)); right: 26px; width: 236px; display: flex;
-    flex-direction: column; gap: 10px; }
-  #search { width: 100%; padding: 9px 12px; border-radius: 9px;
-    border: 1px solid var(--edge); background: rgba(10,14,26,.8);
-    color: var(--ink); font-size: 13px; outline: none; }
-  #search:focus { border-color: #3a4568; }
-  #search::placeholder { color: #5d6684; }
+  /* ── header ── */
+  header { padding: 46px 0 6px; }
+  .eyebrow { font-family: var(--mono); font-size: 11px; color: var(--dimmer); margin-bottom: 9px; }
+  h1 { margin: 0 0 14px; font-size: 30px; font-weight: 620; letter-spacing: -.018em; }
+  .lede { margin: 0; max-width: 800px; color: var(--dim); font-size: 15px; line-height: 1.62; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  .tally { display: flex; gap: 28px; flex-wrap: wrap; margin: 26px 0 0; }
+  .tally div { font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--dimmer); }
+  .tally b { display: block; font-family: var(--mono); font-size: 17px; letter-spacing: 0;
+    color: var(--ink); font-weight: 500; margin-bottom: 2px; text-transform: none; }
 
-  .legend { background: var(--panel); border: 1px solid var(--edge);
-    border-radius: 11px; padding: 10px; backdrop-filter: blur(9px); }
-  .legend-row { display: flex; align-items: center; gap: 9px; padding: 5px 6px;
-    border-radius: 7px; cursor: pointer; font-size: 12.5px; user-select: none; }
-  .legend-row:hover { background: rgba(255,255,255,.05); }
-  .legend-row.off { opacity: .34; }
-  .dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
-  .legend-row .n { margin-left: auto; color: var(--dim); font-size: 11px;
-    font-variant-numeric: tabular-nums; }
-  .legend h4 { margin: 9px 6px 4px; padding-top: 9px; border-top: 1px solid var(--edge);
-    font-size: 10.5px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--dim); }
-  .edge-row { display: flex; align-items: center; gap: 9px; padding: 3px 6px; font-size: 11.5px;
-    color: var(--dim); }
-  .edge-row i { flex: 0 0 22px; height: 0; border-top: 1px solid; position: relative; }
-  .edge-row i.flow { border-top-style: dashed; }
-  .edge-row i.flow::after { content: ''; position: absolute; right: -1px; top: -4px;
-    border: 3.5px solid transparent; border-left: 5px solid currentColor; border-right: 0; }
-  .legend .fine { margin: 6px 6px 2px; font-size: 11px; line-height: 1.45; color: #5d6684; }
+  /* ── sections ── */
+  section { margin-top: 64px; }
+  .sh { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--edge); padding-bottom: 12px; margin-bottom: 4px; }
+  .sh h2 { margin: 0; font-size: 11px; letter-spacing: .15em; text-transform: uppercase; color: var(--ink); font-weight: 640; }
+  .sh .num { font-family: var(--mono); font-size: 11px; color: var(--dimmer); }
+  .sh p { margin: 0; flex-basis: 100%; color: var(--dim); font-size: 13px; max-width: 820px; line-height: 1.6; }
 
-  .btnrow { display: flex; gap: 8px; }
-  button { flex: 1; padding: 8px 10px; border-radius: 9px; cursor: pointer;
-    border: 1px solid var(--edge); background: rgba(10,14,26,.8);
-    color: var(--ink); font-size: 12px; font-family: inherit; }
-  button:hover { border-color: #3a4568; background: rgba(24,32,54,.9); }
-  button.live { border-color: #4dd0e1; color: #9ff0fa; }
+  /* judgement is always visibly different from fact: dotted rule, its own label */
+  .read { margin-top: 7px; padding-left: 11px; border-left: 1px dotted #4a5578;
+    font-size: 12.5px; color: var(--dim); line-height: 1.6; }
+  .read::before { content: 'Our read'; display: block; font-size: 9.5px; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--dimmer); margin-bottom: 1px; }
+  .read.draft::before { content: 'Draft · rewrite in your own words'; }
+  .jtag { font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--dimmer);
+    border: 1px dotted #4a5578; border-radius: 4px; padding: 1px 5px; white-space: nowrap; }
+  .src { font-family: var(--mono); font-size: 10.5px; color: var(--dimmer); margin-top: 6px; }
+  .src a { color: inherit; text-decoration: none; }
+  .src a:hover { color: var(--dim); text-decoration: underline; }
+  .src a + a::before { content: ' · '; color: var(--dimmer); }
 
-  /* detail panel */
-  #detail { position: fixed; z-index: 4; left: 26px; bottom: 26px; width: 352px;
-    max-height: 56vh; overflow-y: auto; background: var(--panel);
-    border: 1px solid var(--edge); border-radius: 13px; padding: 16px 17px;
-    backdrop-filter: blur(11px); transform: translateY(14px); opacity: 0;
-    pointer-events: none; transition: .22s ease; }
-  #detail.show { transform: none; opacity: 1; pointer-events: auto; }
-  #detail .kind { font-size: 10.5px; letter-spacing: .15em; text-transform: uppercase;
-    color: var(--dim); }
-  #detail h2 { margin: 6px 0 2px; font-size: 19px; font-weight: 600; }
-  #detail .meta { font-size: 12px; color: var(--dim); margin-bottom: 11px; }
-  #detail .note { font-size: 13px; line-height: 1.55; margin: 0 0 12px; }
-  #detail h3 { font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase;
-    color: var(--dim); margin: 13px 0 7px; }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip { font-size: 11.5px; padding: 4px 9px; border-radius: 999px;
-    border: 1px solid var(--edge); background: rgba(255,255,255,.04);
-    cursor: pointer; }
-  .chip:hover { border-color: #3a4568; background: rgba(255,255,255,.09); }
-  .chip .ev { margin-left: 5px; color: var(--dim); text-decoration: none; font-size: 10.5px; }
-  .chip .ev:hover { color: var(--ink); }
-  #d-src { margin-top: 14px; font-size: 10.5px; color: #5d6684;
-    font-family: ui-monospace, "SF Mono", Menlo, monospace; }
-  #d-src a { color: inherit; }
-  #d-src a:hover { color: var(--dim); }
-  #close { position: absolute; top: 12px; right: 13px; background: none;
-    border: none; color: var(--dim); font-size: 17px; cursor: pointer;
-    padding: 0; width: auto; flex: none; }
+  /* ── 1. the flag ── */
+  .flag { padding: 22px 0 6px; }
+  .flag .stmt { font-size: 19px; line-height: 1.5; max-width: 880px; font-weight: 450; letter-spacing: -.005em; }
+  .flag .stmt b { font-weight: 620; }
+  .scope { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0 30px; margin-top: 26px; }
+  .scope > div { padding: 13px 0; border-top: 1px solid var(--edge); }
+  .scope .q { font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--dimmer); margin-bottom: 5px; }
+  .scope .a { font-size: 13px; color: var(--dim); line-height: 1.58; }
+  .scope .a a { color: var(--ink); }
+  .inout { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 18px; }
+  .inout h4, .pgrid h4, .two h4 { margin: 0 0 8px; font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--dimmer); font-weight: 600; }
+  .inout ul { margin: 0; padding-left: 17px; color: var(--dim); font-size: 13px; }
+  .inout li { margin-bottom: 4px; }
 
-  #hint { bottom: 76px; right: 26px; font-size: 11.5px; color: #59617d;
-    text-align: right; line-height: 1.8; }
-  kbd { border: 1px solid var(--edge); border-radius: 4px; padding: 1px 5px;
-    font-size: 10.5px; font-family: ui-monospace, monospace; color: var(--dim); }
+  /* filters (shared) */
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; margin: 16px 0 6px; }
+  .filters button { padding: 4.5px 11px; border-radius: 6px; cursor: pointer;
+    border: 1px solid var(--edge); background: #0b0f1c; color: var(--dim); font: inherit; font-size: 11.5px; }
+  .filters button:hover { border-color: var(--edge2); color: var(--ink); }
+  .filters button.on { background: #1a2236; color: var(--ink); border-color: var(--edge2); }
+  .filters button em { font-style: normal; font-family: var(--mono); font-size: 10.5px; color: var(--dimmer); margin-left: 4px; }
 
-  #boot { position: fixed; inset: 0; z-index: 9; display: grid; place-items: center;
-    background: #05070e; font-size: 12.5px; letter-spacing: .16em;
-    text-transform: uppercase; color: var(--dim); transition: opacity .5s; }
-  #boot.gone { opacity: 0; pointer-events: none; }
+  /* ── 2. forces of change ── */
+  .ev { display: grid; grid-template-columns: 96px 1fr 300px; gap: 22px; padding: 15px 0;
+    border-top: 1px solid var(--edge); align-items: start; }
+  .ev:first-child { border-top: none; }
+  .ev .d { font-family: var(--mono); font-size: 11.5px; color: var(--dim); padding-top: 2px; }
+  .ev .d span { display: block; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--dimmer); margin-top: 5px; font-family: inherit; }
+  .ev .t { font-size: 14px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+  .ev .f { font-size: 13px; color: var(--dim); line-height: 1.6; }
+  .ev .read { margin-top: 0; }
+  .vec { display: inline-block; margin-left: 8px; font-size: 9.5px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--dimmer); font-weight: 500; }
+  .hlinks { margin-top: 6px; font-size: 11px; color: var(--dimmer); }
+  .hlinks a { font-family: var(--mono); color: var(--dim); text-decoration: none; margin-right: 6px; }
+  .hlinks a:hover { color: var(--ink); text-decoration: underline; }
 
-  @media (max-width: 820px) {
-    #controls { width: 168px; right: 14px; top: calc(14px + var(--adfb-top, 0px)); }
-    #title { max-width: 190px; left: 14px; top: calc(14px + var(--adfb-top, 0px)); }
-    #nav { top: auto; bottom: 14px; left: 14px; transform: none; }
-    #nav a { min-width: 0; padding: 7px 12px; }
-    #nav a b { white-space: nowrap; }
-    #nav a span, #nav a.on b::before { display: none; }
-    #detail { left: 14px; right: 14px; width: auto; bottom: 14px; }
-    #hint { display: none; }
+  /* ── 3. sub-spaces ── */
+  .sub { display: grid; grid-template-columns: 250px 1fr 1fr; gap: 26px; padding: 18px 0;
+    border-top: 1px solid var(--edge); align-items: start; }
+  .sub:first-child { border-top: none; }
+  .sub .nm { font-size: 14.5px; font-weight: 620; line-height: 1.35; }
+  .sub .w { font-size: 12.5px; color: var(--dim); margin-top: 6px; line-height: 1.58; }
+  .sub .lab { font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--dimmer); margin-bottom: 6px; }
+  .sub .mv { font-size: 12.5px; color: var(--dim); line-height: 1.6; }
+  .names { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+  .nm-chip { font-size: 11.5px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--edge);
+    background: #0d1220; color: var(--ink); text-decoration: none; white-space: nowrap; }
+  a.nm-chip:hover { border-color: var(--edge2); background: #151d30; }
+  a.nm-chip::after { content: ' ↗'; color: var(--dimmer); font-size: 10.5px; }
+  .ask { font-size: 13px; color: var(--ink); line-height: 1.55; }
+  .ask::before { content: '?'; font-family: var(--mono); color: var(--dimmer); margin-right: 7px; }
+
+  /* ── 4. hypotheses ── */
+  .hyp { padding: 22px 0 20px; border-top: 1px solid var(--edge); }
+  .hyp:first-child { border-top: none; }
+  .hyp:target { background: linear-gradient(90deg, rgba(205,215,255,.035), transparent 70%); }
+  .hyp .hh { display: grid; grid-template-columns: 54px 1fr auto; gap: 16px; align-items: start; }
+  .hyp .id { font-family: var(--mono); font-size: 13px; color: var(--dimmer); padding-top: 2px; }
+  .hyp .stmt { font-size: 15.5px; font-weight: 560; line-height: 1.45; max-width: 820px; }
+  .conf { text-align: right; min-width: 132px; }
+  .conf .meter { display: flex; gap: 2px; justify-content: flex-end; margin-bottom: 5px; }
+  .conf .meter i { width: 18px; height: 6px; border-radius: 1px; background: #182031; }
+  .conf .meter i.f { background: var(--cap); }
+  .conf .cl { font-size: 11.5px; color: var(--ink); }
+  .conf .cl s { text-decoration: none; color: var(--dimmer); }
+  .hyp .body { margin-left: 70px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 16px; }
+  .two ul { margin: 0; padding: 0; list-style: none; }
+  .two li { font-size: 12.5px; color: var(--dim); line-height: 1.58; padding: 7px 0; border-top: 1px solid var(--edge); }
+  .two li:first-child { border-top: none; padding-top: 0; }
+  .two li .src { margin-top: 3px; }
+  .two .none { color: var(--dimmer); font-style: italic; }
+  .hmeta { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 16px; }
+  .hmeta > div { flex: 1 1 300px; }
+  .hmeta .lab { font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--dimmer); margin-bottom: 5px; }
+  .hmeta .v { font-size: 12.5px; color: var(--dim); line-height: 1.58; }
+  .who { display: flex; gap: 5px; flex-wrap: wrap; }
+  .who a { font-size: 11px; padding: 2px 8px; border-radius: 999px; text-decoration: none;
+    border: 1px solid color-mix(in srgb, var(--c) 40%, transparent); color: var(--c); }
+  .who a:hover { background: color-mix(in srgb, var(--c) 12%, transparent); }
+
+  /* ── 5. who to learn from ── */
+  .pgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 34px 38px; margin-top: 18px; }
+  .pgrid h4 { display: flex; align-items: center; gap: 8px; }
+  .pgrid h4 i { width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+  .pgrid .why { font-size: 12px; color: var(--dimmer); margin: -2px 0 10px; line-height: 1.5; }
+  .pp { padding: 10px 0; border-top: 1px solid var(--edge); }
+  .pp:first-of-type { border-top: none; }
+  .pp .pn { font-size: 13px; font-weight: 600; color: var(--ink); text-decoration: none; }
+  a.pn:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .pp .pm { font-size: 11.5px; color: var(--dimmer); margin-left: 6px; }
+  .pp .pd { font-size: 12px; color: var(--dim); line-height: 1.52; margin-top: 3px; }
+  .pp .roles { color: var(--dimmer); }
+  /* our read on what this person or body could teach: judgement, so it gets the judgement rule */
+  .pp .pl { margin-top: 4px; padding-left: 9px; border-left: 1px dotted #4a5578; font-size: 12px;
+    color: var(--dim); line-height: 1.5; }
+  .pp .pl::before { content: 'Our read · '; font-size: 9.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--dimmer); }
+  .pp .src { margin-top: 4px; }
+
+  /* ── 6. questions ── */
+  .qgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 30px 38px; margin-top: 18px; }
+  .qgrid h4 { margin: 0 0 4px; font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--dimmer); font-weight: 600; }
+  .qgrid .lp { font-size: 12px; color: var(--dimmer); margin-bottom: 8px; line-height: 1.5; }
+  .qq { padding: 9px 0; border-top: 1px solid var(--edge); font-size: 13px; line-height: 1.55; }
+  .qq:first-of-type { border-top: none; }
+  .qq .qm { margin-top: 4px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .qq .qm a { font-family: var(--mono); font-size: 10.5px; color: var(--dim); text-decoration: none; }
+  .qq .qm a:hover { color: var(--ink); text-decoration: underline; }
+  .qq .qm .to { font-size: 10.5px; color: var(--c); }
+
+  /* ── 7. watering holes ── */
+  .holes { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 30px 38px; margin-top: 18px; }
+  .holes h4 { margin: 0 0 8px; font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--dimmer); font-weight: 600; }
+  .hole { padding: 9px 0; border-top: 1px solid var(--edge); }
+  .hole:first-of-type { border-top: none; }
+  .hole .hn { font-size: 13px; font-weight: 600; text-decoration: none; }
+  a.hn:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .hole .hw { font-family: var(--mono); font-size: 10.5px; color: var(--dimmer); margin-left: 6px; }
+  .hole .hd { font-size: 12px; color: var(--dim); margin-top: 2px; line-height: 1.5; }
+
+  /* ── 8. vocabulary ── */
+  .vocab { columns: 2; column-gap: 40px; margin-top: 18px; }
+  .vt { break-inside: avoid; padding: 7px 0; border-top: 1px solid var(--edge); font-size: 12.5px; color: var(--dim); line-height: 1.5; }
+  .vt b { color: var(--ink); font-weight: 600; margin-right: 6px; font-family: var(--mono); font-size: 12px; }
+
+  /* ── 9. log ── */
+  .log { margin-top: 10px; }
+  .lg { display: grid; grid-template-columns: 96px 1fr; gap: 22px; padding: 14px 0; border-top: 1px solid var(--edge); }
+  .lg:first-child { border-top: none; }
+  .lg .d { font-family: var(--mono); font-size: 11.5px; color: var(--dim); }
+  .lg .t { font-size: 13.5px; font-weight: 600; margin-bottom: 4px; }
+  .lg .b { font-size: 12.5px; color: var(--dim); line-height: 1.6; }
+  .lg .b ul { margin: 6px 0 0; padding-left: 17px; }
+
+  .note { margin-top: 44px; padding: 18px 20px; border: 1px solid var(--edge);
+    border-left: 2px solid var(--cap); border-radius: 10px; background: #0a0e1a;
+    font-size: 12.5px; color: var(--dim); line-height: 1.62; max-width: 900px; }
+  .note b { color: var(--ink); }
+
+  @media (max-width: 860px) {
+    .wrap { padding: 0 16px 60px; }
+    h1 { font-size: 23px; } .flag .stmt { font-size: 16.5px; }
+    .ev { grid-template-columns: 1fr; gap: 6px; }
+    .sub { grid-template-columns: 1fr; gap: 12px; }
+    .hyp .hh { grid-template-columns: 40px 1fr; } .conf { grid-column: 2; text-align: left; }
+    .conf .meter { justify-content: flex-start; }
+    .hyp .body { margin-left: 0; } .two, .inout { grid-template-columns: 1fr; gap: 18px; }
+    .vocab { columns: 1; } .lg { grid-template-columns: 1fr; gap: 4px; }
+    .pgrid, .qgrid, .holes { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<canvas id="stars"></canvas>
-<div id="wash"></div>
-<div id="graph"></div>
-<div id="badges"></div>
-<div id="labels"></div>
+<nav class="top"><div class="nav-in">
+  <span class="brand">US Drones · Open Inquiry</span>
+  <span class="views" role="navigation" aria-label="Views">
+    <a href="index.html" class="on" aria-current="page"><b>Inquiry</b><span>What to ask next, and whom</span></a>
+    <a href="constellation.html"><b>Constellation</b><span>Who works on which problem</span></a>
+    <a href="valuechain.html"><b>Value chain</b><span>Where the supply chain is thin</span></a>
+  </span>
+</div></nav>
+<div class="toc"><div class="toc-in" id="toc"></div></div>
 
-<nav id="nav" aria-label="Views">
-  <a href="index.html" class="on" aria-current="page"><b>Constellation</b><span>Who works on which problem</span></a>
-  <a href="valuechain.html"><b>Value chain</b><span>Where the supply chain is thin</span></a>
-</nav>
+<div class="wrap">
+<header>
+  <div class="eyebrow" id="asof"></div>
+  <h1>US drones: what is changing, and what to go ask</h1>
+  <p class="lede">A desk-research primer for the opening phase of an industry inquiry, built to
+    <b>earn the right to ask good questions</b> before the interviews start. It sets out the
+    flag we are planting, the forces moving the market, the sub-spaces worth a closer look,
+    what we currently believe and what would change our minds, and who could tell us.
+    <b>Facts link to a source. Judgements are marked “our read”.</b> The two never share a line.</p>
+  <div class="tally" id="tally"></div>
+</header>
 
-<div id="title" class="hud">
-  <h1>Aerospace &amp; Defense<br>Constellation</h1>
-  <p>Nine capability clusters. Companies, investors and buyers orbit
-     the problems they touch. Every organisation and every money edge links
-     to a public source, checked 3 Oct 2026. For supply-chain coverage and
-     gaps, switch to the value chain view.</p>
+<section id="flag">
+  <div class="sh"><span class="num">01</span><h2>The flag</h2>
+    <p>Where we are starting, stated concretely enough to act on and loosely enough to be
+       wrong. Held firmly enough to guide the first outreach, revised as the interviews come in.</p></div>
+  <div class="flag" id="flag-body"></div>
+</section>
+
+<section id="forces">
+  <div class="sh"><span class="num">02</span><h2>Forces of change</h2>
+    <p>Dated, sourced events behind the claim that this is a market in motion. Each is tagged
+       as an <b style="color:var(--ink)">internal</b> change (inside the industry: buyers, rules, rivals) or an
+       <b style="color:var(--ink)">external</b> one (war, technology, geopolitics), because the most interesting
+       openings tend to sit where the two collide.</p></div>
+  <div class="filters" id="force-filters"></div>
+  <div id="force-list"></div>
+</section>
+
+<section id="subspaces">
+  <div class="sh"><span class="num">03</span><h2>Sub-spaces</h2>
+    <p>The territory, cut into segments. Scope stays here; attention can drop into any one of
+       these for a closer look and climb back out. Names marked ↗ open in the constellation.</p></div>
+  <div id="sub-list"></div>
+</section>
+
+<section id="hypotheses">
+  <div class="sh"><span class="num">04</span><h2>Hypotheses</h2>
+    <p>What we currently believe, with the evidence on both sides. This whole section is
+       argument: each evidence line is a sourced fact plus how we read it, and confidence is our
+       judgement from desk research alone. None of it has met an interview yet. A hypothesis that
+       gains weight should do so from several independent sources, unprompted.</p></div>
+  <div id="hyp-list"></div>
+</section>
+
+<section id="people">
+  <div class="sh"><span class="num">05</span><h2>Who to learn from</h2>
+    <p>A starting target list across vantage points, chosen for what each could teach rather
+       than for how senior they are. Start closer to the work: operators and program staff
+       educate; executives confirm. Public roles and published work only.</p></div>
+  <div class="pgrid" id="people-list"></div>
+</section>
+
+<section id="questions">
+  <div class="sh"><span class="num">06</span><h2>Questions to take in</h2>
+    <p>What desk research could not answer. Anything a search engine can answer has been
+       answered above, so these are for people. Lenses, not a script: pick the one the
+       conversation is already heading toward.</p></div>
+  <div class="filters" id="q-filters"></div>
+  <div class="qgrid" id="q-list"></div>
+</section>
+
+<section id="holes">
+  <div class="sh"><span class="num">07</span><h2>Where insiders talk</h2>
+    <p>The watering holes: what to read, where to show up, and the public datasets that let
+       you check a claim yourself.</p></div>
+  <div class="holes" id="hole-list"></div>
+</section>
+
+<section id="vocab">
+  <div class="sh"><span class="num">08</span><h2>Vocabulary</h2>
+    <p>The words insiders use without explaining. The same definitions appear on hover
+       wherever a term is used across all three views.</p></div>
+  <div class="vocab" id="vocab-list"></div>
+</section>
+
+<section id="log">
+  <div class="sh"><span class="num">09</span><h2>Research log</h2>
+    <p>Dated, append-only. How the thinking moved, so the trail survives later edits.</p></div>
+  <div class="log" id="log-list"></div>
+</section>
+
+<div class="note" id="method"></div>
 </div>
 
-<div id="controls" class="hud">
-  <input id="search" placeholder="Search — fly to a node" autocomplete="off" />
-  <div class="legend" id="legend"></div>
-  <div class="btnrow">
-    <button id="tour">Tour</button>
-    <button id="reset">Reset</button>
-  </div>
-</div>
-
-<div id="detail">
-  <button id="close" title="Close">&times;</button>
-  <div class="kind" id="d-kind"></div>
-  <h2 id="d-name"></h2>
-  <div class="meta" id="d-meta"></div>
-  <p class="note" id="d-note"></p>
-  <div id="d-links"></div>
-  <div id="d-src"></div>
-</div>
-
-<div id="hint" class="hud">
-  drag to orbit &middot; scroll to zoom &middot; click a node to fly in<br />
-  <kbd>/</kbd> search &nbsp; <kbd>T</kbd> tour &nbsp; <kbd>Esc</kbd> reset
-</div>
-
-<div id="boot">charting the map</div>
-
-<!-- vendored, not CDN: the graph must not go blank when jsDelivr is blocked (docs/07) -->
-<script src="vendor/3d-force-graph-1.80.0.min.js"></script>
 <script src="data.js"></script>
 <script>
-/* ────────────────────────────────────────────────────────────────
-   1. DATA — now lives in data.js, shared with valuechain.html.
-   A plain <script src> works under file:// where fetch() would be
-   blocked by CORS, so we keep "opens by double-click" AND one
-   source of truth. See docs/07-decision-log.md.
-   ──────────────────────────────────────────────────────────────── */
-
-const TYPE_COLOR = { prime:'#ffb347', dtech:'#4dd0e1', space:'#b388ff',
-  investor:'#7cffb2', gov:'#ff7b72', capability:'#cdd7ff' };
-const TYPE_LABEL = { prime:'Prime contractor', dtech:'Defense tech', space:'Space',
-  investor:'Investor', gov:'Government / buyer', capability:'Capability cluster' };
-
-const CAPS       = window.AD.CAPS;
-const nodes      = window.AD.nodes;
-
-// data.js stores "sells to" as company -> buyer. This view draws money, so it
-// flips those to buyer -> company: every flowing edge then runs payer -> payee.
-// Same rows, re-pointed; not a second copy of the data.
-const cleanLinks = window.AD.links.map(l => l.kind === 'sells to'
-  ? { ...l, source: l.target, target: l.source } : { ...l });
-const isMoney = l => l.kind !== 'capability';
-// a flow takes the colour of whoever pays, so the palette stays bound to node types
-const FLOW_COLOR = { investment: '#7cffb2', 'sells to': '#ff7b72' };
-const byId = Object.fromEntries(nodes.map(n => [n.id, n]));
-const endType = e => (e.type ?? byId[e]?.type);
-
-/* ────────────────────────────────────────────────────────────────
-   2. STARFIELD  (plain 2D canvas, behind the WebGL layer)
-   Deliberately not three.js — avoids shipping a second copy of
-   the renderer just for background dots.
-   ──────────────────────────────────────────────────────────────── */
-(function starfield() {
-  const c = document.getElementById('stars'), x = c.getContext('2d');
-  let stars = [], w, h;
-  function seed() {
-    w = c.width = innerWidth * devicePixelRatio;
-    h = c.height = innerHeight * devicePixelRatio;
-    c.style.width = innerWidth + 'px'; c.style.height = innerHeight + 'px';
-    const n = Math.round((innerWidth * innerHeight) / 5200);
-    stars = Array.from({ length: n }, () => ({
-      x: Math.random() * w, y: Math.random() * h,
-      r: (Math.random() ** 2.4) * 1.7 * devicePixelRatio + .25,
-      a: Math.random() * .6 + .12, tw: Math.random() * .014 + .003,
-      p: Math.random() * Math.PI * 2,
-    }));
-  }
-  seed(); addEventListener('resize', seed);
-  (function draw() {
-    x.clearRect(0, 0, w, h);
-    for (const s of stars) {
-      s.p += s.tw;
-      const a = s.a * (0.62 + 0.38 * Math.sin(s.p));
-      x.beginPath(); x.arc(s.x, s.y, s.r, 0, 6.2832);
-      x.fillStyle = 'rgba(214,226,255,' + a.toFixed(3) + ')'; x.fill();
-    }
-    requestAnimationFrame(draw);
-  })();
-})();
-
-/* ────────────────────────────────────────────────────────────────
-   3. GRAPH
-   ──────────────────────────────────────────────────────────────── */
-// v1.7x switched to `new ForceGraph3D(el)`; older builds are `ForceGraph3D()(el)`.
-// Support both so a CDN bump doesn't take the page down.
-function makeGraph(el) {
-  try { return new ForceGraph3D(el); }
-  catch (e) { return ForceGraph3D()(el); }
-}
-
-const el = document.getElementById('graph');
-const G = makeGraph(el);
-
-const hiN = new Set(), hiL = new Set();
-let selected = null, hidden = new Set(), touring = false, tourTimer = null;
-
-const visible = n => !hidden.has(n.type);
-
-function nodeColor(n) {
-  const base = TYPE_COLOR[n.type];
-  if (!visible(n)) return 'rgba(90,100,125,0.07)';
-  if (!hiN.size) return base;
-  return hiN.has(n.id) ? base : 'rgba(120,132,160,0.13)';
-}
-
-// a link is only drawn if BOTH endpoints are of a visible type
-const linkShown = l => !hidden.has(endType(l.source)) && !hidden.has(endType(l.target));
-function rgba(hex, a) {
-  const v = parseInt(hex.slice(1), 16);
-  return `rgba(${v >> 16},${(v >> 8) & 255},${v & 255},${a})`;
-}
-
-function linkColor(l) {
-  if (!linkShown(l)) return 'rgba(0,0,0,0)';
-  const lit = hiL.has(l), dimmed = hiN.size && !lit;
-  if (!isMoney(l)) return lit ? 'rgba(205,215,255,0.55)' : dimmed ? 'rgba(150,170,215,0.04)' : 'rgba(150,170,215,0.10)';
-  const c = FLOW_COLOR[l.kind];
-  return lit ? rgba(c, 0.8) : dimmed ? rgba(c, 0.04) : rgba(c, 0.16);
-}
-// Every money edge is built once with two particles and an arrow. Hover never asks
-// the library to rebuild (that re-processes all 254 links and stalled the page for
-// ~0.5s per hover); paintLinks() below just swaps materials and toggles visibility.
-const GLOSSARY = window.AD.GLOSSARY, gloss = window.AD.gloss;
-// "DIU" -> "Defense Innovation Unit": the part of the glossary entry before the colon
-const fullName = id => GLOSSARY[id] ? GLOSSARY[id].split(':')[0].replace(/^the /, '') : '';
-const LINK_KIND = { capability: 'works on', investment: 'invests in', 'sells to': 'buys from' };
-
-G.graphData({ nodes, links: cleanLinks })
-  .backgroundColor('rgba(0,0,0,0)')
-  .showNavInfo(false)
-  // orgs are drawn ~25% larger than v1 so their marks are legible at the default
-  // zoom; clusters are scaled back so they stay the same size as before
-  .nodeRelSize(4)
-  .nodeVal(n => !visible(n) ? 1 : n.type === 'capability' ? n.val * 0.52 : n.val)
-  .nodeResolution(14)
-  // the spheres are invisible: badges draw the nodes. They stay for hover and click picking.
-  .nodeOpacity(0)
-  .nodeColor(nodeColor)
-  .nodeLabel(n => `<div style="font:600 13px ui-sans-serif;background:rgba(6,9,18,.93);
-      border:1px solid #232b40;border-radius:8px;padding:7px 10px;color:#e8ecf8">
-      ${n.id}<div style="font-weight:400;font-size:11px;color:#8b95b2;margin-top:2px">
-      ${fullName(n.id) ? fullName(n.id) + ' · ' : ''}${TYPE_LABEL[n.type]}${n.hq ? ' · ' + n.hq : ''}</div></div>`)
-  .linkColor(linkColor)
-  .linkWidth(0.4)
-  .linkLabel(l => `<div style="font:12px ui-sans-serif;background:rgba(6,9,18,.93);
-      border:1px solid #232b40;border-radius:8px;padding:6px 9px;color:#e8ecf8">
-      ${l.source.id} <span style="color:#8b95b2">${LINK_KIND[l.kind]}</span> ${l.target.id}${l.src
-        ? `<div style="font-size:10.5px;color:#5d6684;margin-top:3px">src · ${host(l.src)}</div>` : ''}</div>`)
-  .linkDirectionalParticles(l => isMoney(l) ? 2 : 0)
-  .linkDirectionalParticleColor(l => FLOW_COLOR[l.kind])
-  .linkDirectionalParticleWidth(1.3)
-  // speed is read every frame by the library, so it can follow the selection for free
-  .linkDirectionalParticleSpeed(l => hiL.has(l) ? 0.007 : 0.0028)
-  .linkDirectionalArrowLength(l => isMoney(l) ? 4 : 0)
-  .linkDirectionalArrowRelPos(0.62)
-  .linkDirectionalArrowColor(l => rgba(FLOW_COLOR[l.kind] || '#cdd7ff', 0.9))
-  .onNodeHover(n => {
-    if (selected) return;
-    highlight(n);
-    el.style.cursor = n ? 'pointer' : null;
-  })
-  .onNodeClick(n => { stopTour(); selected = n; highlight(n); flyTo(n); openDetail(n); })
-  .onBackgroundClick(() => { stopTour(); selected = null; highlight(null); closeDetail(); });
-
-G.d3Force('charge').strength(-260);
-// settle most of the layout before the first frame, so a click (or a ?focus= deep
-// link) flies to where a node actually ends up rather than where it was drifting
-G.warmupTicks(160).cooldownTime(5000);
-G.d3Force('link').distance(l => l.kind === 'capability' ? 46 : 78);
-
-// re-applying an accessor is how you force the library to redraw
-// Full rebuild: only for legend filters, which change node sizes. Rare, so the cost is fine.
-function refresh() {
-  G.nodeVal(G.nodeVal()).linkColor(linkColor);
-  requestAnimationFrame(() => requestAnimationFrame(paintLinks));   // objects are rebuilt next tick
-}
-
-// Cheap highlight: restyle the existing three.js objects in place. Materials are
-// shared between links by the library, so each state gets its own cached clone.
-const mats = new Map();
-function matFor(o, css) {
-  if (!mats.has(css)) {
-    const [r, g, b, a = 1] = css.match(/[\d.]+/g).map(Number);
-    const m = o.material.clone();
-    m.color.setRGB(r / 255, g / 255, b / 255); m.opacity = a; m.transparent = true;
-    mats.set(css, m);
-  }
-  return mats.get(css);
-}
-function paintLinks() {
-  const sel = hiN.size > 0;
-  for (const l of cleanLinks) {
-    const o = l.__lineObj; if (!o) continue;
-    const lit = hiL.has(l), shown = linkShown(l);
-    o.material = matFor(o, linkColor(l));
-    o.scale.x = o.scale.y = lit ? 2.6 : 1;            // thicker, without new geometry
-    const ph = l.__photonsObj?.children || [];
-    // at rest: one slow particle per money edge; selected: both, faster and larger; others: none
-    ph.forEach((p, i) => { p.visible = shown && (sel ? lit : i === 0); p.scale.setScalar(lit ? 1.45 : 1); });
-    if (l.__arrowObj) l.__arrowObj.visible = shown && lit;
-  }
-}
-
-function highlight(n) {
-  hiN.clear(); hiL.clear();
-  if (n) {
-    hiN.add(n.id);
-    for (const l of cleanLinks) {
-      const s = l.source.id ?? l.source, t = l.target.id ?? l.target;
-      if (s === n.id || t === n.id) { hiL.add(l); hiN.add(s); hiN.add(t); }
-    }
-  }
-  paintLinks();
-}
-
-function flyTo(n) {
-  const d = 1 + 190 / Math.hypot(n.x || 1, n.y || 1, n.z || 1);
-  G.cameraPosition({ x: (n.x || 0) * d, y: (n.y || 0) * d, z: (n.z || 0) * d }, n, 1100);
-}
-
-/* ── detail panel ── */
-const D = { box: document.getElementById('detail'), kind: document.getElementById('d-kind'),
-  name: document.getElementById('d-name'), meta: document.getElementById('d-meta'),
-  note: document.getElementById('d-note'), links: document.getElementById('d-links'),
-  src: document.getElementById('d-src') };
-const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return u; } };
+const AD = window.AD, Q = AD.INQUIRY, gloss = AD.gloss;
 const esc = t => String(t).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return u; } };
+const fmtDate = d => {
+  const [y, m, day] = d.split('-');
+  const M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m - 1];
+  return day ? `${+day} ${M} ${y}` : m ? `${M} ${y}` : y;
+};
+// one source line; a row may carry one URL or several
+const srcLine = s => !s ? '' : `<div class="src">src · ${[].concat(s).map(u =>
+  `<a href="${esc(u)}" target="_blank" rel="noopener">${host(u)}</a>`).join('')}</div>`;
+// organisations that exist as constellation nodes become links into it
+const known = new Set(AD.nodes.map(n => n.id));
+const orgLink = (name, cls = 'nm-chip') => known.has(name)
+  ? `<a class="${cls}" href="constellation.html?focus=${encodeURIComponent(name)}">${esc(name)}</a>`
+  : `<span class="${cls}">${esc(name)}</span>`;
+const PEOPLE_CAT = Q.peopleCats;               // id -> {label, colour var, why}
+const hLink = id => `<a href="#${id.toLowerCase()}">${id}</a>`;
 
-function openDetail(n) {
-  D.kind.textContent = TYPE_LABEL[n.type];
-  D.name.textContent = n.id;
-  D.meta.textContent = [fullName(n.id), n.hq, n.stage].filter(Boolean).join(' · ');
-  D.note.innerHTML = gloss(esc(n.note));
+/* ── header ── */
+const nForces = Q.forces.length, nHyp = Q.hypotheses.length;
+const nPeople = Object.values(Q.people).flat().length;
+const nQ = Q.questions.length;
+const nSrc = new Set([
+  ...Q.forces.flatMap(f => [].concat(f.src)),
+  ...Q.hypotheses.flatMap(h => [...h.for, ...h.against].flatMap(e => [].concat(e[1]))),
+  ...Object.values(Q.people).flat().map(p => p.src),
+  ...Q.holes.flatMap(g => g.items.map(i => i.src)),
+].filter(Boolean)).size;
+document.getElementById('asof').textContent =
+  `AS OF ${fmtDate(Q.asOf).toUpperCase()} · PHASE: ${Q.phase.toUpperCase()}`;
+document.getElementById('tally').innerHTML = [
+  [nForces, 'forces of change'], [Q.subspaces.length, 'sub-spaces'], [nHyp, 'open hypotheses'],
+  [nPeople, 'people & bodies to learn from'], [nQ, 'questions for interviews'], [nSrc, 'distinct sources']]
+  .map(([n, l]) => `<div><b>${n}</b>${l}</div>`).join('');
 
-  // keyed by kind + which end of the edge this node is on
-  const heads = { 'capability>': 'Works on', 'capability<': 'Who works on this',
-    'investment>': 'Portfolio', 'investment<': 'Backed by',
-    'sells to>': 'Buys from', 'sells to<': 'Sells to' };
-  // each entry is [other end, evidence URL or undefined]
-  const groups = Object.fromEntries(Object.keys(heads).map(k => [k, []]));
-  for (const l of cleanLinks) {
-    const s = l.source.id ?? l.source, t = l.target.id ?? l.target;
-    if (s === n.id) groups[l.kind + '>'].push([t, l.src]);
-    else if (t === n.id) groups[l.kind + '<'].push([s, l.src]);
-  }
-  D.links.innerHTML = Object.entries(groups)
-    .filter(([, v]) => v.length)
-    .map(([k, v]) => `<h3>${heads[k]}</h3><div class="chips">` +
-      v.map(([x, src]) => `<span class="chip" data-go="${esc(x)}">${x}${src
-        ? `<a class="ev" href="${esc(src)}" target="_blank" rel="noopener" title="Evidence: ${esc(host(src))}">↗</a>` : ''}</span>`).join('') +
-      `</div>`).join('');
-  D.src.innerHTML = n.src
-    ? `src · <a href="${esc(n.src)}" target="_blank" rel="noopener">${host(n.src)}</a> · checked ${n.verified}` +
-      (groups['investment<'].length + groups['sells to<'].length + groups['investment>'].length + groups['sells to>'].length
-        ? '<br>↗ on a name opens the evidence for that edge' : '')
-    : '';
-  D.box.classList.add('show');
+/* ── in-page index ── */
+const SECTIONS = [['flag','The flag'],['forces','Forces',nForces],['subspaces','Sub-spaces',Q.subspaces.length],
+  ['hypotheses','Hypotheses',nHyp],['people','Who to learn from',nPeople],['questions','Questions',nQ],
+  ['holes','Where insiders talk'],['vocab','Vocabulary'],['log','Log']];
+// the index sticks directly under the top bar, whose height changes with the viewport
+const fitToc = () => document.documentElement.style.setProperty('--navh',
+  document.querySelector('nav.top').offsetHeight + 'px');
+fitToc(); addEventListener('resize', fitToc);
+const toc = document.getElementById('toc');
+toc.innerHTML = SECTIONS.map(([id, l, n]) => `<a href="#${id}" data-s="${id}">${l}${n ? `<em>${n}</em>` : ''}</a>`).join('');
+const spy = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) toc.querySelectorAll('a').forEach(a => a.classList.toggle('on', a.dataset.s === e.target.id));
+}), { rootMargin: '-40% 0px -55% 0px' });
+SECTIONS.forEach(([id]) => spy.observe(document.getElementById(id)));
+
+/* ── 01 flag ── */
+const F = Q.flag;
+document.getElementById('flag-body').innerHTML = `
+  <div class="stmt">${gloss(F.statement)}</div>
+  <div class="read draft">${gloss(F.note)}</div>
+  <div class="inout">
+    <div><h4>In scope</h4><ul>${F.inScope.map(x => `<li>${gloss(x)}</li>`).join('')}</ul></div>
+    <div><h4>Out of scope, for now</h4><ul>${F.outScope.map(x => `<li>${gloss(x)}</li>`).join('')}</ul></div>
+  </div>
+  <div class="scope">${F.checks.map(([q, a]) => `<div><div class="q">${q}</div><div class="a">${gloss(a)}</div></div>`).join('')}</div>`;
+
+/* ── 02 forces ── */
+const CATS = Q.forceCats;
+let forceCat = 'all';
+const forceHyps = {};                          // force id -> hypotheses that cite it
+Q.hypotheses.forEach(h => (h.forces || []).forEach(f => (forceHyps[f] = forceHyps[f] || []).push(h.id)));
+function drawForces() {
+  const counts = Q.forces.reduce((a, f) => (a[f.cat] = (a[f.cat] || 0) + 1, a), {});
+  document.getElementById('force-filters').innerHTML =
+    [['all', 'All', Q.forces.length], ...Object.entries(CATS).map(([k, l]) => [k, l, counts[k] || 0])]
+      .map(([k, l, n]) => `<button data-c="${k}" class="${forceCat === k ? 'on' : ''}">${l}<em>${n}</em></button>`).join('');
+  document.getElementById('force-list').innerHTML = Q.forces
+    .filter(f => forceCat === 'all' || f.cat === forceCat)
+    .slice().sort((a, b) => b.d.localeCompare(a.d))
+    .map(f => `<div class="ev" id="f-${f.id}">
+      <div class="d">${fmtDate(f.d)}<span>${CATS[f.cat]}</span></div>
+      <div><div class="t">${gloss(f.t)}<span class="vec">${f.vec}</span></div>
+        <div class="f">${gloss(f.f)}</div>${srcLine(f.src)}
+        ${forceHyps[f.id] ? `<div class="hlinks">bears on ${forceHyps[f.id].map(hLink).join('')}</div>` : ''}</div>
+      <div class="read">${gloss(f.why)}</div>
+    </div>`).join('');
 }
-function closeDetail() { D.box.classList.remove('show'); }
-document.getElementById('close').onclick = () => {
-  selected = null; highlight(null); closeDetail();
-};
-D.links.addEventListener('click', e => {
-  if (e.target.closest('a')) return;   // evidence link: let the browser open it
-  const name = e.target.closest('.chip')?.dataset.go; if (!name) return;
-  const n = nodes.find(x => x.id === name);
-  if (n) { selected = n; highlight(n); flyTo(n); openDetail(n); }
+document.getElementById('force-filters').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; forceCat = b.dataset.c; drawForces();
 });
+drawForces();
 
-/* ── legend / filters ── */
-const counts = nodes.reduce((a, n) => (a[n.type] = (a[n.type] || 0) + 1, a), {});
-document.getElementById('legend').innerHTML = Object.keys(TYPE_LABEL).map(t =>
-  `<div class="legend-row" data-t="${t}">
-     <span class="dot" style="background:${TYPE_COLOR[t]}"></span>
-     <span>${TYPE_LABEL[t]}</span><span class="n">${counts[t] || 0}</span></div>`).join('') +
-  `<h4>Edges</h4>
-   <div class="edge-row"><i style="color:rgba(205,215,255,.5)"></i>works on a cluster</div>
-   <div class="edge-row"><i class="flow" style="color:${FLOW_COLOR.investment}"></i>capital: investor → company</div>
-   <div class="edge-row"><i class="flow" style="color:${FLOW_COLOR['sells to']}"></i>contracts: buyer → company</div>
-   <p class="fine">Particles show which way money moves, not how much. Dollar amounts aren't sourced yet.</p>`;
-document.getElementById('legend').addEventListener('click', e => {
-  const row = e.target.closest('.legend-row'); if (!row) return;
-  const t = row.dataset.t;
-  hidden.has(t) ? hidden.delete(t) : hidden.add(t);
-  row.classList.toggle('off', hidden.has(t));
-  refresh();
+/* ── 03 sub-spaces ── */
+document.getElementById('sub-list').innerHTML = Q.subspaces.map(s => `<div class="sub" id="s-${s.id}">
+  <div><div class="nm">${s.name}</div><div class="w">${gloss(s.what)}</div>
+    <div class="names">${s.players.map(p => orgLink(p)).join('')}</div></div>
+  <div><div class="lab">What is moving</div><div class="mv">${gloss(s.moving)}</div>${srcLine(s.src)}</div>
+  <div><div class="lab">The question we can't answer from a desk</div><div class="ask">${gloss(s.ask)}</div>
+    ${s.h?.length ? `<div class="hlinks">see ${s.h.map(hLink).join('')}</div>` : ''}</div>
+</div>`).join('');
+
+/* ── 04 hypotheses ── */
+const CONF = { Low: 1, Medium: 2, High: 3 };
+const qByH = {};
+Q.questions.forEach(q => (q.h || []).forEach(h => (qByH[h] = (qByH[h] || 0) + 1)));
+const evList = xs => xs.length ? `<ul>${xs.map(([t, s]) => `<li>${gloss(t)}${srcLine(s)}</li>`).join('')}</ul>`
+  : `<ul><li class="none">Nothing found yet. That is itself worth asking about.</li></ul>`;
+document.getElementById('hyp-list').innerHTML = Q.hypotheses.map(h => `<div class="hyp" id="${h.id.toLowerCase()}">
+  <div class="hh"><div class="id">${h.id}</div><div class="stmt">${gloss(h.h)}</div>
+    <div class="conf"><div class="meter">${[1,2,3].map(k => `<i class="${k <= CONF[h.conf] ? 'f' : ''}"></i>`).join('')}</div>
+      <div class="cl">${h.conf} confidence <s>·</s> <span class="jtag">judgement</span></div></div></div>
+  <div class="body">
+    <div class="two"><div><h4>Evidence for</h4>${evList(h.for)}</div>
+      <div><h4>Evidence against, or complicating</h4>${evList(h.against)}</div></div>
+    <div class="hmeta">
+      <div><div class="lab">What would change our mind</div><div class="v">${gloss(h.flip)}</div></div>
+      <div><div class="lab">Who could test it</div><div class="who">${h.ask.map(c =>
+        `<a href="#people-${c}" style="--c:var(--${PEOPLE_CAT[c].c})">${PEOPLE_CAT[c].label}</a>`).join('')}</div>
+        <div class="hlinks" style="margin-top:9px">logged ${fmtDate(h.logged)} · status: ${h.status}${
+          qByH[h.id] ? ` · <a href="#questions" data-qh="${h.id}">${qByH[h.id]} question${qByH[h.id] > 1 ? 's' : ''} test this</a>` : ''}</div></div>
+    </div>
+  </div></div>`).join('');
+
+/* ── 05 people ── */
+document.getElementById('people-list').innerHTML = Object.entries(PEOPLE_CAT).map(([k, c]) =>
+  `<div id="people-${k}" style="--c:var(--${c.c})"><h4><i></i>${c.label}<em style="font-style:normal;font-family:var(--mono);color:var(--dimmer);letter-spacing:0;margin-left:2px">${(Q.people[k] || []).length}</em></h4>
+    <div class="why">${c.why}</div>
+    ${(Q.people[k] || []).map(p => `<div class="pp">
+      ${known.has(p.n) ? orgLink(p.n, 'pn') : `<span class="pn">${esc(p.n)}</span>`}${p.a ? `<span class="pm">${esc(p.a)}</span>` : ''}
+      <div class="pd">${gloss(p.d)}</div>
+      ${p.l ? `<div class="pl">${gloss(p.l)}</div>` : ''}
+      ${p.roles ? `<div class="pd roles">Start with: ${gloss(p.roles)}</div>` : ''}
+      ${srcLine(p.src)}</div>`).join('')}</div>`).join('');
+
+/* ── 06 questions ── */
+let qFilter = 'all';
+function drawQuestions() {
+  const hs = [...new Set(Q.questions.flatMap(q => q.h || []))].sort((a, b) => a.slice(1) - b.slice(1));
+  document.getElementById('q-filters').innerHTML = [['all', 'All lenses'], ...hs.map(h => [h, h])]
+    .map(([k, l]) => `<button data-q="${k}" class="${qFilter === k ? 'on' : ''}">${l === 'All lenses' ? l : 'Tests ' + l}</button>`).join('');
+  document.getElementById('q-list').innerHTML = Q.lenses.map(L => {
+    const qs = Q.questions.filter(q => q.lens === L.id && (qFilter === 'all' || (q.h || []).includes(qFilter)));
+    if (!qs.length) return '';
+    return `<div><h4>${L.label}</h4><div class="lp">${L.why}</div>${qs.map(q => `<div class="qq">${gloss(q.q)}
+      <div class="qm">${(q.h || []).map(hLink).join('')}${q.to.map(c =>
+        `<span class="to" style="--c:var(--${PEOPLE_CAT[c].c})">${PEOPLE_CAT[c].label.toLowerCase()}</span>`).join('<span style="color:var(--dimmer)">·</span>')}</div></div>`).join('')}</div>`;
+  }).join('');
+}
+document.getElementById('q-filters').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return; qFilter = b.dataset.q; drawQuestions();
 });
-
-/* ── search ── */
-const search = document.getElementById('search');
-search.addEventListener('keydown', e => {
-  if (e.key !== 'Enter') return;
-  const q = search.value.trim().toLowerCase(); if (!q) return;
-  const n = nodes.find(x => x.id.toLowerCase().includes(q));
-  if (n) { stopTour(); selected = n; highlight(n); flyTo(n); openDetail(n); search.blur(); }
-  else { search.value = ''; search.placeholder = 'no match — try "Anduril"'; }
+document.getElementById('hyp-list').addEventListener('click', e => {
+  const a = e.target.closest('[data-qh]'); if (!a) return; qFilter = a.dataset.qh; drawQuestions();
 });
+drawQuestions();
 
-/* ── tour: fly cluster to cluster ── */
-const tourBtn = document.getElementById('tour');
-function stopTour() { touring = false; clearTimeout(tourTimer); tourBtn.classList.remove('live'); }
-tourBtn.onclick = () => {
-  if (touring) return stopTour();
-  touring = true; tourBtn.classList.add('live');
-  let i = 0;
-  const stops = CAPS.map(([, name]) => nodes.find(n => n.id === name));
-  (function step() {
-    if (!touring) return;
-    const n = stops[i++ % stops.length];
-    selected = n; highlight(n); flyTo(n); openDetail(n);
-    tourTimer = setTimeout(step, 4200);
-  })();
-};
-document.getElementById('reset').onclick = () => {
-  stopTour(); selected = null; highlight(null); closeDetail();
-  G.cameraPosition({ x: 0, y: 0, z: 620 }, { x: 0, y: 0, z: 0 }, 1000);
-};
+/* ── 07 watering holes ── */
+document.getElementById('hole-list').innerHTML = Q.holes.map(g => `<div><h4>${g.label}</h4>${g.items.map(i => `<div class="hole">
+  <a class="hn" href="${esc(i.src)}" target="_blank" rel="noopener">${esc(i.n)}</a>${i.w ? `<span class="hw">${esc(i.w)}</span>` : ''}
+  <div class="hd">${gloss(i.d)}</div></div>`).join('')}</div>`).join('');
 
-/* ── keys ── */
+/* ── 08 vocabulary ── */
+document.getElementById('vocab-list').innerHTML = Q.vocab.filter(k => AD.GLOSSARY[k])
+  .map(k => `<div class="vt"><b>${esc(k)}</b>${esc(AD.GLOSSARY[k])}</div>`).join('');
+
+/* ── 09 log ── */
+document.getElementById('log-list').innerHTML = Q.log.slice().reverse().map(l => `<div class="lg">
+  <div class="d">${fmtDate(l.d)}</div><div><div class="t">${l.t}</div><div class="b">${gloss(l.b)}</div></div></div>`).join('');
+
+document.getElementById('method').innerHTML = Q.method;
+
 // what the feedback widget reports as context
-window.AD_CONTEXT = () => selected ? 'looking at: ' + selected.id : 'no node selected';
-
-addEventListener('keydown', e => {
-  if (e.target === search) return;
-  if (e.key === '/') { e.preventDefault(); search.focus(); }
-  if (e.key.toLowerCase() === 't') tourBtn.click();
-  if (e.key === 'Escape') document.getElementById('reset').click();
-});
-
-/* ── badges + name labels ──
-   Both are plain DOM projected from the 3D scene each frame, so there is no
-   second three.js. Badges sit exactly over each sphere (the sphere stays
-   underneath for picking) and are z-sorted by depth so near nodes cover far
-   ones. Labels are placed in priority order — clusters, then the selection,
-   then nearest first — and any label that would overlap one already placed is
-   skipped, so the map names as much as it can without becoming a word cloud. */
-
-// capability clusters get a drawn icon; they are problems, not organisations
-const CAP_ICON = {
-  autonomy: '<circle cx="5.5" cy="5.5" r="2.6"/><circle cx="18.5" cy="5.5" r="2.6"/><circle cx="5.5" cy="18.5" r="2.6"/><circle cx="18.5" cy="18.5" r="2.6"/><path d="M7.5 7.5l3 3m6-3l-3 3m-6 6l3-3m6 3l-3-3"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/>',
-  launch:   '<path d="M12 2.5c3 2.6 4.4 6 4.4 10.2V17H7.6v-4.3C7.6 8.5 9 5.1 12 2.5z"/><circle cx="12" cy="10" r="1.7"/><path d="M7.6 13.5L4.8 16v3.2l2.8-1.5m8.8-4.2l2.8 2.5v3.2l-2.8-1.5M10 17.5l-.6 3.5m4.6-3.5l.6 3.5"/>',
-  space:    '<rect x="9.2" y="9.2" width="5.6" height="5.6" rx="1" transform="rotate(45 12 12)"/><path d="M3 6.5l4.5 4.5M6.5 3L11 7.5M3 6.5L6.5 3m14.5 14.5l-4.5-4.5M17.5 21L13 16.5M21 17.5L17.5 21"/><path d="M15.5 4.5a6 6 0 014 4"/>',
-  c2:       '<circle cx="12" cy="5" r="2.4"/><circle cx="5" cy="18" r="2.4"/><circle cx="19" cy="18" r="2.4"/><path d="M11 7.2L6.1 15.8M13 7.2l4.9 8.6M7.4 18h9.2"/><circle cx="12" cy="13.2" r="1.2"/>',
-  ew:       '<circle cx="12" cy="12" r="1.8"/><path d="M8.3 8.3a5.2 5.2 0 000 7.4m7.4-7.4a5.2 5.2 0 010 7.4M5.5 5.5a9.2 9.2 0 000 13m13-13a9.2 9.2 0 010 13"/>',
-  hyper:    '<path d="M21 12L9 6.5 11 12l-2 5.5z"/><path d="M3 9h5M2 12h7M3 15h5"/>',
-  cuas:     '<circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.8v4.4m0 11.6v4.4M1.8 12h4.4m11.6 0h4.4"/>',
-  maritime: '<path d="M3 14.5h18l-2.6 4.5H5.6z"/><path d="M7 14.5V11h8.5l1.5 3.5M10 11V8h3v3"/><path d="M2.5 21.5c1.6 0 1.6-1 3.2-1s1.6 1 3.2 1 1.6-1 3.2-1 1.6 1 3.2 1 1.6-1 3.2-1 1.6 1 3.2 1"/>',
-  mfg:      '<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5l1.6 2.6 3-.9.6 3 2.9 1.1-1 2.9 1.9 2.4-2.5 1.8.1 3.1-3.1.2L14 21l-2-2.3L10 21l-1.5-2.8-3.1-.2.1-3.1L3 13.1l1.9-2.4-1-2.9 2.9-1.1.6-3 3 .9z"/>',
-};
-const CAP_KEY = Object.fromEntries(CAPS.map(([k, name]) => [name, k]));
-// government nodes get a monogram: official seals and service insignia carry
-// legal restrictions on unofficial use, and they turn to mush at 30px anyway
-const MONO = { 'US Army': 'ARMY', 'US Navy': 'NAVY', 'US Air Force': 'USAF',
-  'US Space Force': 'USSF', 'DoD Office of Strategic Capital': 'OSC' };
-// agencies are known by their acronym (DIU, SDA, NRO); anything else falls back to initials
-const monogram = n => MONO[n.id] || (n.type === 'gov' && n.id.length <= 6 ? n.id
-  : n.id.replace(/[^A-Za-z0-9 ]/g, '').split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase());
-const LOGOS = window.AD.LOGOS || {};
-
-const BDG = document.getElementById('badges'), LBL = document.getElementById('labels');
-const items = nodes.map(n => {
-  const b = document.createElement('div');
-  b.className = 'bdg';
-  b.style.setProperty('--c', TYPE_COLOR[n.type]);
-  if (n.type === 'capability') {
-    b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-      stroke-linecap="round" stroke-linejoin="round">${CAP_ICON[CAP_KEY[n.id]] || ''}</svg>`;
-  } else if (LOGOS[n.id]) {
-    const img = new Image();
-    img.alt = ''; img.decoding = 'async'; img.src = LOGOS[n.id].file;
-    // a missing or broken file falls back to the monogram rather than an empty disk
-    img.onerror = () => { b.className = 'bdg'; b.innerHTML = `<b>${monogram(n)}</b>`; };
-    b.appendChild(img);
-    if (LOGOS[n.id].kind === 'wordmark') { b.classList.add('wm'); b.insertAdjacentHTML('beforeend', `<b>${monogram(n)}</b>`); }
-  } else {
-    b.innerHTML = `<b>${monogram(n)}</b>`;
-  }
-  BDG.appendChild(b);
-  const el = document.createElement('span');
-  el.textContent = n.id;
-  if (n.type === 'capability') el.className = 'cap';
-  LBL.appendChild(el);
-  return { n, b, el, w: 0, h: 0, a: 0, ba: 0, dim: false, bare: false, big: false };
-});
-
-const NEAR = 380, FAR = 820;   // camera distance at which org labels are full / gone
-const MARK_MIN = 9, WORDMARK_MIN = 24;           // below this on-screen radius a mark is unreadable: plain disk
-const rank = it => it.n.type === 'capability' ? 0 : hiN.has(it.n.id) ? 1 : 2;
-
-(function placeOverlay() {
-  const cam = G.camera(), inv = cam.matrixWorldInverse.elements, up = cam.matrixWorld.elements;
-  const live = [];
-  for (const it of items) {
-    const n = it.n;
-    it.a = 0; it.ba = 0;
-    if (n.x === undefined || !visible(n)) continue;
-    const z = inv[2] * n.x + inv[6] * n.y + inv[10] * n.z + inv[14];   // view space; < 0 is in front
-    if (z > -1) continue;
-    it.depth = -z;
-    const R = Math.cbrt(G.nodeVal()(n)) * G.nodeRelSize();
-    const p = G.graph2ScreenCoords(n.x, n.y, n.z);
-    // project the node's top edge along the camera's up axis to get its on-screen radius
-    const q = G.graph2ScreenCoords(n.x + up[4] * R, n.y + up[5] * R, n.z + up[6] * R);
-    it.p = p; it.r = Math.hypot(q.x - p.x, q.y - p.y);
-
-    // badge: always drawn for a visible node; dimmed rather than hidden when unselected
-    it.ba = 1;
-    const dim = hiN.size > 0 && !hiN.has(n.id), bare = it.r < MARK_MIN;
-    if (dim !== it.dim) { it.b.classList.toggle('dim', dim); it.dim = dim; }
-    if (bare !== it.bare) { it.b.classList.toggle('bare', bare); it.bare = bare; }
-    const big = it.r >= WORDMARK_MIN;
-    if (big !== it.big) { it.b.classList.toggle('big', big); it.big = big; }
-    const d = it.r * 2 + 1;   // a hair larger than the sphere so its edge never peeks out
-    it.b.style.transform = `translate(${(p.x - d / 2).toFixed(1)}px,${(p.y - d / 2).toFixed(1)}px) scale(${(d / 100).toFixed(4)})`;
-    it.b.style.zIndex = String(100000 - Math.round(it.depth * 10));
-
-    if (hiN.size) it.a = hiN.has(n.id) ? 1 : 0;
-    else if (n.type === 'capability') it.a = 0.9;
-    else it.a = Math.max(0, Math.min(1, (FAR - it.depth) / (FAR - NEAR))) * 0.8;
-    if (it.a > 0.02) live.push(it);
-  }
-  live.sort((p, q) => rank(p) - rank(q) || p.depth - q.depth);
-  const placed = [];
-  for (const it of live) {
-    if (!it.w) { it.w = it.el.offsetWidth; it.h = it.el.offsetHeight; }
-    const box = { x: it.p.x - it.w / 2, y: it.p.y + it.r + 3, w: it.w, h: it.h };
-    if (placed.some(b => box.x < b.x + b.w + 6 && b.x < box.x + box.w + 6 &&
-                         box.y < b.y + b.h && b.y < box.y + box.h)) { it.a = 0; continue; }
-    placed.push(box);
-    it.el.style.transform = `translate(${box.x.toFixed(1)}px,${box.y.toFixed(1)}px)`;
-  }
-  for (const it of items) {
-    const o = it.a > 0.02 ? it.a.toFixed(2) : '0', bo = !it.ba ? '0' : it.dim ? '0.5' : '1';
-    if (it.el.style.opacity !== o) it.el.style.opacity = o;
-    if (it.b.style.opacity !== bo) it.b.style.opacity = bo;
-  }
-  requestAnimationFrame(placeOverlay);
-})();
-
-/* ── boot + sizing ── */
-// size from the container, not the window, so projected label positions match the canvas
-function size() { G.width(el.clientWidth).height(el.clientHeight); }
-size(); addEventListener('resize', size);
-G.cameraPosition({ x: 0, y: 0, z: 900 });
-setTimeout(() => {
-  G.cameraPosition({ x: 0, y: 0, z: 620 }, { x: 0, y: 0, z: 0 }, 2200);
-  document.getElementById('boot').classList.add('gone');
-  paintLinks();   // objects exist by now; apply the at-rest look (one particle, no arrows)
-}, 900);
-
-// deep link from the value chain view: valuechain.html -> index.html?focus=Anduril
-const focus = new URLSearchParams(location.search).get('focus');
-if (focus) setTimeout(() => {
-  const n = nodes.find(x => x.id === focus);
-  if (n) { selected = n; highlight(n); flyTo(n); openDetail(n); }
-}, 2600);
+window.AD_CONTEXT = () => 'section ' + (toc.querySelector('a.on')?.dataset.s || 'top')
+  + ' · forces ' + forceCat + ' · questions ' + qFilter;
 </script>
 <script src="feedback.js"></script>
 </body>

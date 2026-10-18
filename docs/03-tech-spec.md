@@ -24,7 +24,7 @@ Realistic budget for the 3D layer: **6–10 hours**, including learning it.
 ## Architecture
 
 ```
-prototype/index.html      one file, three layers stacked by z-index
+prototype/constellation.html  one file, three layers stacked by z-index (was index.html until 2026-10-18)
 ├── z0  <canvas id="stars">   2D canvas starfield  (plain Canvas API)
 ├── z0  <div id="wash">       CSS radial-gradient nebula
 ├── z1  <div id="graph">      3d-force-graph's WebGL canvas, transparent bg

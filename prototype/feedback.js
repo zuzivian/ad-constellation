@@ -21,16 +21,16 @@
     // The site is noindex + unlisted, so scraping exposure is low, but if
     // you'd rather not publish it, swap in an alias.
     to: 'natwong@stanford.edu',
-    subject: 'Aerospace & Defense map — feedback',
+    subject: 'US drones inquiry — feedback',
 
     // Optional Google Form upgrade. Leave formAction '' to stay on email.
     formAction: '',
     entry: { learned: '', named: '', wanted: '', context: '' },
 
     // Shown in the ribbon
-    draftNote: 'Coverage percentages and risk ratings are our ' +
-               'estimates, not published statistics — the underlying facts are sourced. ' +
-               'Tell us what looks wrong.',
+    draftNote: 'An open inquiry, before any interviews. Facts are sourced; hypotheses, ' +
+               'confidence levels, coverage and risk ratings are our judgement. ' +
+               'If you work in this industry, tell us what looks wrong.',
   };
 
   /* ── styles ─────────────────────────────────────────────────────── */
@@ -88,7 +88,7 @@
     background: #101728; color: #e8ecf8; }
   #adfb-panel .row button.go { background: #1c4a55; border-color: #2a7180;
     color: #d6f6fb; font-weight: 560; }
-  /* index.html has a global button:hover rule; restate background and border
+  /* constellation.html has a global button:hover rule; restate background and border
      here so it cannot bleed through into the widget. (Do not use backticks in
      this comment — it lives inside a template literal.) */
   #adfb-panel .row button:hover { background: #18213a; border-color: #3d4c6e; }
@@ -150,15 +150,15 @@
       <h3>Was this useful?</h3>
       <div class="sub">Three questions, about sixty seconds.</div>
 
-      <label>Did this show you a company or a supply-chain issue you didn't already know?</label>
+      <label>Did this show you something about the drone industry you didn't already know?</label>
       <div class="opts" id="adfb-learned">${LEARNED.map(([v, l]) =>
         `<div class="opt" data-v="${v}"><i></i><span>${l}</span></div>`).join('')}</div>
 
       <label for="adfb-named">Name one, if you can. <span style="color:#59617d">(optional)</span></label>
-      <input type="text" id="adfb-named" placeholder="e.g. Hadrian, or the titanium sponge thing" />
+      <input type="text" id="adfb-named" placeholder="e.g. the FCC exemption cliff, or Gauntlet deliveries" />
 
-      <label for="adfb-wanted">What would make this more useful to you?</label>
-      <textarea id="adfb-wanted" placeholder="What's missing, what's confusing, what you'd actually use it for…"></textarea>
+      <label for="adfb-wanted">What looks wrong, out of date, or missing? Who should we talk to?</label>
+      <textarea id="adfb-wanted" placeholder="A hypothesis you'd push back on, a fact that's stale, a person or company we've missed…"></textarea>
 
       <label for="adfb-who">Your name <span style="color:#59617d">(optional — helps us follow up)</span></label>
       <input type="text" id="adfb-who" placeholder="" />
@@ -197,7 +197,8 @@
      window.AD_CONTEXT() to describe its own state. */
   function context() {
     const page = location.pathname.split('/').pop() || 'index.html';
-    const view = page.includes('valuechain') ? 'value chain' : 'constellation';
+    const view = page.includes('valuechain') ? 'value chain'
+      : page.includes('constellation') ? 'constellation' : 'inquiry';
     let extra = '';
     try { extra = (typeof window.AD_CONTEXT === 'function' && window.AD_CONTEXT()) || ''; }
     catch (e) {}

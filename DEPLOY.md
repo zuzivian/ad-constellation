@@ -15,9 +15,10 @@ no build command, no root directory, no output directory. Import and deploy.
 | File | Purpose |
 |---|---|
 | `vercel.json` (repo root) | Serves `prototype/` as the site; `noindex` headers, cache policy |
-| `prototype/index.html` | Constellation view (entry point) |
+| `prototype/index.html` | Inquiry view (entry point) |
+| `prototype/constellation.html` | Constellation view |
 | `prototype/valuechain.html` | Value chain view |
-| `prototype/data.js` | The shared dataset both views read |
+| `prototype/data.js` | The shared dataset all three views read |
 | `prototype/feedback.js` | Draft ribbon + feedback widget |
 | `prototype/robots.txt` | `Disallow: /` while it's a draft |
 | `prototype/favicon.svg` | So the browser tab isn't a blank page icon |
@@ -108,7 +109,7 @@ WebGL (rare, usually a locked-down machine or a disabled GPU).
 
 ## How feedback reaches you
 
-The **Feedback** button is on both views. It asks three questions, then opens
+The **Feedback** button is on all three views. It asks three questions, then opens
 the person's mail client with a structured message addressed to
 `natwong@stanford.edu`, including which view and which segment they were looking
 at when they clicked. If their mail client doesn't open, there's a

@@ -64,6 +64,19 @@ four rounds of "hmm, not quite."
 > V11 now holds for both views: the constellation's library was vendored on
 > 2026-10-03 (see `docs/07-decision-log.md`), so conference wifi is no longer a risk.
 
+## P0 — inquiry view (`index.html`, added 2026-10-18)
+
+| # | Requirement | How you verify it |
+|---|---|---|
+| I1 | The page states a flag (scope + why now), in-scope and out-of-scope lists, and four scope checks | Read section 01 |
+| I2 | Every force of change has a date, a category, internal/external tag, a fact line with at least one source link, and a separate "Our read" line | Spot-check ten rows against `INQUIRY.forces` in `data.js` |
+| I3 | Force filters change the list and show a count per category; no category is empty | Click each filter |
+| I4 | Every hypothesis shows evidence for **and** against (or says none was found), a confidence word with a "judgement" tag, what would change our mind, and who could test it | Read all eight |
+| I5 | "N questions test this" on a hypothesis filters the question list to that hypothesis | Click it on H4; expect 3 questions |
+| I6 | Organisations that exist in the constellation link to it, centred on that node; the constellation's detail panel links back to the inquiry | Click "Neros" in sub-spaces; then the panel's inquiry link |
+| I7 | The method note says how facts were checked and that no interviews have happened yet | Read the note at the bottom |
+| I8 | Opens by double-click, no network, no errors in the console; no horizontal scroll at 390 px | Open it offline on a phone-width window |
+
 ## P2 — only after five users have touched it
 
 | # | Requirement |

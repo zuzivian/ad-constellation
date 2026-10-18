@@ -22,12 +22,13 @@ other. That is what determines the architecture: two views, one dataset.
 ```
 prototype/
 ├── data.js           ← 65 orgs + 10 segments + 79 chokepoints + 51 opportunities
-├── index.html        ← constellation. Reads data.js. 3d-force-graph.
+├── index.html        ← inquiry (added 2026-10-18). Reads data.js. No libraries.
+├── constellation.html← constellation. Reads data.js. 3d-force-graph.
 └── valuechain.html   ← value chain. Reads data.js. No libraries at all.
 ```
 
 Both link to each other in the top bar. The value chain's player chips deep-link
-into the constellation (`index.html?focus=MP%20Materials`) and fly the camera to
+into the constellation (`constellation.html?focus=MP%20Materials`) and fly the camera to
 that organisation.
 
 ### The reusable lesson
