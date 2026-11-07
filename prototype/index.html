@@ -163,6 +163,7 @@
 
   #hint { bottom: 76px; right: 26px; font-size: 11.5px; color: #59617d;
     text-align: right; line-height: 1.8; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   kbd { border: 1px solid var(--edge); border-radius: 4px; padding: 1px 5px;
     font-size: 10.5px; font-family: ui-monospace, monospace; color: var(--dim); }
 
@@ -170,6 +171,43 @@
     background: #05070e; font-size: 12.5px; letter-spacing: .16em;
     text-transform: uppercase; color: var(--dim); transition: opacity .5s; }
   #boot.gone { opacity: 0; pointer-events: none; }
+
+  /* companion list: the text equivalent of the map (docs/07, 2026-09-17 v2 answer).
+     Same question as the graph, "who else works on this problem", as tables. */
+  .skip { position: fixed; z-index: 50; left: 14px; top: 10px; padding: 8px 12px;
+    border-radius: 8px; background: #1d2740; border: 1px solid #3a4a72; color: var(--ink);
+    font-size: 12.5px; text-decoration: none; transform: translateY(-200%); }
+  .skip:focus { transform: none; }
+  #list { position: fixed; z-index: 7; inset: 0; overflow-y: auto; background: rgba(5,7,14,.94);
+    backdrop-filter: blur(6px); opacity: 0; pointer-events: none; transition: opacity .22s ease;
+    visibility: hidden; }
+  #list.show { opacity: 1; pointer-events: auto; visibility: visible; }
+  #list .in { max-width: 980px; margin: 0 auto; padding: calc(30px + var(--adfb-top, 0px)) 28px 90px;
+    transform: translateY(10px); transition: transform .22s ease; }
+  #list.show .in { transform: none; }
+  #list h2 { margin: 0; font-size: 15px; font-weight: 620; letter-spacing: .14em;
+    text-transform: uppercase; outline: none; }
+  #list .lede { margin: 8px 0 0; max-width: 640px; font-size: 13px; line-height: 1.55; color: var(--dim); }
+  #l-close { position: absolute; top: calc(24px + var(--adfb-top, 0px)); right: 26px; flex: none; }
+  #list section { margin-top: 30px; }
+  #list h3 { margin: 0 0 8px; font-size: 10.5px; font-weight: 500; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--cap); }
+  #list h3 span { color: var(--dim); margin-left: 8px; }
+  #list .tw { overflow-x: auto; position: relative; }   /* contains the .sr spans too */
+  #list table { width: 100%; border-collapse: collapse; font-size: 13px; line-height: 1.45; }
+  #list th { text-align: left; font-size: 10.5px; font-weight: 500; letter-spacing: .13em;
+    text-transform: uppercase; color: var(--dim); padding: 6px 12px 6px 0;
+    border-bottom: 1px solid var(--edge); white-space: nowrap; }
+  #list td { padding: 7px 12px 7px 0; border-bottom: 1px solid #121726; vertical-align: top;
+    color: var(--dim); }
+  #list td:first-child { min-width: 170px; }
+  #list .go { all: unset; cursor: pointer; color: var(--ink); }
+  #list .go:hover { text-decoration: underline; text-underline-offset: 3px; }
+  #list .go:focus-visible, #list a:focus-visible { outline: 2px solid #4dd0e1; outline-offset: 2px; border-radius: 3px; }
+  #list .t { white-space: nowrap; }
+  #list .t i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 7px; }
+  #list a { color: var(--dim); }
+  #list a:hover { color: var(--ink); }
 
   @media (max-width: 820px) {
     #controls { width: 168px; right: 14px; top: calc(14px + var(--adfb-top, 0px)); }
@@ -180,16 +218,22 @@
     #nav a span, #nav a.on b::before { display: none; }
     #detail { left: 14px; right: 14px; width: auto; bottom: 14px; }
     #hint { display: none; }
+    #list .in { padding: calc(18px + var(--adfb-top, 0px)) 16px 90px; }
+    #l-close { position: static; margin-top: 14px; }
+    #list td { min-width: 9.5em; }   /* scroll the table sideways rather than one word per line */
   }
 </style>
 </head>
 <body>
 
-<canvas id="stars"></canvas>
-<div id="wash"></div>
-<div id="graph"></div>
-<div id="badges"></div>
-<div id="labels"></div>
+<a class="skip" href="#list" id="skip">Skip to the map as a text list</a>
+
+<!-- the 3D map has no screen-reader equivalent of its own; #list is that equivalent -->
+<canvas id="stars" aria-hidden="true"></canvas>
+<div id="wash" aria-hidden="true"></div>
+<div id="graph" aria-hidden="true"></div>
+<div id="badges" aria-hidden="true"></div>
+<div id="labels" aria-hidden="true"></div>
 
 <nav id="nav" aria-label="Views">
   <a href="index.html" class="on" aria-current="page"><b>Constellation</b><span>Who works on which problem</span></a>
@@ -210,6 +254,7 @@
   <div class="btnrow">
     <button id="tour">Tour</button>
     <button id="reset">Reset</button>
+    <button id="listbtn" aria-expanded="false" aria-controls="list">List</button>
   </div>
 </div>
 
@@ -223,9 +268,21 @@
   <div id="d-src"></div>
 </div>
 
+<section id="list" aria-labelledby="l-title">
+  <div class="in">
+    <h2 id="l-title" tabindex="-1">The map as a list</h2>
+    <p class="lede">Every organisation on the map, grouped by the capability cluster it works on.
+      An organisation in several clusters appears in each. Investors and buyers are listed
+      again at the end with who they fund and buy from. Every money edge here is sourced;
+      choose a name to see it on the map and open the evidence.</p>
+    <button id="l-close">Close list</button>
+    <div id="l-body"></div>
+  </div>
+</section>
+
 <div id="hint" class="hud">
   drag to orbit &middot; scroll to zoom &middot; click a node to fly in<br />
-  <kbd>/</kbd> search &nbsp; <kbd>T</kbd> tour &nbsp; <kbd>Esc</kbd> reset
+  <kbd>/</kbd> search &nbsp; <kbd>T</kbd> tour &nbsp; <kbd>L</kbd> list &nbsp; <kbd>Esc</kbd> reset
 </div>
 
 <div id="boot">charting the map</div>
@@ -531,6 +588,63 @@ document.getElementById('reset').onclick = () => {
   G.cameraPosition({ x: 0, y: 0, z: 620 }, { x: 0, y: 0, z: 0 }, 1000);
 };
 
+/* ── companion list ──
+   The text equivalent of the map, for screen readers and for anyone who would
+   rather scan than orbit. Built from the same nodes and links the graph draws,
+   so it can never disagree with it, and it ignores the legend filters on
+   purpose: it is the whole map, not the current view of it. */
+const LIST = document.getElementById('list'), listBtn = document.getElementById('listbtn');
+const ends = l => [l.source.id ?? l.source, l.target.id ?? l.target];
+const rel = (id, kind, side) => cleanLinks.filter(l => l.kind === kind && ends(l)[side] === id)
+  .map(l => ends(l)[1 - side]);
+const typeCell = t => `<td class="t"><i style="background:${TYPE_COLOR[t]}"></i>${TYPE_LABEL[t]}</td>`;
+const nameCell = id => `<td><button class="go" data-go="${esc(id)}">${esc(id)}</button></td>`;
+const srcCell = n => `<td>${n.src ? `<a href="${esc(n.src)}" target="_blank" rel="noopener">${esc(host(n.src))}<span class="sr"> (opens in a new tab)</span></a>` : ''}</td>`;
+const names = a => esc(a.join(', ')) || '<span aria-label="none">—</span>';
+const head = cols => `<thead><tr>${cols.map(c => `<th scope="col">${c}</th>`).join('')}</tr></thead>`;
+const byName = (a, b) => a.localeCompare(b);
+
+document.getElementById('l-body').innerHTML = CAPS.map(([key, cap]) => {
+  const who = rel(cap, 'capability', 1).sort(byName);
+  return `<section aria-labelledby="lc-${key}"><h3 id="lc-${key}">${esc(cap)}<span>${who.length} organisations</span></h3>
+    <div class="tw"><table>${head(['Organisation', 'Type', 'Also works on', 'Backed by', 'Sells to', 'Source'])}<tbody>` +
+    who.map(id => { const n = byId[id];
+      return `<tr>${nameCell(id)}${typeCell(n.type)}<td>${names(rel(id, 'capability', 0).filter(c => c !== cap))}</td>` +
+        `<td>${names(rel(id, 'investment', 1))}</td><td>${names(rel(id, 'sells to', 1))}</td>${srcCell(n)}</tr>`; }).join('') +
+    `</tbody></table></div></section>`;
+}).join('') + (() => {
+  const between = nodes.filter(n => n.type === 'investor' || n.type === 'gov')
+    .sort((a, b) => a.type.localeCompare(b.type) || byName(a.id, b.id));
+  return `<section aria-labelledby="lc-between"><h3 id="lc-between">Investors and buyers<span>${between.length} organisations</span></h3>
+    <div class="tw"><table>${head(['Organisation', 'Type', 'Invests in', 'Buys from', 'Source'])}<tbody>` +
+    between.map(n => `<tr>${nameCell(n.id)}${typeCell(n.type)}<td>${names(rel(n.id, 'investment', 0).sort(byName))}</td>` +
+      `<td>${names(rel(n.id, 'sells to', 0).sort(byName))}</td>${srcCell(n)}</tr>`).join('') +
+    `</tbody></table></div></section>`;
+})();
+
+let listReturn = null;
+function openList() {
+  stopTour();
+  listReturn = document.activeElement;
+  LIST.classList.add('show'); listBtn.setAttribute('aria-expanded', 'true');
+  document.getElementById('l-title').focus();
+}
+function closeList(refocus = true) {
+  LIST.classList.remove('show'); listBtn.setAttribute('aria-expanded', 'false');
+  if (refocus) (listReturn && listReturn !== document.body ? listReturn : listBtn).focus();
+}
+const listOpen = () => LIST.classList.contains('show');
+listBtn.onclick = () => listOpen() ? closeList() : openList();
+document.getElementById('l-close').onclick = () => closeList();
+document.getElementById('skip').onclick = e => { e.preventDefault(); openList(); };
+LIST.addEventListener('click', e => {
+  const name = e.target.closest('.go')?.dataset.go; if (!name) return;
+  const n = byId[name]; if (!n) return;
+  closeList(false);
+  selected = n; highlight(n); flyTo(n); openDetail(n);
+  document.getElementById('close').focus();   // keyboard users land in the detail panel
+});
+
 /* ── keys ── */
 // what the feedback widget reports as context
 window.AD_CONTEXT = () => selected ? 'looking at: ' + selected.id : 'no node selected';
@@ -539,6 +653,9 @@ window.AD_CONTEXT = () => selected ? 'looking at: ' + selected.id : 'no node sel
 addEventListener('keydown', e => {
   if (e.target.closest?.('input, textarea, select, [contenteditable]')
     || e.metaKey || e.ctrlKey || e.altKey) return;
+  // while the list covers the map, the map's shortcuts would act on something you can't see
+  if (listOpen()) { if (e.key === 'Escape') closeList(); return; }
+  if (e.key.toLowerCase() === 'l') { openList(); return; }
   if (e.key === '/') { e.preventDefault(); search.focus(); }
   if (e.key.toLowerCase() === 't') tourBtn.click();
   if (e.key === 'Escape') document.getElementById('reset').click();
