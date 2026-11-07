@@ -205,7 +205,7 @@
 </div>
 
 <div id="controls" class="hud">
-  <input id="search" placeholder="Search — fly to a node" autocomplete="off" />
+  <input id="search" placeholder="Search — fly to a node" autocomplete="off" aria-label="Search for a company, investor, buyer or cluster" />
   <div class="legend" id="legend"></div>
   <div class="btnrow">
     <button id="tour">Tour</button>
@@ -535,8 +535,10 @@ document.getElementById('reset').onclick = () => {
 // what the feedback widget reports as context
 window.AD_CONTEXT = () => selected ? 'looking at: ' + selected.id : 'no node selected';
 
+// page shortcuts never fire while someone is typing (search, feedback box)
 addEventListener('keydown', e => {
-  if (e.target === search) return;
+  if (e.target.closest?.('input, textarea, select, [contenteditable]')
+    || e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.key === '/') { e.preventDefault(); search.focus(); }
   if (e.key.toLowerCase() === 't') tourBtn.click();
   if (e.key === 'Escape') document.getElementById('reset').click();

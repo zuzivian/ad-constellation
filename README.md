@@ -27,6 +27,15 @@ dependencies at all. The site makes no third-party requests and works offline. N
 (each with a source in `LOGOS`), so nothing is fetched from a logo service.
 Total payload is about 2080 KB (the 3D library is ~1.3 MB of that, gzipped in transit).
 
+## Check the data
+
+```
+node scripts/check-data.js
+```
+
+Zero dependencies. Runs the validation gate in [`data/SCHEMA.md`](data/SCHEMA.md):
+every row and money edge sourced, every key resolves, no orphans or duplicates.
+
 ## Data honesty
 
 Every row carries a `source` URL, and every investor and buyer edge carries its

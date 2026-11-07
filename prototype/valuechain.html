@@ -103,6 +103,7 @@
   .seg:last-child { border-right: 1px solid var(--edge); border-radius: 0 11px 11px 0; }
   .seg:hover { background: #0e1424; }
   .seg.on { background: #131b2e; }
+  .seg:focus-visible { outline: 1px solid var(--ink); outline-offset: -4px; }
   .seg.on::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px;
     height: 2px; background: currentColor; }
   .seg .num { font-family: var(--mono); font-size: 10px; color: var(--dimmer); }
@@ -242,6 +243,7 @@
     .wrap { padding: 0 16px 60px; } .nav-in { padding: 11px 16px; }
     h1 { font-size: 23px; } .cp { grid-template-columns: 1fr; gap: 9px; }
     .srcs ol { columns: 1; }
+    .spine-scroll { margin: 0 -16px; padding-left: 16px; padding-right: 16px; }
   }
 </style>
 </head>
@@ -340,7 +342,9 @@ function drawSpine() {
   spine.innerHTML = SEGMENTS.map((s, i) => {
     const c = segColor(s), m = segMetric(s);
     const filled = Math.round(s.domestic / 10);
-    return `<div class="seg${i === sel ? ' on' : ''}" data-i="${i}" style="color:${c}">
+    return `<div class="seg${i === sel ? ' on' : ''}" data-i="${i}" style="color:${c}"
+      role="button" tabindex="0" aria-pressed="${i === sel}"
+      aria-label="Segment ${s.n}: ${s.short}, ${s.domestic}% domestic (estimate), ${s.risk} risk">
       <div class="num">${String(s.n).padStart(2, '0')}</div>
       <div class="nm">${s.short}</div>
       <div class="gauge">${Array.from({length:10},(_,k)=>
@@ -351,9 +355,17 @@ function drawSpine() {
       </div></div>`;
   }).join('');
 }
+function pick(i) {
+  const hadFocus = spine.contains(document.activeElement);
+  sel = i; drawSpine(); drawDetail();
+  if (hadFocus) spine.children[sel].focus();   // redraw replaces the nodes
+}
 spine.addEventListener('click', e => {
-  const t = e.target.closest('.seg'); if (!t) return;
-  sel = +t.dataset.i; drawSpine(); drawDetail();
+  const t = e.target.closest('.seg'); if (t) pick(+t.dataset.i);
+});
+spine.addEventListener('keydown', e => {
+  const t = e.target.closest('.seg');
+  if (t && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); pick(+t.dataset.i); }
 });
 
 /* ── detail ── */
@@ -478,13 +490,15 @@ document.getElementById('lenses').addEventListener('click', e => {
 });
 
 /* ── keyboard ── */
+// page shortcuts never fire while someone is typing (e.g. in the feedback box)
 addEventListener('keydown', e => {
-  if (e.target.tagName === 'INPUT') return;
+  if (e.target.closest?.('input, textarea, select, [contenteditable]')
+    || e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.key === 'ArrowRight') sel = Math.min(SEGMENTS.length - 1, sel + 1);
   else if (e.key === 'ArrowLeft') sel = Math.max(0, sel - 1);
   else if (/^[0-9]$/.test(e.key)) sel = e.key === '0' ? 9 : +e.key - 1;
   else return;
-  e.preventDefault(); drawSpine(); drawDetail();
+  e.preventDefault(); pick(sel);
 });
 
 /* ── provenance ── */
