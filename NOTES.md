@@ -13,7 +13,8 @@ Short and current. The standing brief is `CLAUDE.md`. Decisions with reasons go 
 - 2026-11-07 (autopilot run 2): companion list for the constellation (`List` button, `L`, or the
   skip link that is the first Tab stop). One table per cluster plus investors and buyers, built
   from the graph's own `nodes`/`links`. Picking a name closes it, flies there and focuses the
-  detail panel. PRD requirement 18; `docs/07` row.
+  detail panel. PRD requirement 18; `docs/07` row. Detail-panel chips are now buttons (Tab +
+  Enter follows them), with the ↗ evidence link beside the button and a full accessible name.
 - 2026-11-07 (autopilot): keyboard shortcuts no longer fire while you type in the feedback
   widget (both views). Fixed 12 px of horizontal overflow on the value chain at phone width.
   Value-chain segments are now keyboard-focusable. Search has an accessible name. Added
@@ -25,9 +26,6 @@ Short and current. The standing brief is `CLAUDE.md`. Decisions with reasons go 
   it needs Nat or Lucas to decide whether to add scores at all. See the open question on
   publishing scores. It isn't safe to do unattended.
 - The open questions at the bottom of `docs/07`. All of them are Nat or Lucas calls.
-- Detail-panel chips in the constellation are `<span>`s, so a keyboard user who lands in the
-  panel can't follow "Works on" / "Backed by" links. Making them buttons means moving the ↗
-  evidence link out of the chip (no links inside buttons). Small, worth doing next.
 
 ## Gotchas
 - `data.js` runs in a `vm` context in the check script and only touches `window.AD`. Keep it

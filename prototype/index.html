@@ -151,6 +151,8 @@
     border: 1px solid var(--edge); background: rgba(255,255,255,.04);
     cursor: pointer; }
   .chip:hover { border-color: #3a4568; background: rgba(255,255,255,.09); }
+  .chip .cn { all: unset; cursor: pointer; }
+  .chip .cn:focus-visible, .chip .ev:focus-visible { outline: 2px solid #4dd0e1; outline-offset: 2px; border-radius: 3px; }
   .chip .ev { margin-left: 5px; color: var(--dim); text-decoration: none; font-size: 10.5px; }
   .chip .ev:hover { color: var(--ink); }
   #d-src { margin-top: 14px; font-size: 10.5px; color: #5d6684;
@@ -518,8 +520,10 @@ function openDetail(n) {
   D.links.innerHTML = Object.entries(groups)
     .filter(([, v]) => v.length)
     .map(([k, v]) => `<h3>${heads[k]}</h3><div class="chips">` +
-      v.map(([x, src]) => `<span class="chip" data-go="${esc(x)}">${x}${src
-        ? `<a class="ev" href="${esc(src)}" target="_blank" rel="noopener" title="Evidence: ${esc(host(src))}">↗</a>` : ''}</span>`).join('') +
+      // the name is a button so the panel works from the keyboard; the evidence link sits
+      // beside it, not inside it (no links inside buttons)
+      v.map(([x, src]) => `<span class="chip" data-go="${esc(x)}"><button class="cn">${esc(x)}</button>${src
+        ? `<a class="ev" href="${esc(src)}" target="_blank" rel="noopener" title="Evidence: ${esc(host(src))}" aria-label="Evidence for ${esc(n.id)} and ${esc(x)}: ${esc(host(src))} (opens in a new tab)">↗</a>` : ''}</span>`).join('') +
       `</div>`).join('');
   D.src.innerHTML = n.src
     ? `src · <a href="${esc(n.src)}" target="_blank" rel="noopener">${host(n.src)}</a> · checked ${n.verified}` +
@@ -536,7 +540,10 @@ D.links.addEventListener('click', e => {
   if (e.target.closest('a')) return;   // evidence link: let the browser open it
   const name = e.target.closest('.chip')?.dataset.go; if (!name) return;
   const n = nodes.find(x => x.id === name);
-  if (n) { selected = n; highlight(n); flyTo(n); openDetail(n); }
+  if (!n) return;
+  selected = n; highlight(n); flyTo(n); openDetail(n);
+  // the chip just pressed was replaced; keep keyboard users inside the panel
+  if (e.detail === 0) document.getElementById('close').focus();
 });
 
 /* ── legend / filters ── */
