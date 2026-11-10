@@ -70,7 +70,10 @@ Derived, never stored. Three kinds:
 
 ## Validation gate
 
-Run before Phase 4. All must pass:
+Run `node scripts/check-data.js` before every change to `data.js` lands. It
+automates the first four items below (plus evidence URLs on every money edge,
+logo files, and chokepoint `src` lines) and exits non-zero on any failure.
+The last two items stay human. All must pass:
 
 - [ ] every node has `source` and `verified`
 - [ ] every key in `capabilities` / `investors` / `buyers` resolves to a node

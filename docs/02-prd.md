@@ -40,10 +40,11 @@ four rounds of "hmm, not quite."
 |---|---|---|
 | 12 | An animated starfield sits behind the graph, independent of the graph camera | Look; it should twinkle and not rotate with the graph |
 | 13 | A "Tour" mode flies cluster to cluster every ~4s and can be stopped | Press T, then T again |
-| 14 | Keyboard: `/` focuses search, `T` tours, `Esc` resets | Press each |
+| 14 | Keyboard: `/` focuses search, `T` tours, `L` opens the list, `Esc` resets (or closes the list) | Press each |
 | 15 | Highlighted edges show directional particles indicating flow direction | Hover an investor |
 | 16 | No layout breakage at 1280×720 through 2560×1440 | Resize the window |
 | 17 | Every fact in the detail panel traces to a `source` URL in the dataset | Spot-check five rows against `prototype/data.js` |
+| 18 | A text list of the whole map (every org by cluster, plus investors and buyers) is reachable by keyboard and screen reader; picking a name flies to it | Tab once from page load, Enter, then Tab to a name and press Enter |
 
 ## P0 — value chain view (`valuechain.html`)
 
@@ -99,4 +100,5 @@ views and nothing to show.
 - Does not need to support >500 nodes. At 65 nodes we are ~30× under the
   library's comfortable limit; do not optimize for scale we don't have.
 - Does not need to be accessible via screen reader in v1 — but log this in the
-  decision log as a known, deliberate debt, not an oversight.
+  decision log as a known, deliberate debt, not an oversight. (Paid down 2026-11-07:
+  the companion list, requirement 18.)
