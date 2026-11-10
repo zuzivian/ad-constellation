@@ -24,6 +24,11 @@ Short and current. The standing brief is `CLAUDE.md`. Decisions with reasons go 
   `scripts/check-data.js`.
 
 ## Next
+Nothing safe to do unattended beyond quality passes. Everything else is under Needs Nat.
+
+## Needs Nat
+- Run 3: do instant camera cuts under OS "reduce motion" feel disorienting? A short fade is the
+  fallback. (No in-app motion toggle, on purpose.)
 - Feedback #2 (`docs/11`): four value-chain KPIs (build-to-print vs design-to-spec, capex
   intensity, fixed costs, mission criticality). Every value would be a judgement score, so
   it needs Nat or Lucas to decide whether to add scores at all. See the open question on
