@@ -10,6 +10,9 @@ Short and current. The standing brief is `CLAUDE.md`. Decisions with reasons go 
   hand on 2026-11-07. It isn't committed because adding Playwright to the repo would mean npm.
 
 ## Done
+- 2026-11-10 (autopilot run 3): both views honour the OS "reduce motion" setting. Camera
+  flights become cuts, the starfield holds still, particles are off (arrows on lit edges stay),
+  and panels fade instead of sliding. The value chain drops smooth scroll. `docs/07` row.
 - 2026-11-07 (autopilot run 2): companion list for the constellation (`List` button, `L`, or the
   skip link that is the first Tab stop). One table per cluster plus investors and buyers, built
   from the graph's own `nodes`/`links`. Picking a name closes it, flies there and focuses the
@@ -28,6 +31,10 @@ Short and current. The standing brief is `CLAUDE.md`. Decisions with reasons go 
 - The open questions at the bottom of `docs/07`. All of them are Nat or Lucas calls.
 
 ## Gotchas
+- Reduced motion is read live from one `calm` MediaQueryList in `index.html`. To test it, start a
+  fresh Playwright context with `reducedMotion: 'reduce'`. `page.emulateMedia()` mid-page
+  doesn't reliably fire the `change` event in headless Chromium (one flip in three fired), so a
+  live-flip test gives false failures. Real OS changes do fire it.
 - `data.js` runs in a `vm` context in the check script and only touches `window.AD`. Keep it
   free of DOM calls at load time or the check breaks.
 - The value-chain spine re-renders with `innerHTML` on every selection, so `pick()` puts

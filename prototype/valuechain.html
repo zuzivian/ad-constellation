@@ -30,6 +30,7 @@
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body { margin: 0; background: var(--bg); color: var(--ink);
     font-family: ui-sans-serif, -apple-system, "Segoe UI", Inter, sans-serif;
     font-size: 14px; line-height: 1.55;
