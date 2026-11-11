@@ -24,10 +24,11 @@ Realistic budget for the 3D layer: **6–10 hours**, including learning it.
 ## Architecture
 
 ```
-prototype/index.html      one file, three layers stacked by z-index
+prototype/index.html      one page, layers stacked by z-index
 ├── z0  <canvas id="stars">   2D canvas starfield  (plain Canvas API)
 ├── z0  <div id="wash">       CSS radial-gradient nebula
 ├── z1  <div id="graph">      3d-force-graph's WebGL canvas, transparent bg
+├── z2  #labels, #badges      plain DOM overlays (labels, logo badges)
 └── z3+ .hud / #detail        plain DOM: title, search, legend, detail panel
 ```
 
@@ -66,13 +67,15 @@ function makeGraph(el) {
 ```
 
 The library changed its constructor style mid-life and most tutorials online
-show the old form. Supporting both means a CDN version bump can't silently
-blank the page. This is the general pattern: **when you pin a CDN dependency,
-pin the version AND handle the API you might get anyway.**
+show the old form. `3d-force-graph@1.80.0` is vendored in `prototype/vendor/`
+and loaded with a local script tag, so there is no CDN and a remote version bump
+can't blank the page. The wrapper stays so that upgrading the vendored file
+later can't silently blank it either. This is the general pattern: **pin the
+version AND handle the API you might get anyway.**
 
 ## Performance
 
-At 65 nodes / 233 edges this is nowhere near a limit. Numbers to know:
+At 78 nodes / 254 edges this is nowhere near a limit. Numbers to know:
 
 - Comfortable: up to ~2,000 nodes with `nodeResolution` at 14.
 - Needs `nodeResolution: 6–8` and no particles: ~5,000 nodes.
