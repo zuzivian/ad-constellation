@@ -29,6 +29,7 @@ const CAPS = [
   ['ew',         'Electronic Warfare & Spectrum'],
   ['hyper',      'Hypersonics & Propulsion'],
   ['cuas',       'Counter-Drone & Air Defense'],
+  ['uas',        'Drones (UAS)'],
   ['maritime',   'Maritime Autonomy'],
   ['mfg',        'Advanced Manufacturing'],
 ];
@@ -68,13 +69,13 @@ const ORGS = [
    'Forgings, castings, fasteners. Unglamorous and structurally critical — the castings queue runs through firms like this.',
    'https://www.howmet.com/about-us/'],
 
-  ['Anduril','dtech',['autonomy','cuas','c2'],['fp','a16z','8vc','gc'],['socom','diu','army'],'Costa Mesa, CA','Late',
+  ['Anduril','dtech',['autonomy','cuas','c2','uas'],['fp','a16z','8vc','gc'],['socom','diu','army'],'Costa Mesa, CA','Late',
    'The category definer: builds product on its own balance sheet, then sells. Bought solid-rocket-motor maker Adranos (2023) and now produces tactical SRMs in McHenry, MS. Hires MBAs into growth, corp dev, and business-lead roles owning a product P&L.',
    'https://www.anduril.com/'],
   ['Palantir','dtech',['c2','autonomy'],[],['army','socom','diu'],'Miami, FL','Public',
    'Forward-deployed engineer model. MBAs typically go to the Foundry/Gotham business side (business development, deployment strategy).',
    'https://investors.palantir.com/files/2025%20FY%20PLTR%2010-K.pdf'],
-  ['Shield AI','dtech',['autonomy'],['a16z','pt'],['socom','af'],'San Diego, CA','Late',
+  ['Shield AI','dtech',['autonomy','uas'],['a16z','pt'],['socom','af'],'San Diego, CA','Late',
    'Hivemind autonomy stack plus V-BAT airframe. Hardware + software, which makes ops roles unusually meaty.',
    'https://shield.ai/shield-ai-awarded-u-s-air-force-production-contract/'],
   ['Applied Intuition','dtech',['autonomy'],['lux','gc','a16z'],['army','diu'],'Mountain View, CA','Late',
@@ -95,7 +96,7 @@ const ORGS = [
   ['Saronic','dtech',['maritime','autonomy'],['a16z','8vc','gc'],['navy','socom'],'Austin, TX','Late',
    'Autonomous surface vessels. Riding the mass-attritable-hull thesis hard.',
    'https://www.govconwire.com/articles/saronic-1-75b-series-d-maritime-autonomy'],
-  ['Skydio','dtech',['autonomy','cuas'],['a16z'],['army','diu'],'San Mateo, CA','Late',
+  ['Skydio','dtech',['autonomy','cuas','uas'],['a16z'],['army','diu'],'San Mateo, CA','Late',
    'Largest US drone maker; pivoted from consumer to defense and public safety. Supply chain is its exposure: China\'s 2024 sanctions cut off its sole battery supplier.',
    'https://www.skydio.com/blog/skydio-series-f'],
   ['Hadrian','dtech',['mfg'],['a16z','lux','fp'],['navy','army'],'Torrance, CA','Late',
@@ -134,9 +135,41 @@ const ORGS = [
   ['Niron Magnetics','dtech',['mfg'],['osc'],[],'Minneapolis, MN','Growth',
    'Iron-nitride permanent magnets — no rare earths at all. Substitution is the one lever export controls cannot reach.',
    'https://www.prnewswire.com/news-releases/niron-magnetics-receives-conditional-150-million-department-of-war-commitment-302846367.html'],
-  ['Kratos','dtech',['hyper','autonomy'],[],['af','navy'],'San Diego, CA','Public',
+  ['Kratos','dtech',['hyper','autonomy','uas'],[],['af','navy'],'San Diego, CA','Public',
    'Target drones, jet-powered UAS, and now hypersonic test infrastructure — announced a mid-tier arc jet and laser facility in Odon, IN in May 2026.',
    'https://www.kratosdefense.com/newsroom/kratos-names-odon-indiana-as-home-of-new-hypersonic-test-facility'],
+
+  /* ── drones and counter-drone (added 2026-11-11; see docs/07) ── */
+  ['AeroVironment','dtech',['uas','cuas'],[],['army'],'Arlington, VA','Public',
+   'Makes Switchblade loitering munitions for the Army. Bought BlueHalo in an all-stock deal valued at about $4.1B (closed May 2025), adding a space, cyber and directed-energy segment. A listed incumbent, not a startup.',
+   'https://www.avinc.com/2025/05/01/aerovironment-and-bluehalo-complete-transaction-creating-a-global-defense-technology/'],
+  ['Red Cat','dtech',['uas'],[],['army','af'],'San Juan, PR','Public',
+   'Parent of Teal Drones, whose Black Widow quadcopter won the Army\'s Short Range Reconnaissance Tranche 2 in Nov 2024 (objective: 5,880 systems over five years). Also owns FlightWave, maker of the Edge 130 VTOL drone. Teal builds in Utah.',
+   'https://ir.redcatholdings.com/news-events/press-releases/detail/160/red-cat-announces-production-selection-for-u-s-army-short-range-reconnaissance-program'],
+  ['Neros','dtech',['uas'],['sq'],['army'],'Torrance, CA','Growth',
+   'Cheap FPV strike drones (Archer) built in volume. $75M Series B led by Sequoia (Nov 2025); one of three primary FPV suppliers for the Army\'s Purpose-Built Attritable Systems program, plus a Marine Corps order for Archer Strike drones. Moving into a 250,000 sq ft Torrance factory.',
+   'https://www.neros.tech/articles/neros-closes-75m-series-b-fundraise-led-by-sequoia-capital'],
+  ['Performance Drone Works','dtech',['uas'],['osc'],['army'],'Huntsville, AL','Growth',
+   'C100 multi-mission quadcopter, picked with Anduril\'s Ghost X for the Army\'s company-level small UAS requirement (Sep 2024). Opened a 90,000 sq ft drone factory near Redstone Arsenal; OSC offered a conditional loan of up to $820M (Jul 2026).',
+   'https://www.pdw.ai/posts/pdw-unveils-new-90000-sq-ft-manufacturing-facility-to-accelerate-delivery-of-tactical-drones'],
+  ['Firestorm Labs','dtech',['uas','mfg'],[],['af'],'San Diego, CA','Growth',
+   '3D-printed drones plus xCell, a containerised microfactory that prints airframes in the field. $47M Series A led by NEA (Jul 2025). Air Force IDIQ with a $100M ceiling, of which only part is obligated.',
+   'https://www.prnewswire.com/news-releases/firestorm-labs-announces-47-million-series-a-funding-to-accelerate-growth-and-innovation-in-defense-technology-302506303.html'],
+  ['Auterion','dtech',['uas','autonomy'],[],[],'Arlington, VA','Growth',
+   'Software, not airframes: its OS and Skynode kits turn cheap drones into autonomous ones. A $50M Pentagon contract funds 33,000 strike kits for Ukraine (Jul 2025). Engineering sits in Munich and Zurich as well as the US.',
+   'https://auterion.com/auterion-secures-contract-to-deliver-33000-skynode-drone-strike-kits-to-ukraine/'],
+  ['Allen Control Systems','dtech',['cuas','autonomy'],[],['jiatf'],'Austin, TX','Growth',
+   'Bullfrog: an autonomous gun turret that engages Group 1–3 drones. $200M Series B at a $2.2B valuation, led by Smash Capital (Jun 2026). Says it has contracts through JIATF-401 and is building a 191,000 sq ft Austin plant.',
+   'https://www.businesswire.com/news/home/20260526638233/en/Allen-Control-Systems-Raises-$200-Million-Series-B-at-$2.2-Billion-Post-Money-Valuation-to-Scale-Manufacturing-and-Accelerate-Deployment-of-Bullfrog'],
+  ['Fortem Technologies','dtech',['cuas'],[],['army'],'Lindon, UT','Growth',
+   'DroneHunter: an interceptor drone that catches intruding drones in a tethered net. Three-year, $18M Army contract (Feb 2026) for counter-drone kit and support at Army sites worldwide.',
+   'https://www.businesswire.com/news/home/20260226465227/en/Fortem-Technologies-Awarded-3-Year-$18M-U.S.-Army-Contract-for-Counter-Drone-Solutions'],
+  ['SRC Inc','dtech',['cuas','ew'],[],['army','jiatf'],'Syracuse, NY','Not-for-profit',
+   'Not-for-profit R&D contractor. Holds the Army\'s $426M E-LIDS counter-drone contract (2020), and the first foreign sale of the Army\'s fixed-site LIDS system went to Qatar with SRC kit. Won a $500M-ceiling JIATF-401 "Domestic Shield" IDIQ in Oct 2026, starting with Gryphon radars. An unusual employer: no equity, no exit.',
+   'https://www.srcinc.com/news-and-events/press/2020/20201204-us-army-awards-src-idiq-contract-for-counter-uas-technology.html'],
+  ['Dedrone','dtech',['cuas'],[],[],'Sterling, VA','Acquired',
+   'Airspace security: detects unauthorised drones over airports, stadiums, prisons and bases. Bought by Axon (body cameras, Tasers) in Oct 2024 and still runs as its own entity. The closest node on this map to civil aviation safety.',
+   'https://www.axon.com/blog/axon-completes-acquisition-of-dedrone'],
 
   ['SpaceX','space',['launch','space'],['fp','sq'],['nro','sf','nasa'],'Starbase, TX','Public',
    'Starlink/Starshield make it the largest single node in the ecosystem. Public since its June 2026 IPO. Few MBA-titled roles; entry is usually finance, Starlink business ops, or supply chain.',
@@ -245,6 +278,9 @@ const ORGS = [
   ['NASA','gov',['launch','space'],[],[],'Washington, DC','Civil',
    'Not defense, but the same supplier base — and a softer first customer for space startups.',
    'https://www.nasa.gov/about/'],
+  ['JIATF-401','gov',['cuas'],[],[],'','DoD',
+   'Joint Interagency Task Force 401, set up in Aug 2025 to pull the Pentagon\'s counter-drone buying, standards and training into one place. If you want to sell counter-drone kit, this is the office to understand.',
+   'https://www.army.mil/article/289738/jiatf_401_marks_100_days_of_counter_drone_operations_highlighting_early_successes_and_rapid_innovation'],
   ['IBAS','gov',['mfg'],[],[],'Washington, DC','DoD',
    'Industrial Base Analysis and Sustainment program. Names castings and forgings a priority sector. If you want to know what the Pentagon thinks is broken, read what IBAS funds.',
    'https://www.businessdefense.gov/ibr/wire/ibas.html'],
@@ -376,10 +412,39 @@ const EDGE_SRC = {
   'Hermeus>iqt': 'https://news.crunchbase.com/venture/biggest-funding-rounds-chips-aviation-biotech-sifive/',
   'Orbit Fab>af': 'https://www.highergov.com/contract/FA94532290021/',
   'Orbit Fab>diu': 'https://www.airandspaceforces.com/space-force-satellite-refueling-demos/',
+  // drones and counter-drone, checked 2026-11-11
+  'AeroVironment>army': 'https://www.avinc.com/2025/02/03/av-secures-288-million-delivery-order-on-990-million-contract-with-u-s-army/',
+  'Red Cat>army': 'https://ir.redcatholdings.com/news-events/press-releases/detail/160/red-cat-announces-production-selection-for-u-s-army-short-range-reconnaissance-program',
+  'Red Cat>af': 'https://ir.redcatholdings.com/news-events/press-releases/detail/235/red-cat-receives-2-49-million-u-s-air-force-order-for-black-widow-systems',
+  'Neros>sq': 'https://www.neros.tech/articles/neros-closes-75m-series-b-fundraise-led-by-sequoia-capital',
+  'Neros>army': 'https://www.businesswire.com/news/home/20251107969770/en/Neros-Closes-$75M-Series-B-Fundraise-led-by-Sequoia-Capital-Selected-for-Army-Program',
+  'Performance Drone Works>army': 'https://www.army.mil/article/279603/the_u_s_army_selects_vendors_for_the_company_level_small_uncrewed_aircraft_system_directed_requirement_for_brigade_combat_teams',
+  'Performance Drone Works>osc': 'https://www.pdw.ai/posts/pdw-receives-conditional-820-million-loan-commitment-from-us-department-of-war-to-power-americas-drone-arsenal',
+  'Firestorm Labs>af': 'https://www.defensedaily.com/startup-with-3d-printed-uas-gets-100-million-air-force-award/air-force/',
+  'Allen Control Systems>jiatf': 'https://www.businesswire.com/news/home/20260526638233/en/Allen-Control-Systems-Raises-$200-Million-Series-B-at-$2.2-Billion-Post-Money-Valuation-to-Scale-Manufacturing-and-Accelerate-Deployment-of-Bullfrog',
+  'Fortem Technologies>army': 'https://www.businesswire.com/news/home/20260226465227/en/Fortem-Technologies-Awarded-3-Year-$18M-U.S.-Army-Contract-for-Counter-Drone-Solutions',
+  'SRC Inc>army': 'https://www.srcinc.com/news-and-events/press/2020/20201204-us-army-awards-src-idiq-contract-for-counter-uas-technology.html',
+  'SRC Inc>jiatf': 'https://www.globenewswire.com/news-release/2026/10/6/3375557/0/en/src-secures-500-million-jiatf-401-domestic-shield-idiq-contract-including-10-24-million-initial-gryphon-radar-order.html',
+};
+
+/* Rows checked on a later date than the 2026-10-03 pass. */
+const CHECKED_ON = Object.fromEntries(['AeroVironment', 'Red Cat', 'Neros', 'Performance Drone Works',
+  'Firestorm Labs', 'Auterion', 'Allen Control Systems', 'Fortem Technologies', 'SRC Inc', 'Dedrone',
+  'JIATF-401'].map(n => [n, '2026-11-11']));
+
+/* ─── US-PERSON HIRING SIGNAL ──────────────────────────────────────────
+   A FACT, not a score: only what an employer's OWN job posting says, with
+   the URL. Postings are per role and expire, so this is "a posted role said
+   X", never "this company hires / does not hire non-US persons". Third-party
+   guides and job-board mirrors do not count. No entry = not checked, and the
+   UI says so. Never fill a gap by inference from the company's work. */
+const US_PERSON = {
+  'Skydio': ['A National Security team posting said the role must be held by a US person because it needs access to export-controlled information.',
+    'https://www.skydio.com/jobs/6970684003/', '2026-11-11'],
 };
 
 const BUYER_ID = { af:'US Air Force', navy:'US Navy', army:'US Army', socom:'SOCOM',
-  nro:'NRO', sda:'SDA', sf:'US Space Force', diu:'DIU', nasa:'NASA' };
+  nro:'NRO', sda:'SDA', sf:'US Space Force', diu:'DIU', nasa:'NASA', jiatf:'JIATF-401' };
 // 'ex' is deliberately unmapped — it marks "there is a lead investor and we
 // have not verified who." Holes are honest; invented edges are not.
 const INV_ID = { a16z:'a16z American Dynamism', fp:'Founders Fund', lux:'Lux Capital',
@@ -1164,6 +1229,12 @@ const GLOSSARY = {
   'HTPB': 'the rubbery binder that holds solid rocket propellant together',
   'RDX': 'a military high explosive',
   'HMX': 'a military high explosive',
+  'FPV': 'first-person view: a small drone flown through a live camera feed, often as a one-way strike weapon',
+  'sUAS': 'small uncrewed aircraft systems: drones light enough to carry',
+  'C-UAS': 'counter-drone: detecting, tracking and defeating hostile drones',
+  'JIATF-401': 'Joint Interagency Task Force 401, the Pentagon\'s counter-drone office (since Aug 2025)',
+  'IDIQ': 'indefinite delivery, indefinite quantity: a contract with a ceiling, paid out order by order',
+  'VTOL': 'vertical take-off and landing',
   'SIPRI': 'Stockholm International Peace Research Institute, which ranks arms companies',
 };
 const GLOSS_RE = new RegExp('(^|[^A-Za-z0-9])(' + Object.keys(GLOSSARY)
@@ -1188,7 +1259,8 @@ CAPS.forEach(([id, name]) => nodes.push({
   note: 'A capability cluster — the problem, not the company. Nodes wired here compete, partner, or buy along this axis.'
 }));
 ORGS.forEach(([name, type, caps, invs, buyers, hq, stage, note, src]) => {
-  nodes.push({ id: name, type, hq, stage, note, src, verified: '2026-10-03',
+  nodes.push({ id: name, type, hq, stage, note, src, verified: CHECKED_ON[name] || '2026-10-03',
+    usPerson: US_PERSON[name] || null,
     val: type === 'prime' ? 17 : type === 'gov' ? 14 : type === 'investor' ? 10 : 8 });
   caps.forEach(c => rawLinks.push({ source: name, target: CAP_NAME[c], kind: 'capability' }));
   // money edges are only drawn if they carry evidence: no source, no edge
@@ -1204,5 +1276,5 @@ const links = rawLinks.filter(l => {
   seen.add(k); return true;
 });
 
-return { CAPS, ORGS, EDGE_SRC, LOGOS, GLOSSARY, gloss, CAP_NAME, BUYER_ID, INV_ID, nodes, links, SEGMENTS, READS, META };
+return { CAPS, ORGS, EDGE_SRC, US_PERSON, LOGOS, GLOSSARY, gloss, CAP_NAME, BUYER_ID, INV_ID, nodes, links, SEGMENTS, READS, META };
 })();
