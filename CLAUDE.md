@@ -6,7 +6,7 @@ Read this at the start of every session. It is the contract.
 A two-view explorer of the US aerospace & defense ecosystem, built for GSB
 first-years figuring out where to recruit.
 
-- **`prototype/index.html`** — a 3D "constellation". Nine capability clusters
+- **`prototype/index.html`** — a 3D "constellation". Ten capability clusters
   act as gravity wells; companies, investors and buyers orbit the problems they
   touch. Answers *"who else works on this problem?"*
 - **`prototype/valuechain.html`** — the value chain, raw materials to fielded

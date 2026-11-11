@@ -5,7 +5,7 @@ GSB first-years figuring out where to recruit.
 
 | View | Question it answers |
 |---|---|
-| [`prototype/index.html`](prototype/index.html) | *Who else works on this problem?* — a 3D constellation. Nine capability clusters act as gravity wells; companies, investors and buyers orbit the problems they touch. |
+| [`prototype/index.html`](prototype/index.html) | *Who else works on this problem?* — a 3D constellation. Ten capability clusters act as gravity wells; companies, investors and buyers orbit the problems they touch. |
 | [`prototype/valuechain.html`](prototype/valuechain.html) | *Where are the gaps?* — the value chain from raw materials to fielded capability. Ten segments with coverage, chokepoints, players and unbuilt opportunities. |
 
 One question per view. See [`CLAUDE.md`](CLAUDE.md) for the standing brief and
