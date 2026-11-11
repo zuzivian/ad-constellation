@@ -45,6 +45,11 @@
     width: auto; flex: none; line-height: 1; }
   #adfb-ribbon button:hover { color: #ffd98a; background: none; }
   body.adfb-ribbon-on { --adfb-top: 37px; }
+  #adfb-ribbon button:focus-visible, #adfb-btn:focus-visible, #adfb-x:focus-visible,
+  #adfb-copy:focus-visible, #adfb-panel .row button:focus-visible,
+  #adfb-panel .opt:focus-visible, #adfb-panel input:focus-visible,
+  #adfb-panel textarea:focus-visible, #adfb-panel h3:focus-visible
+    { outline: 2px solid #4dd0e1; outline-offset: 2px; }
 
   #adfb-btn { position: fixed; z-index: 41; right: 22px; bottom: 22px;
     padding: 10px 17px; border-radius: 999px; cursor: pointer;
@@ -144,15 +149,17 @@
 
   const panel = document.createElement('div');
   panel.id = 'adfb-panel';
+  panel.setAttribute('role', 'dialog');
+  panel.setAttribute('aria-labelledby', 'adfb-title');
   panel.innerHTML = `
     <button id="adfb-x" title="Close" aria-label="Close">&times;</button>
     <div id="adfb-form">
-      <h3>Was this useful?</h3>
+      <h3 id="adfb-title" tabindex="-1">Was this useful?</h3>
       <div class="sub">Three questions, about sixty seconds.</div>
 
-      <label>Did this show you a company or a supply-chain issue you didn't already know?</label>
-      <div class="opts" id="adfb-learned">${LEARNED.map(([v, l]) =>
-        `<div class="opt" data-v="${v}"><i></i><span>${l}</span></div>`).join('')}</div>
+      <label id="adfb-learned-q">Did this show you a company or a supply-chain issue you didn't already know?</label>
+      <div class="opts" id="adfb-learned" role="radiogroup" aria-labelledby="adfb-learned-q">${LEARNED.map(([v, l], n) =>
+        `<div class="opt" role="radio" aria-checked="false" tabindex="${n ? -1 : 0}" data-v="${v}"><i></i><span>${l}</span></div>`).join('')}</div>
 
       <label for="adfb-named">Name one, if you can. <span style="color:#59617d">(optional)</span></label>
       <input type="text" id="adfb-named" placeholder="e.g. Hadrian, or the titanium sponge thing" />
@@ -169,7 +176,7 @@
         <button id="adfb-send" class="go">Send</button>
       </div>
     </div>
-    <div id="adfb-done">
+    <div id="adfb-done" aria-live="polite">
       <div class="tick">&#10003;</div>
       <p>Thank you — this is genuinely the useful part.<br />
          If your mail client didn't open, copy the text instead:</p>
@@ -181,16 +188,35 @@
   let learned = '';
 
   const open = () => { panel.classList.add('open'); btn.style.display = 'none';
-    $('adfb-ctx').textContent = 'context · ' + context(); };
-  const close = () => { panel.classList.remove('open'); btn.style.display = ''; };
+    $('adfb-ctx').textContent = 'context · ' + context();
+    $('adfb-title').focus(); };
+  const close = () => { panel.classList.remove('open'); btn.style.display = '';
+    btn.focus(); };
   btn.onclick = open;
   $('adfb-x').onclick = close;
   $('adfb-cancel').onclick = close;
 
-  $('adfb-learned').addEventListener('click', e => {
-    const o = e.target.closest('.opt'); if (!o) return;
+  // Radio group: click, Space/Enter, or arrow keys select; one tab stop (roving tabindex).
+  const opts = [...$('adfb-learned').children];
+  const choose = o => {
     learned = o.dataset.v;
-    [...$('adfb-learned').children].forEach(x => x.classList.toggle('sel', x === o));
+    opts.forEach(x => { const on = x === o;
+      x.classList.toggle('sel', on); x.setAttribute('aria-checked', on);
+      x.tabIndex = on ? 0 : -1; });
+  };
+  $('adfb-learned').addEventListener('click', e => {
+    const o = e.target.closest('.opt'); if (o) choose(o);
+  });
+  $('adfb-learned').addEventListener('keydown', e => {
+    const o = e.target.closest('.opt'); if (!o) return;
+    const i = opts.indexOf(o), k = e.key;
+    if (k === ' ' || k === 'Enter') { e.preventDefault(); choose(o); return; }
+    const d = (k === 'ArrowDown' || k === 'ArrowRight') ? 1
+            : (k === 'ArrowUp' || k === 'ArrowLeft') ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    const n = opts[(i + d + opts.length) % opts.length];
+    choose(n); n.focus();
   });
 
   /* Which view, and what they were looking at. Each page may define
@@ -250,6 +276,7 @@
 
     $('adfb-form').style.display = 'none';
     $('adfb-done').classList.add('open');
+    $('adfb-copy').focus();
     $('adfb-copy').onclick = async () => {
       try { await navigator.clipboard.writeText(CFG.to + '\n\n' + text);
         $('adfb-copy').textContent = 'Copied — paste it into an email'; }
