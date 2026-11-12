@@ -108,8 +108,10 @@
   .legend { background: var(--panel); border: 1px solid var(--edge);
     border-radius: 11px; padding: 10px; backdrop-filter: blur(9px); }
   .legend-row { display: flex; align-items: center; gap: 9px; padding: 5px 6px;
+    width: 100%; border: 0; background: transparent; color: inherit; font: inherit; text-align: left;
     border-radius: 7px; cursor: pointer; font-size: 12.5px; user-select: none; }
   .legend-row:hover { background: rgba(255,255,255,.05); }
+  .legend-row:focus-visible { outline: 2px solid #4dd0e1; outline-offset: 2px; }
   .legend-row.off { opacity: .34; }
   .dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
   .legend-row .n { margin-left: auto; color: var(--dim); font-size: 11px;
@@ -256,7 +258,7 @@
   <input id="search" placeholder="Search — fly to a node" autocomplete="off" aria-label="Search for a company, investor, buyer or cluster" />
   <div class="legend" id="legend"></div>
   <div class="btnrow">
-    <button id="tour">Tour</button>
+    <button id="tour" aria-pressed="false">Tour</button>
     <button id="reset">Reset</button>
     <button id="listbtn" aria-expanded="false" aria-controls="list">List</button>
   </div>
@@ -569,9 +571,9 @@ D.links.addEventListener('click', e => {
 /* ── legend / filters ── */
 const counts = nodes.reduce((a, n) => (a[n.type] = (a[n.type] || 0) + 1, a), {});
 document.getElementById('legend').innerHTML = Object.keys(TYPE_LABEL).map(t =>
-  `<div class="legend-row" data-t="${t}">
+  `<button type="button" class="legend-row" data-t="${t}" aria-pressed="true">
      <span class="dot" style="background:${TYPE_COLOR[t]}"></span>
-     <span>${TYPE_LABEL[t]}</span><span class="n">${counts[t] || 0}</span></div>`).join('') +
+     <span>${TYPE_LABEL[t]}</span><span class="n">${counts[t] || 0}</span></button>`).join('') +
   `<h4>Edges</h4>
    <div class="edge-row"><i style="color:rgba(205,215,255,.5)"></i>works on a cluster</div>
    <div class="edge-row"><i class="flow" style="color:${FLOW_COLOR.investment}"></i>capital: investor → company</div>
@@ -582,6 +584,7 @@ document.getElementById('legend').addEventListener('click', e => {
   const t = row.dataset.t;
   hidden.has(t) ? hidden.delete(t) : hidden.add(t);
   row.classList.toggle('off', hidden.has(t));
+  row.setAttribute('aria-pressed', String(!hidden.has(t)));
   refresh();
 });
 
@@ -597,10 +600,14 @@ search.addEventListener('keydown', e => {
 
 /* ── tour: fly cluster to cluster ── */
 const tourBtn = document.getElementById('tour');
-function stopTour() { touring = false; clearTimeout(tourTimer); tourBtn.classList.remove('live'); }
+function stopTour() {
+  touring = false; clearTimeout(tourTimer); tourBtn.classList.remove('live');
+  tourBtn.setAttribute('aria-pressed', 'false');
+}
 tourBtn.onclick = () => {
   if (touring) return stopTour();
   touring = true; tourBtn.classList.add('live');
+  tourBtn.setAttribute('aria-pressed', 'true');
   let i = 0;
   const stops = CAPS.map(([, name]) => nodes.find(n => n.id === name));
   (function step() {
