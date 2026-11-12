@@ -1296,6 +1296,7 @@ const GLOSSARY = {
   'SIPRI': 'Stockholm International Peace Research Institute, which ranks arms companies',
 };
 const GLOSS_RE = new RegExp('(^|[^A-Za-z0-9])(' + Object.keys(GLOSSARY)
+  .flatMap(k => k.includes('&') ? [k, k.replace(/&/g, '&amp;')] : [k])
   .sort((a, b) => b.length - a.length).map(k => k.replace(/[.*+?^${}()|[\]\\\/&]/g, '\\$&')).join('|') +
   ')(s?)(?![A-Za-z0-9])', 'g');
 // first use of each term per block becomes <abbr>; text inside HTML tags is left alone
@@ -1303,9 +1304,10 @@ function gloss(html) {
   const seen = new Set();
   return String(html).split(/(<[^>]+>)/).map(part => part.startsWith('<') ? part :
     part.replace(GLOSS_RE, (m, pre, term, pl) => {
-      if (seen.has(term)) return m;
-      seen.add(term);
-      return `${pre}<abbr title="${GLOSSARY[term].replace(/"/g, '&quot;')}">${term}${pl}</abbr>`;
+      const key = term.replace(/&amp;/g, '&');
+      if (seen.has(key)) return m;
+      seen.add(key);
+      return `${pre}<abbr title="${GLOSSARY[key].replace(/"/g, '&quot;')}">${term}${pl}</abbr>`;
     })).join('');
 }
 
