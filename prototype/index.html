@@ -590,10 +590,19 @@ document.getElementById('legend').addEventListener('click', e => {
 
 /* ── search ── */
 const search = document.getElementById('search');
+const searchPlaceholder = search.placeholder;
+search.addEventListener('input', () => { search.placeholder = searchPlaceholder; });
 search.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
   const q = search.value.trim().toLowerCase(); if (!q) return;
-  const n = nodes.find(x => x.id.toLowerCase().includes(q));
+  let n, bestRank = 3;
+  for (const candidate of nodes) {
+    const names = [candidate.id, fullName(candidate.id)].map(name => name.toLowerCase());
+    const rank = names.some(name => name === q) ? 0
+      : names.some(name => name.startsWith(q)) ? 1
+      : names.some(name => name.includes(q)) ? 2 : 3;
+    if (rank < bestRank) { n = candidate; bestRank = rank; }
+  }
   if (n) { stopTour(); selected = n; highlight(n); flyTo(n); openDetail(n); search.blur(); }
   else { search.value = ''; search.placeholder = 'no match — try "Anduril"'; }
 });
