@@ -96,8 +96,8 @@ const ORGS = [
   ['Saronic','dtech',['maritime','autonomy'],['a16z','8vc','gc'],['navy','socom'],'Austin, TX','Late',
    'Autonomous surface vessels. Riding the mass-attritable-hull thesis hard.',
    'https://www.govconwire.com/articles/saronic-1-75b-series-d-maritime-autonomy'],
-  ['Skydio','dtech',['autonomy','cuas','uas'],['a16z'],['army','diu'],'San Mateo, CA','Late',
-   'Largest US drone maker; pivoted from consumer to defense and public safety. Supply chain is its exposure: China\'s 2024 sanctions cut off its sole battery supplier.',
+  ['Skydio','dtech',['autonomy','cuas','uas'],['a16z'],['army','diu','af'],'San Mateo, CA','Late',
+   'Largest US drone maker; pivoted from consumer to defense and public safety. Supply chain is its exposure: China\'s 2024 sanctions cut off its sole battery supplier. Its own board has posted a Senior Business Operations Manager role on sourcing and product cost — the supply-chain problem as an MBA job.',
    'https://www.skydio.com/blog/skydio-series-f'],
   ['Hadrian','dtech',['mfg'],['a16z','lux','fp'],['navy','army'],'Torrance, CA','Late',
    'Automated precision machining factories — attacking the supply-base bottleneck, not the platform. Now moving into castings and forgings itself under a Navy-backed factory plan.',
@@ -146,8 +146,8 @@ const ORGS = [
   ['Red Cat','dtech',['uas'],[],['army','af'],'San Juan, PR','Public',
    'Parent of Teal Drones, whose Black Widow quadcopter won the Army\'s Short Range Reconnaissance Tranche 2 in Nov 2024 (objective: 5,880 systems over five years). Also owns FlightWave, maker of the Edge 130 VTOL drone. Teal builds in Utah.',
    'https://ir.redcatholdings.com/news-events/press-releases/detail/160/red-cat-announces-production-selection-for-u-s-army-short-range-reconnaissance-program'],
-  ['Neros','dtech',['uas'],['sq'],['army'],'Torrance, CA','Growth',
-   'Cheap FPV strike drones (Archer) built in volume. $75M Series B led by Sequoia (Nov 2025); one of three primary FPV suppliers for the Army\'s Purpose-Built Attritable Systems program, plus a Marine Corps order for Archer Strike drones. Moving into a 250,000 sq ft Torrance factory.',
+  ['Neros','dtech',['uas'],['sq'],['army','navy'],'Torrance, CA','Growth',
+   'Cheap FPV strike drones (Archer) built in volume. $75M Series B led by Sequoia (Nov 2025); one of three primary FPV suppliers for the Army\'s Purpose-Built Attritable Systems program, plus a Marine Corps order for Archer Strike drones. Moving into a 250,000 sq ft Torrance factory. Its own board has posted a Program Manager role for government programs, the usual non-engineering way in.',
    'https://www.neros.tech/articles/neros-closes-75m-series-b-fundraise-led-by-sequoia-capital'],
   ['Performance Drone Works','dtech',['uas'],['osc'],['army'],'Huntsville, AL','Growth',
    'C100 multi-mission quadcopter, picked with Anduril\'s Ghost X for the Army\'s company-level small UAS requirement (Sep 2024). Opened a 90,000 sq ft drone factory near Redstone Arsenal; OSC offered a conditional loan of up to $820M (Jul 2026).',
@@ -167,9 +167,44 @@ const ORGS = [
   ['SRC Inc','dtech',['cuas','ew'],[],['army','jiatf'],'Syracuse, NY','Not-for-profit',
    'Not-for-profit R&D contractor. Holds the Army\'s $426M E-LIDS counter-drone contract (2020), and the first foreign sale of the Army\'s fixed-site LIDS system went to Qatar with SRC kit. Won a $500M-ceiling JIATF-401 "Domestic Shield" IDIQ in Oct 2026, starting with Gryphon radars. An unusual employer: no equity, no exit.',
    'https://www.srcinc.com/news-and-events/press/2020/20201204-us-army-awards-src-idiq-contract-for-counter-uas-technology.html'],
-  ['Dedrone','dtech',['cuas'],[],[],'Sterling, VA','Acquired',
-   'Airspace security: detects unauthorised drones over airports, stadiums, prisons and bases. Bought by Axon (body cameras, Tasers) in Oct 2024 and still runs as its own entity. The closest node on this map to civil aviation safety.',
+  ['Dedrone','dtech',['cuas'],[],['diu','af'],'Sterling, VA','Acquired',
+   'Airspace security: detects unauthorised drones over airports, stadiums, prisons and bases. Bought by Axon (body cameras, Tasers) in Oct 2024 and still runs as its own entity. The closest node on this map to civil aviation safety. Military sales are small and old: DIUx bought its sensors for base experiments (2018) and F.E. Warren AFB renewed its licence (2019). Axon\'s board lists Product Operations roles inside Dedrone.',
    'https://www.axon.com/blog/axon-completes-acquisition-of-dedrone'],
+
+  /* ── UAS, eVTOL and remote sensing (added 2026-11-12; see docs/07).
+     MBA-role lines cite only the employer's own job board unless they say
+     otherwise; postings expire, so treat them as "a posted role", not a pipeline.
+       Joby     https://careers-jobyaviation.icims.com/jobs/1677/associate,-corporate-strategy/job
+       Archer   https://job-boards.greenhouse.io/archer56/jobs/7921071003
+       Planet   https://job-boards.greenhouse.io/planetlabs/jobs/6321266
+       Skydio   https://www.skydio.com/jobs/17b9ecf9-7a47-4811-b035-e1b9a54966aa
+       Neros    https://job-boards.greenhouse.io/nerostechnologies/jobs/4856664007
+       Dedrone  https://job-boards.greenhouse.io/axon/jobs/7724018003
+     ── */
+  ['Zipline','dtech',['uas','autonomy'],['a16z','sq'],['diu'],'South San Francisco, CA','Late',
+   'Autonomous delivery drones, designed and built at its HQ. Raised $1.5B at a $21.5B valuation (Nov 2026) alongside a Walmart deal for 300 more sites. Its defense tie is a DIU agreement (from 2018) to prototype battlefield medical resupply. Strategic and business operations roles show up on job aggregators; not confirmed on its own board.',
+   'https://techcrunch.com/2026/11/05/zipline-hits-21-5b-valuation-as-walmart-expands-bet-on-drone-delivery/'],
+  ['Wing','dtech',['uas','autonomy'],[],[],'Palo Alto, CA','Subsidiary',
+   'Alphabet\'s drone delivery company. Says it made more than 1M US home deliveries in 2026, and plans up to $125M on a Fort Worth drone factory (Nov 2026). No defense work found. Business operations, strategy and product manager roles show up on job aggregators; not confirmed on wing.com.',
+   'https://www.axios.com/2026/11/09/alphabets-wing-makes-125-million-manufacturing-bet-on-drone-delivery'],
+  ['Matternet','dtech',['uas','autonomy'],[],[],'Mountain View, CA','Public',
+   'Medical and retail delivery drones; calls itself the only FAA type-certified drone delivery platform. Went public by reverse merger with a $33M private placement (May 2026). Small company: product manager and business development postings appear on aggregators, not confirmed on its own board.',
+   'https://www.businesswire.com/news/home/20260528964448/en/Matternet-The-Worlds-Only-FAA-Type-Certified-Drone-Delivery-Platform-Raises-$33M-Private-Placement-as-Part-of-Go-Public-Transaction'],
+  ['BRINC','dtech',['uas'],[],[],'Seattle, WA','Growth',
+   'Drones that police and fire departments launch on 911 calls. Raised $125M led by Motorola Solutions (Jul 2026) after a $75M round led by Index (Apr 2025). Public safety, not defense: no DoD award found. Commercial roles posted are product marketing; no strategy or BizOps posting found.',
+   'https://www.prnewswire.com/news-releases/brinc-raises-125m-to-put-a-911-response-drone-on-every-police-and-fire-station-roof-302824451.html'],
+  ['Freefly Systems','dtech',['uas'],[],[],'Woodinville, WA','Private',
+   'Heavy-lift and mapping drones. Its Astro is on DIU\'s Blue UAS list, which clears it for government buyers but is not a contract. Postings on its careers page were technician and support roles; no MBA-type role found.',
+   'https://www.diu.mil/latest/blue-uas-refresh-list-and-framework-platforms-and-capabilities-selected'],
+  ['Joby Aviation','dtech',['autonomy'],[],['af'],'Santa Cruz, CA','Public',
+   'Electric air taxi. Its AFWERX Agility Prime contract reached a potential $131M (Apr 2023) for up to nine aircraft, and Air Force autonomy funding reached about $37M (Nov 2026). Its own board has posted an Associate, Corporate Strategy role.',
+   'https://www.jobyaviation.com/news/joby-expands-autonomous-flight-contracts-with-us-air-force-to-nearly-37-million-following-record-coast-to-coast-tour'],
+  ['Archer Aviation','dtech',['autonomy'],[],['af'],'San Jose, CA','Public',
+   'Electric air taxi turning toward defense. Air Force contracts worth up to $142M (Jul 2023); with Anduril it unveiled Thunder, an autonomous hybrid VTOL for defense (Jul 2026). Agreed in Aug 2026 to buy Boeing\'s Wisk, Insitu and SkyGrid; not closed as of Q3 2026 results. Its own board has posted a Corporate Development Director (M&A) role.',
+   'https://investors.archer.com/news/news-details/2026/Anduril-and-Archer-Unveil-Jointly-Developed-Autonomous-VTOL-Platform-For-Commercial-and-Defense-Applications/default.aspx'],
+  ['Beta Technologies','dtech',[],[],['af','army'],'South Burlington, VT','Public',
+   'Electric aircraft (ALIA) and electric propulsion. Got the Air Force\'s first airworthiness approval for a crewed electric aircraft (2021); IPO on the NYSE raised over $1B (Nov 2025). Fits no cluster here: it is an aircraft, not an autonomy or drone play. A business development role selling its propulsion to other makers was seen on an aggregator; none confirmed on its own board.',
+   'https://investors.beta.team/news-events/press-releases/detail/89/beta-technologies-inc-prices-upsized-initial-public-offering'],
 
   ['SpaceX','space',['launch','space'],['fp','sq'],['nro','sf','nasa'],'Starbase, TX','Public',
    'Starlink/Starshield make it the largest single node in the ecosystem. Public since its June 2026 IPO. Few MBA-titled roles; entry is usually finance, Starlink business ops, or supply chain.',
@@ -204,6 +239,9 @@ const ORGS = [
   ['Hermeus','space',['hyper'],['fp','iqt'],['af'],'El Segundo, CA','Growth',
    'Hypersonic aircraft, incrementally: Quarterhorse to Darkhorse. Constrained by the same test capacity everyone else is.',
    'https://www.hermeus.com/'],
+  ['Planet Labs','space',['space'],['fp','lux'],['nro','nasa','navy','diu'],'San Francisco, CA','Public',
+   'Runs the largest fleet of Earth-imaging satellites and sells the data. NRO renewed its broad-area imagery baseline ($13.2M through Jun 2026); a Navy NIWC Pacific contract tracks vessels across the Pacific (Mar 2024). Its own board has posted a Product Marketing Manager for Defense and Intelligence: government is a product line, not a side business.',
+   'https://www.businesswire.com/news/home/20251210070707/en/Planet-Reports-Financial-Results-for-Third-Quarter-of-Fiscal-Year-2026'],
   ['Orbit Fab','space',['space','launch'],[],['af','diu'],'Lafayette, CO','Early',
    'In-space refueling — \'gas stations in space.\' The classic chicken-and-egg: nobody launches refuelable satellites until fuel exists.',
    'https://www.orbitfab.com/about/'],
@@ -425,12 +463,32 @@ const EDGE_SRC = {
   'Fortem Technologies>army': 'https://www.businesswire.com/news/home/20260226465227/en/Fortem-Technologies-Awarded-3-Year-$18M-U.S.-Army-Contract-for-Counter-Drone-Solutions',
   'SRC Inc>army': 'https://www.srcinc.com/news-and-events/press/2020/20201204-us-army-awards-src-idiq-contract-for-counter-uas-technology.html',
   'SRC Inc>jiatf': 'https://www.globenewswire.com/news-release/2026/10/6/3375557/0/en/src-secures-500-million-jiatf-401-domestic-shield-idiq-contract-including-10-24-million-initial-gryphon-radar-order.html',
+  // UAS, eVTOL and remote sensing, checked 2026-11-12
+  'Skydio>af': 'https://www.skydio.com/blog/USAF-Awards-Skydio-Initial-Contracts-to-Bring-Advanced-Autonomy-to-Mission-Critical-specialties',
+  'Neros>navy': 'https://www.neros.tech/articles/neros-secures-multi-million-marine-corps-contract-for-archer-strike-fpv-drones',
+  'Dedrone>diu': 'https://fedscoop.com/diux-invests-counter-drone-dedrone/',
+  'Dedrone>af': 'https://www.dedrone.com/press/air-force-base-selects-dedrone-for-small-uas-threat-tracking-and-defense-solution',
+  'Zipline>a16z': 'https://venturebeat.com/business/drone-delivery-startup-zipline-raises-25-million-from-sequoia-andreessen-horowitz',
+  'Zipline>sq': 'https://venturebeat.com/business/drone-delivery-startup-zipline-raises-25-million-from-sequoia-andreessen-horowitz',
+  'Zipline>diu': 'https://fedscoop.com/diu-drone-project/',
+  'Joby Aviation>af': 'https://www.jobyaviation.com/news/joby-aviation-to-deliver-aircraft-to-edwards-air-force-base-as-part-of-department-of-defense-contract-valued-up-to-131-million',
+  'Archer Aviation>af': 'https://investors.archer.com/news/news-details/2023/U.S.-Air-Force-and-Archer-Enter-Into-Contracts-Worth-Up-to-142-Million-Representing-Landmark-Investment-In-eVTOL-Technology-by-U.S.-Military/default.aspx',
+  'Beta Technologies>af': 'https://www.af.mil/News/Article-Display/Article/2966513/afwerx-agility-prime-program-beta-technologies-make-history-with-first-airman-f/',
+  'Beta Technologies>army': 'https://vtta.org/u-s-army-partners-with-evtol-developer-beta-technologies/',
+  'Planet Labs>fp': 'https://www.businesswire.com/news/home/20131218005375/en/Planet-Labs-Raises-52M-Financing',
+  'Planet Labs>lux': 'https://www.businesswire.com/news/home/20131218005375/en/Planet-Labs-Raises-52M-Financing',
+  'Planet Labs>nro': 'https://www.businesswire.com/news/home/20230322005148/en/National-Reconnaissance-Office-Awards-Planet-Contract-for-Hyperspectral-Capabilities',
+  'Planet Labs>nasa': 'https://www.businesswire.com/news/home/20240909654906/en/Planet-Selected-for-NASA-Commercial-SmallSat-Data-Acquisition-CSDA-Contract-to-Continue-Providing-Earth-Observation-Data',
+  'Planet Labs>navy': 'https://www.businesswire.com/news/home/20240305304407/en/Planet-Awarded-Contract-for-Vessel-Detection-and-Monitoring-by-Naval-Information-Warfare-Center-NIWC-Pacific',
+  'Planet Labs>diu': 'https://defensescoop.com/2025/05/12/diu-hybrid-space-architecture-hsa-pilot-vendors/',
 };
 
 /* Rows checked on a later date than the 2026-10-03 pass. */
 const CHECKED_ON = Object.fromEntries(['AeroVironment', 'Red Cat', 'Neros', 'Performance Drone Works',
   'Firestorm Labs', 'Auterion', 'Allen Control Systems', 'Fortem Technologies', 'SRC Inc', 'Dedrone',
   'JIATF-401'].map(n => [n, '2026-11-11']));
+['Zipline', 'Wing', 'Matternet', 'BRINC', 'Freefly Systems', 'Joby Aviation', 'Archer Aviation',
+  'Beta Technologies', 'Planet Labs'].forEach(n => { CHECKED_ON[n] = '2026-11-12'; });
 
 /* ─── US-PERSON HIRING SIGNAL ──────────────────────────────────────────
    A FACT, not a score: only what an employer's OWN job posting says, with
