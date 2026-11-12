@@ -97,7 +97,7 @@ views and nothing to show.
 ## Explicit non-requirements
 
 - Does not need to work offline after first load.
-- Does not need to support >500 nodes. At 65 nodes we are ~30× under the
+- Does not need to support >500 nodes. At 90 nodes (as of 2026-11-12) we are ~22× under the
   library's comfortable limit; do not optimize for scale we don't have.
 - Does not need to be accessible via screen reader in v1 — but log this in the
   decision log as a known, deliberate debt, not an oversight. (Paid down 2026-11-07:
