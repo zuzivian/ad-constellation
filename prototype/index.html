@@ -544,11 +544,11 @@ function openDetail(n) {
   // US-person hiring signal: a sourced fact from the employer's own posting, or an explicit "not checked"
   const usp = ['prime', 'dtech', 'space'].includes(n.type)
     ? (n.usPerson
-      ? `US-person rule · ${esc(n.usPerson[0])} <a href="${esc(n.usPerson[1])}" target="_blank" rel="noopener">${host(n.usPerson[1])}</a> · checked ${n.usPerson[2]}<br>One posted role, not a company policy.<br><br>`
+      ? `US-person rule · ${esc(n.usPerson[0])} <a href="${esc(n.usPerson[1])}" target="_blank" rel="noopener">${esc(host(n.usPerson[1]))}<span class="sr"> (opens in a new tab)</span></a> · checked ${n.usPerson[2]}<br>One posted role, not a company policy.<br><br>`
       : 'US-person rule · not checked. No employer posting cited here; ask the recruiter.<br><br>')
     : '';
   D.src.innerHTML = usp + (n.src
-    ? `src · <a href="${esc(n.src)}" target="_blank" rel="noopener">${host(n.src)}</a> · checked ${n.verified}` +
+    ? `src · <a href="${esc(n.src)}" target="_blank" rel="noopener">${esc(host(n.src))}<span class="sr"> (opens in a new tab)</span></a> · checked ${n.verified}` +
       (groups['investment<'].length + groups['sells to<'].length + groups['investment>'].length + groups['sells to>'].length
         ? '<br>↗ on a name opens the evidence for that edge' : '')
     : '');
