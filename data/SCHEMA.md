@@ -37,17 +37,20 @@ This file is the *contract* — the shape `data.js` must satisfy.
 
 ### `stage`
 `Early` · `Growth` · `Late` · `Public` · `Fund` · `Strategic` · `Service` ·
-`DoD` · `IC` · `Civil`
+`DoD` · `IC` · `Civil` · `Not-for-profit` · `Acquired` · `Subsidiary` ·
+`Private` · `Space Force` · `Air Force`
 
 ### Capability keys
 `autonomy` · `launch` · `space` · `c2` · `ew` · `hyper` · `cuas` · `maritime`
-· `mfg`
+· `mfg` · `uas`
 
 ## How `data.js` stores it
 
 `ORGS` rows are tuples: `[name, type, caps[], investors[], buyers[], hq, stage, note, source]`.
-`verified` is the date of the last full source check (currently 2026-10-03), set when the
-graph is derived.
+`verified` is set when the graph is derived: `CHECKED_ON[name] || '2026-10-03'`.
+`CHECKED_ON` maps org names to later source-check dates (2026-11-11 for the drone
+rows, with further overrides on 2026-11-12); other rows use the last full source
+check date, 2026-10-03.
 
 `EDGE_SRC` maps `'Org>key'` to the URL that evidences that investor or buyer edge.
 **An investor/buyer edge with no `EDGE_SRC` entry is not drawn.**
@@ -102,6 +105,9 @@ The last two items stay human. All must pass:
 
 `bind` is one of: `Foreign control` · `Single supplier` · `Process capacity` ·
 `Institutional`.
+
+Whitespace `kind` is one of: `Company` · `Policy` · `Research` · `Fintech` ·
+`Policy / Company` · `Policy / Fintech`.
 
 ### Facts vs scores — the load-bearing rule
 
