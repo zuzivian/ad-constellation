@@ -184,7 +184,10 @@
   .cp .bar { display: flex; gap: 1.5px; margin-bottom: 6px; }
   .cp .bar i { flex: 1; height: 11px; border-radius: 1.5px; background: #182031; }
   .cp .bar i.f { background: currentColor; }
-  .cp .meta { display: flex; align-items: center; gap: 7px; }
+  .cp .meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .cp .meta > span { white-space: nowrap; }
+  .cp .estimate { font-size: 9.5px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--dimmer); }
   .cp .n { font-size: 12.5px; color: var(--dim); line-height: 1.6; }
   .cp .n b { color: var(--ink); font-weight: 580; }
   .cp .ctrl { font-size: 11.5px; color: var(--ink); margin-bottom: 5px; }
@@ -385,9 +388,9 @@ function drawDetail() {
       <div class="eyebrow">SEGMENT ${String(s.n).padStart(2,'0')} / 10</div>
       <h3>${s.name}</h3>
       <div class="dstats">
-        <div class="stat"><div class="sl">Domestic coverage</div>
+        <div class="stat"><div class="sl">Domestic coverage · estimate</div>
           <div class="sv" style="color:${c}">${s.domestic}<span style="font-size:12px;color:var(--dimmer)">%</span></div></div>
-        <div class="stat"><div class="sl">Headline risk</div>
+        <div class="stat"><div class="sl">Headline risk · judgement</div>
           <div class="sv" style="color:${c}">${s.risk}</div></div>
         <div class="stat"><div class="sl">Chokepoints</div>
           <div class="sv">${s.chokepoints.length}<span style="font-size:12px;color:var(--dimmer)"> · ${nCrit} critical</span></div></div>
@@ -439,8 +442,8 @@ function paneCp(s) {
         <div><div class="k">${x.k}</div><div class="u">${x.use}</div></div>
         <div>
           <div class="bar">${Array.from({length:10},(_,k)=>`<i class="${k<filled?'f':''}"></i>`).join('')}</div>
-          <div class="meta"><span class="pct" style="color:var(--ink)">${x.domestic}<s>%</s></span>
-            <span class="chip">${x.risk}</span></div>
+          <div class="meta"><span class="pct" style="color:var(--ink)">${x.domestic}<s>%</s> <span class="estimate" aria-hidden="true" title="Analyst estimate, not a published statistic">est.</span><span class="sr"> (analyst estimate)</span></span>
+            <span><span class="chip">${x.risk}</span> <span class="estimate" aria-hidden="true" title="Analyst estimate, not a published statistic">est.</span><span class="sr"> (analyst estimate)</span></span></div>
         </div>
         <div><div class="ctrl">${x.control}</div>
           <div class="n">${gloss(x.note)}</div>
