@@ -72,13 +72,18 @@ Derived, never stored. Three kinds:
 
 Run `node scripts/check-data.js` before every change to `data.js` lands. It
 automates the first four items below (plus evidence URLs on every money edge,
-logo files, and chokepoint `src` lines) and exits non-zero on any failure.
+logo files, US-person entry structure, and chokepoint `src` lines) and exits non-zero on any failure.
 The last two items stay human. All must pass:
 
 - [ ] every node has `source` and `verified`
 - [ ] every key in `capabilities` / `investors` / `buyers` resolves to a node
 - [ ] no orphan nodes (zero edges)
 - [ ] no duplicate `id`
+- [ ] every `US_PERSON` key names an existing `prime`, `dtech` or `space` node;
+      its value is exactly `[quote, source, date]`: a non-empty string, an HTTPS
+      URL, and a valid `YYYY-MM-DD` date no later than today (UTC). The quote
+      must come from the employer's own posting; source ownership and quote
+      accuracy require human verification.
 - [ ] every `note` is non-empty and mentions an MBA-relevant detail
 - [ ] random 10-row re-verification: ≤1 error, else fix the process
 
