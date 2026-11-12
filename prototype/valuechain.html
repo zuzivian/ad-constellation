@@ -273,9 +273,9 @@
 <div class="toolbar">
   <h2>Colour by</h2>
   <span class="lenses" id="lenses">
-    <button data-l="risk" class="on">Supply risk</button>
-    <button data-l="cover">Domestic coverage</button>
-    <button data-l="bind">Binding constraint</button>
+    <button type="button" data-l="risk" class="on" aria-pressed="true">Supply risk</button>
+    <button type="button" data-l="cover" aria-pressed="false">Domestic coverage</button>
+    <button type="button" data-l="bind" aria-pressed="false">Binding constraint</button>
   </span>
 </div>
 
@@ -401,9 +401,9 @@ function drawDetail() {
       </div>
     </div>
     <div class="tabs">
-      <button data-t="cp" class="${tab==='cp'?'on':''}">Chokepoints<em>${s.chokepoints.length}</em></button>
-      <button data-t="pl" class="${tab==='pl'?'on':''}">Players</button>
-      <button data-t="ws" class="${tab==='ws'?'on':''}">What else could be done<em>${s.whitespace.length}</em></button>
+      <button type="button" data-t="cp" class="${tab==='cp'?'on':''}" aria-pressed="${tab==='cp'}">Chokepoints<em>${s.chokepoints.length}</em></button>
+      <button type="button" data-t="pl" class="${tab==='pl'?'on':''}" aria-pressed="${tab==='pl'}">Players</button>
+      <button type="button" data-t="ws" class="${tab==='ws'?'on':''}" aria-pressed="${tab==='ws'}">What else could be done<em>${s.whitespace.length}</em></button>
     </div>
     <div class="pane${tab==='cp'?'':' hide'}" id="pane-cp">${paneCp(s)}</div>
     <div class="pane${tab==='pl'?'':' hide'}" id="pane-pl">${panePl(s)}</div>
@@ -411,17 +411,21 @@ function drawDetail() {
 
   detail.querySelector('.tabs')?.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
+    const hadFocus = detail.contains(document.activeElement);
     tab = b.dataset.t; drawDetail();
+    if (hadFocus) detail.querySelector(`[data-t="${tab}"]`).focus();
   });
   detail.querySelector('.filters')?.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
+    const hadFocus = detail.contains(document.activeElement);
     riskFilter = b.dataset.r; drawDetail();
+    if (hadFocus) detail.querySelector(`[data-r="${riskFilter}"]`).focus();
   });
 }
 
 function paneCp(s) {
   const counts = s.chokepoints.reduce((a,x)=>(a[x.risk]=(a[x.risk]||0)+1,a),{});
-  const btn = (r, label) => `<button data-r="${r}" class="${riskFilter===r?'on':''}">${label}${
+  const btn = (r, label) => `<button type="button" data-r="${r}" class="${riskFilter===r?'on':''}" aria-pressed="${riskFilter===r}">${label}${
     r==='all' ? ` (${s.chokepoints.length})` : counts[r] ? ` (${counts[r]})` : ' (0)'}</button>`;
   const rows = s.chokepoints
     .filter(x => riskFilter === 'all' || x.risk === riskFilter)
@@ -485,7 +489,10 @@ bindkey.innerHTML = Object.entries(BIND_VAR).map(([k, c]) =>
 document.getElementById('lenses').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   lens = b.dataset.l;
-  [...e.currentTarget.children].forEach(x => x.classList.toggle('on', x === b));
+  [...e.currentTarget.children].forEach(x => {
+    x.classList.toggle('on', x === b);
+    x.setAttribute('aria-pressed', String(x === b));
+  });
   bindkey.classList.toggle('show', lens === 'bind');
   drawSpine();
 });
