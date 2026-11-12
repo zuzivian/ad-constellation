@@ -446,7 +446,7 @@ G.graphData({ nodes, links: cleanLinks })
     highlight(n);
     el.style.cursor = n ? 'pointer' : null;
   })
-  .onNodeClick(n => { stopTour(); selected = n; highlight(n); flyTo(n); openDetail(n); })
+  .onNodeClick(n => selectNode(n))
   .onBackgroundClick(() => { stopTour(); selected = null; highlight(null); closeDetail(); });
 
 G.d3Force('charge').strength(-260);
@@ -508,6 +508,18 @@ function flyTo(n) {
   G.cameraPosition({ x: (n.x || 0) * d, y: (n.y || 0) * d, z: (n.z || 0) * d }, n, ms(1100));
 }
 
+function selectNode(n, { fromTour = false } = {}) {
+  if (!fromTour) stopTour();
+  if (hidden.has(n.type)) {
+    hidden.delete(n.type);
+    const row = document.querySelector(`.legend-row[data-t="${n.type}"]`);
+    row.classList.remove('off');
+    row.setAttribute('aria-pressed', 'true');
+    refresh();
+  }
+  selected = n; highlight(n); flyTo(n); openDetail(n);
+}
+
 /* ── detail panel ── */
 const D = { box: document.getElementById('detail'), kind: document.getElementById('d-kind'),
   name: document.getElementById('d-name'), meta: document.getElementById('d-meta'),
@@ -563,7 +575,7 @@ D.links.addEventListener('click', e => {
   const name = e.target.closest('.chip')?.dataset.go; if (!name) return;
   const n = nodes.find(x => x.id === name);
   if (!n) return;
-  selected = n; highlight(n); flyTo(n); openDetail(n);
+  selectNode(n);
   // the chip just pressed was replaced; keep keyboard users inside the panel
   if (e.detail === 0) document.getElementById('close').focus();
 });
@@ -603,7 +615,7 @@ search.addEventListener('keydown', e => {
       : names.some(name => name.includes(q)) ? 2 : 3;
     if (rank < bestRank) { n = candidate; bestRank = rank; }
   }
-  if (n) { stopTour(); selected = n; highlight(n); flyTo(n); openDetail(n); search.blur(); }
+  if (n) { selectNode(n); search.blur(); }
   else { search.value = ''; search.placeholder = 'no match — try "Anduril"'; }
 });
 
@@ -622,7 +634,7 @@ tourBtn.onclick = () => {
   (function step() {
     if (!touring) return;
     const n = stops[i++ % stops.length];
-    selected = n; highlight(n); flyTo(n); openDetail(n);
+    selectNode(n, { fromTour: true });
     tourTimer = setTimeout(step, 4200);
   })();
 };
@@ -684,7 +696,7 @@ LIST.addEventListener('click', e => {
   const name = e.target.closest('.go')?.dataset.go; if (!name) return;
   const n = byId[name]; if (!n) return;
   closeList(false);
-  selected = n; highlight(n); flyTo(n); openDetail(n);
+  selectNode(n);
   document.getElementById('close').focus();   // keyboard users land in the detail panel
 });
 
@@ -830,7 +842,7 @@ setTimeout(() => {
 const focus = new URLSearchParams(location.search).get('focus');
 if (focus) setTimeout(() => {
   const n = nodes.find(x => x.id === focus);
-  if (n) { selected = n; highlight(n); flyTo(n); openDetail(n); }
+  if (n) selectNode(n);
 }, 2600);
 </script>
 <script src="feedback.js"></script>
