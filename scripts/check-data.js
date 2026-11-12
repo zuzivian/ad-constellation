@@ -16,19 +16,31 @@ const A = ctx.window.AD;
 const fail = [];
 const bad = msg => fail.push(msg);
 const isUrl = u => typeof u === 'string' && /^https:\/\/\S+$/.test(u);
+const today = new Date().toISOString().slice(0, 10);
+function validDate(date, label) {
+  // Date.parse normalizes some impossible dates (e.g. February 30); round-trip too.
+  const timestamp = typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)
+    ? Date.parse(`${date}T00:00:00Z`) : NaN;
+  if (!Number.isFinite(timestamp) || new Date(timestamp).toISOString().slice(0, 10) !== date) {
+    bad(`${label}: invalid YYYY-MM-DD date`);
+  } else if (date > today) bad(`${label}: date is in the future`);
+}
 
 const TYPES = ['prime', 'dtech', 'space', 'investor', 'gov'];
 const RISKS = ['Critical', 'High', 'Medium', 'Low'];
 const BINDS = ['Foreign control', 'Single supplier', 'Process capacity', 'Institutional'];
+const STAGES = ['Public', 'Late', 'Growth', 'Early', 'Fund', 'Strategic', 'Service', 'DoD', 'IC', 'Civil', 'Not-for-profit', 'Acquired', 'Space Force', 'Air Force', 'Subsidiary', 'Private'];
+const HEATS = ['Hot', 'Contrarian', 'Early'];
 
 // ── nodes ──
 const ids = A.nodes.map(n => n.id), idSet = new Set(ids);
 ids.filter((x, i) => ids.indexOf(x) !== i).forEach(x => bad(`duplicate node id: ${x}`));
 
 A.ORGS.forEach(row => {
-  const [name, type, caps, invs, buyers, , , note, src] = row;
+  const [name, type, caps, invs, buyers, , stage, note, src] = row;
   if (row.length !== 9) bad(`${name}: row has ${row.length} fields, expected 9`);
   if (!TYPES.includes(type)) bad(`${name}: unknown type "${type}"`);
+  if (!STAGES.includes(stage)) bad(`${name}: unknown stage "${stage}"`);
   if (!isUrl(src)) bad(`${name}: no https source — no source, no row`);
   if (!note || !note.trim()) bad(`${name}: empty note`);
   caps.forEach(k => A.CAP_NAME[k] || bad(`${name}: unknown capability "${k}"`));
@@ -61,8 +73,14 @@ const degree = {};
 A.links.forEach(l => { degree[l.source] = 1; degree[l.target] = 1; });
 A.nodes.forEach(n => degree[n.id] || bad(`orphan node (no edges): ${n.id}`));
 
+// ── provenance dates ──
+Object.entries(A.CHECKED_ON).forEach(([name, date]) => {
+  const label = `CHECKED_ON "${name}"`;
+  if (!A.ORGS.some(row => row[0] === name)) bad(`${label}: no such org`);
+  validDate(date, label);
+});
+
 // ── US-person hiring signals (facts from employer postings) ──
-const today = new Date().toISOString().slice(0, 10);
 Object.entries(A.US_PERSON).forEach(([name, entry]) => {
   const label = `US_PERSON "${name}"`;
   const node = A.nodes.find(n => n.id === name);
@@ -75,12 +93,7 @@ Object.entries(A.US_PERSON).forEach(([name, entry]) => {
   const [quote, url, date] = entry;
   if (typeof quote !== 'string' || !quote.trim()) bad(`${label}: empty or non-string quote`);
   if (!isUrl(url)) bad(`${label}: not an https URL`);
-  // Date.parse normalizes some impossible dates (e.g. February 30); round-trip too.
-  const timestamp = typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)
-    ? Date.parse(`${date}T00:00:00Z`) : NaN;
-  if (!Number.isFinite(timestamp) || new Date(timestamp).toISOString().slice(0, 10) !== date) {
-    bad(`${label}: invalid YYYY-MM-DD date`);
-  } else if (date > today) bad(`${label}: date is in the future`);
+  validDate(date, label);
 });
 
 // ── logos ──
@@ -92,7 +105,11 @@ Object.entries(A.LOGOS).forEach(([name, l]) => {
 });
 
 // ── value chain ──
-A.SEGMENTS.forEach(s => {
+const segmentIds = new Set();
+A.SEGMENTS.forEach((s, i) => {
+  if (segmentIds.has(s.id)) bad(`duplicate segment id: ${s.id}`);
+  segmentIds.add(s.id);
+  if (s.n !== i + 1) bad(`segment ${s.id}: n must be ${i + 1}, got "${s.n}"`);
   if (!RISKS.includes(s.risk)) bad(`segment ${s.id}: unknown risk "${s.risk}"`);
   if (!BINDS.includes(s.bind)) bad(`segment ${s.id}: unknown binding constraint "${s.bind}"`);
   if (!(s.domestic >= 0 && s.domestic <= 100)) bad(`segment ${s.id}: domestic must be 0–100`);
@@ -104,6 +121,13 @@ A.SEGMENTS.forEach(s => {
     if (!c.src || !c.src.trim()) bad(`segment ${s.id} chokepoint "${c.k}": no src — facts need a named source`);
     if (!RISKS.includes(c.risk)) bad(`segment ${s.id} chokepoint "${c.k}": unknown risk "${c.risk}"`);
     if (!(c.domestic >= 0 && c.domestic <= 100)) bad(`segment ${s.id} chokepoint "${c.k}": domestic must be 0–100`);
+  });
+  (s.whitespace || []).forEach((w, j) => {
+    const label = `segment ${s.id} whitespace ${j + 1}`;
+    ['t', 'd', 'kind'].forEach(key => {
+      if (typeof w[key] !== 'string' || !w[key].trim()) bad(`${label}: empty or non-string ${key}`);
+    });
+    if (!HEATS.includes(w.heat)) bad(`${label}: unknown heat "${w.heat}"`);
   });
 });
 A.META.sources.forEach(([pub, , url]) => isUrl(url) || bad(`META source "${pub}": not an https URL`));

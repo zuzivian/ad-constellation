@@ -1334,5 +1334,5 @@ const links = rawLinks.filter(l => {
   seen.add(k); return true;
 });
 
-return { CAPS, ORGS, EDGE_SRC, US_PERSON, LOGOS, GLOSSARY, gloss, CAP_NAME, BUYER_ID, INV_ID, nodes, links, SEGMENTS, READS, META };
+return { CAPS, ORGS, EDGE_SRC, CHECKED_ON, US_PERSON, LOGOS, GLOSSARY, gloss, CAP_NAME, BUYER_ID, INV_ID, nodes, links, SEGMENTS, READS, META };
 })();
