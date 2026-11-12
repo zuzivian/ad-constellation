@@ -61,6 +61,28 @@ const degree = {};
 A.links.forEach(l => { degree[l.source] = 1; degree[l.target] = 1; });
 A.nodes.forEach(n => degree[n.id] || bad(`orphan node (no edges): ${n.id}`));
 
+// ── US-person hiring signals (facts from employer postings) ──
+const today = new Date().toISOString().slice(0, 10);
+Object.entries(A.US_PERSON).forEach(([name, entry]) => {
+  const label = `US_PERSON "${name}"`;
+  const node = A.nodes.find(n => n.id === name);
+  if (!node) bad(`${label}: no such node`);
+  else if (!['prime', 'dtech', 'space'].includes(node.type)) bad(`${label}: node must be prime, dtech or space`);
+  if (!Array.isArray(entry) || entry.length !== 3) {
+    bad(`${label}: expected [quote, https URL, YYYY-MM-DD date] (exactly 3 fields)`);
+    return;
+  }
+  const [quote, url, date] = entry;
+  if (typeof quote !== 'string' || !quote.trim()) bad(`${label}: empty or non-string quote`);
+  if (!isUrl(url)) bad(`${label}: not an https URL`);
+  // Date.parse normalizes some impossible dates (e.g. February 30); round-trip too.
+  const timestamp = typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)
+    ? Date.parse(`${date}T00:00:00Z`) : NaN;
+  if (!Number.isFinite(timestamp) || new Date(timestamp).toISOString().slice(0, 10) !== date) {
+    bad(`${label}: invalid YYYY-MM-DD date`);
+  } else if (date > today) bad(`${label}: date is in the future`);
+});
+
 // ── logos ──
 Object.entries(A.LOGOS).forEach(([name, l]) => {
   if (!idSet.has(name)) bad(`LOGOS "${name}": no such node`);
@@ -91,5 +113,5 @@ if (fail.length) {
   process.exit(1);
 }
 console.log(`data.js OK — ${A.ORGS.length} orgs, ${A.nodes.length} nodes, ${A.links.length} edges, ` +
-  `${Object.keys(A.EDGE_SRC).length} sourced money edges, ${A.SEGMENTS.length} segments, ` +
+  `${Object.keys(A.EDGE_SRC).length} sourced money edges, ${Object.keys(A.US_PERSON).length} US-person entries, ${A.SEGMENTS.length} segments, ` +
   `${A.SEGMENTS.reduce((n, s) => n + s.chokepoints.length, 0)} chokepoints`);
