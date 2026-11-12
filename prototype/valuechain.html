@@ -29,6 +29,9 @@
     --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   }
   * { box-sizing: border-box; }
+  .sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  a[target='_blank'] { position: relative; }
   html { scroll-behavior: smooth; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body { margin: 0; background: var(--bg); color: var(--ink);
@@ -463,7 +466,7 @@ function panePl(s) {
       ${n ? `<a class="pn" href="index.html?focus=${encodeURIComponent(name)}">${name}</a>`
           : `<span class="pn">${name}</span>`}${meta ? `<span class="pm">${meta}</span>` : ''}
       ${line ? `<div class="pd">${gloss(line)}</div>` : ''}
-      ${src ? `<div class="src">src · <a href="${src}" target="_blank" rel="noopener">${host(src)}</a></div>` : ''}
+      ${src ? `<div class="src">src · <a href="${src}" target="_blank" rel="noopener">${host(src)}<span class="sr"> (opens in a new tab)</span></a></div>` : ''}
     </div>`;
   };
   return `<div class="pgrid">` + Object.entries(heads).filter(([k]) => (s.players[k] || []).length).map(([k, h]) =>
@@ -517,7 +520,7 @@ document.getElementById('caveat').innerHTML =
    risk ratings are a defensible reading of those facts, not a published statistic —
    so cite the facts, not the bars. ${META.caveat}`;
 document.getElementById('srclist').innerHTML = META.sources
-  .map(([pub, title, url]) => `<li>${pub} — <a href="${url}" target="_blank" rel="noopener">${title}</a></li>`)
+  .map(([pub, title, url]) => `<li>${pub} — <a href="${url}" target="_blank" rel="noopener">${title}<span class="sr"> (opens in a new tab)</span></a></li>`)
   .join('');
 
 /* ── deep link: ?seg=energetics ── */
