@@ -405,7 +405,7 @@ function linkColor(l) {
   return lit ? rgba(c, 0.8) : dimmed ? rgba(c, 0.04) : rgba(c, 0.16);
 }
 // Every money edge is built once with two particles and an arrow. Hover never asks
-// the library to rebuild (that re-processes all 254 links and stalled the page for
+// the library to rebuild (that re-processes all links and stalled the page for
 // ~0.5s per hover); paintLinks() below just swaps materials and toggles visibility.
 const GLOSSARY = window.AD.GLOSSARY, gloss = window.AD.gloss;
 // "DIU" -> "Defense Innovation Unit": the part of the glossary entry before the colon

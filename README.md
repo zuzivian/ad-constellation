@@ -25,7 +25,7 @@ Plain HTML + CSS + vanilla JS. The constellation view uses `3d-force-graph@1.80.
 vendored in `prototype/vendor/` with its MIT license; the value chain view has no
 dependencies at all. The site makes no third-party requests and works offline. Node logos are local SVGs in `prototype/logos/`
 (each with a source in `LOGOS`), so nothing is fetched from a logo service.
-Total payload is about 2080 KB (the 3D library is ~1.3 MB of that, gzipped in transit).
+Total payload is about 1940 KB as of 2026-11-12 (the 3D library is ~1.3 MB of that, gzipped in transit).
 
 ## Check the data
 

@@ -75,7 +75,7 @@ version AND handle the API you might get anyway.**
 
 ## Performance
 
-At 78 nodes / 254 edges this is nowhere near a limit. Numbers to know:
+At 90 nodes / 286 edges (as of 2026-11-12) this is nowhere near a limit. Numbers to know:
 
 - Comfortable: up to ~2,000 nodes with `nodeResolution` at 14.
 - Needs `nodeResolution: 6–8` and no particles: ~5,000 nodes.
