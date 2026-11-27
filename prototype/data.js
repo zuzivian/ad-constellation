@@ -76,8 +76,8 @@ const ORGS = [
    'Forward-deployed engineer model. MBAs typically go to the Foundry/Gotham business side (business development, deployment strategy).',
    'https://investors.palantir.com/files/2025%20FY%20PLTR%2010-K.pdf'],
   ['Shield AI','dtech',['autonomy','uas'],['a16z','pt'],['socom','af'],'San Diego, CA','Late',
-   'Hivemind autonomy stack plus V-BAT airframe. Hardware + software, which makes ops roles unusually meaty.',
-   'https://shield.ai/shield-ai-awarded-u-s-air-force-production-contract/'],
+   'Hivemind autonomy stack plus V-BAT airframe. Hardware + software, which makes ops roles unusually meaty. Raised a Series G at a $12.7B valuation (Mar 2026), then agreed to buy counter-drone radar maker Echodyne for up to $5.3B alongside a $1B Series H at $28.8B (Nov 2026; expected to close early 2027). Echodyne is its fifth and largest acquisition, so post-merger integration is a live problem.',
+   'https://shield.ai/shield-to-acquire-echodyne-in-a-transaction-valued-at-5-3-billion-and-raise-2-5-billion-at-a-28-8-billion-valuation/'],
   ['Applied Intuition','dtech',['autonomy'],['lux','gc','a16z'],['army','diu'],'Mountain View, CA','Late',
    'Crossed over from automotive AV tooling into defense ground autonomy. Strong MBA pipeline already.',
    'https://www.appliedintuition.com/news/series-f'],
@@ -97,7 +97,7 @@ const ORGS = [
    'Autonomous surface vessels. Riding the mass-attritable-hull thesis hard.',
    'https://www.govconwire.com/articles/saronic-1-75b-series-d-maritime-autonomy'],
   ['Skydio','dtech',['autonomy','cuas','uas'],['a16z'],['army','diu','af'],'San Mateo, CA','Late',
-   'Largest US drone maker; pivoted from consumer to defense and public safety. Supply chain is its exposure: China\'s 2024 sanctions cut off its sole battery supplier. Its own board has posted a Senior Business Operations Manager role on sourcing and product cost — the supply-chain problem as an MBA job.',
+   'Largest US drone maker; pivoted from consumer to defense and public safety. Supply chain is its exposure: China\'s 2024 sanctions cut off its sole battery supplier. Its own board has posted a Senior Business Operations Manager role on sourcing and product cost — the supply-chain problem as an MBA job. Axon agreed to invest about $1.2B more at a $5.2B pre-money valuation, taking its stake to 37% and becoming Skydio\'s exclusive US and Canadian public-safety distributor (Nov 2026; closing Q4 2026 to Q1 2027).',
    'https://www.skydio.com/blog/skydio-series-f'],
   ['Hadrian','dtech',['mfg'],['a16z','lux','fp'],['navy','army'],'Torrance, CA','Late',
    'Automated precision machining factories — attacking the supply-base bottleneck, not the platform. Now moving into castings and forgings itself under a Navy-backed factory plan.',
@@ -141,13 +141,13 @@ const ORGS = [
 
   /* ── drones and counter-drone (added 2026-11-11; see docs/07) ── */
   ['AeroVironment','dtech',['uas','cuas'],[],['army'],'Arlington, VA','Public',
-   'Makes Switchblade loitering munitions for the Army. Bought BlueHalo in an all-stock deal valued at about $4.1B (closed May 2025), adding a space, cyber and directed-energy segment. A listed incumbent, not a startup.',
+   'Makes Switchblade loitering munitions for the Army. Bought BlueHalo in an all-stock deal valued at about $4.1B (closed May 2025), adding a space, cyber and directed-energy segment. Since then: a $186M Army delivery order for next-generation Switchblade (Feb 2026) and Switchblade 400 picked for the Army\'s LASSO loitering-munition program (May 2026). A listed incumbent, not a startup.',
    'https://www.avinc.com/2025/05/01/aerovironment-and-bluehalo-complete-transaction-creating-a-global-defense-technology/'],
   ['Red Cat','dtech',['uas'],[],['army','af'],'San Juan, PR','Public',
-   'Parent of Teal Drones, whose Black Widow quadcopter won the Army\'s Short Range Reconnaissance Tranche 2 in Nov 2024 (objective: 5,880 systems over five years). Also owns FlightWave, maker of the Edge 130 VTOL drone. Teal builds in Utah.',
+   'Parent of Teal Drones, whose Black Widow quadcopter won the Army\'s Short Range Reconnaissance Tranche 2 in Nov 2024 (objective: 5,880 systems over five years). Also owns FlightWave, maker of the Edge 130 VTOL drone. Teal builds in Utah. Its FANG FPV drone was not picked as a Drone Dominance Gauntlet II finalist, and in Nov 2026 it withdrew its 2026 revenue target after Q3 revenue of $11.8M.',
    'https://ir.redcatholdings.com/news-events/press-releases/detail/160/red-cat-announces-production-selection-for-u-s-army-short-range-reconnaissance-program'],
   ['Neros','dtech',['uas'],['sq'],['army','navy'],'Torrance, CA','Growth',
-   'Cheap FPV strike drones (Archer) built in volume. $75M Series B led by Sequoia (Nov 2025); one of three primary FPV suppliers for the Army\'s Purpose-Built Attritable Systems program, plus a Marine Corps order for Archer Strike drones. Moving into a 250,000 sq ft Torrance factory. Its own board has posted a Program Manager role for government programs, the usual non-engineering way in.',
+   'Cheap FPV strike drones (Archer) built in volume. $75M Series B led by Sequoia (Nov 2025); one of three primary FPV suppliers for the Army\'s Purpose-Built Attritable Systems program, plus a Marine Corps order for Archer Strike drones. Placed first in Close Quarters Battle at the Pentagon\'s Drone Dominance Gauntlet II and announced a 14,000-drone order worth over $100M (Sep 2026). Moving into a 250,000 sq ft Torrance factory. Its own board has posted a Program Manager role for government programs, the usual non-engineering way in.',
    'https://www.neros.tech/articles/neros-closes-75m-series-b-fundraise-led-by-sequoia-capital'],
   ['Performance Drone Works','dtech',['uas'],['osc'],['army'],'Huntsville, AL','Growth',
    'C100 multi-mission quadcopter, picked with Anduril\'s Ghost X for the Army\'s company-level small UAS requirement (Sep 2024). Opened a 90,000 sq ft drone factory near Redstone Arsenal; OSC offered a conditional loan of up to $820M (Jul 2026).',
@@ -156,7 +156,7 @@ const ORGS = [
    '3D-printed drones plus xCell, a containerised microfactory that prints airframes in the field. $47M Series A led by NEA (Jul 2025). Air Force IDIQ with a $100M ceiling, of which only part is obligated.',
    'https://www.prnewswire.com/news-releases/firestorm-labs-announces-47-million-series-a-funding-to-accelerate-growth-and-innovation-in-defense-technology-302506303.html'],
   ['Auterion','dtech',['uas','autonomy'],[],[],'Arlington, VA','Growth',
-   'Software, not airframes: its OS and Skynode kits turn cheap drones into autonomous ones. A $50M Pentagon contract funds 33,000 strike kits for Ukraine (Jul 2025). Engineering sits in Munich and Zurich as well as the US.',
+   'Software, not airframes: its OS and Skynode kits turn cheap drones into autonomous ones. A $50M Pentagon contract funds 33,000 strike kits for Ukraine (Jul 2025); with Ukrainian maker SkyFall it began shipping 50,000 Shrike strike drones fitted with its kits (Jul 2026), paid for by an unnamed NATO nation. Reported in Feb 2026 to be weighing a ~$200M raise at a $1.2B+ valuation; no close announced. Engineering sits in Munich and Zurich as well as the US.',
    'https://auterion.com/auterion-secures-contract-to-deliver-33000-skynode-drone-strike-kits-to-ukraine/'],
   ['Allen Control Systems','dtech',['cuas','autonomy'],[],['jiatf'],'Austin, TX','Growth',
    'Bullfrog: an autonomous gun turret that engages Group 1–3 drones. $200M Series B at a $2.2B valuation, led by Smash Capital (Jun 2026). Says it has contracts through JIATF-401 and is building a 191,000 sq ft Austin plant.',
@@ -168,7 +168,7 @@ const ORGS = [
    'Not-for-profit R&D contractor. Holds the Army\'s $426M E-LIDS counter-drone contract (2020), and the first foreign sale of the Army\'s fixed-site LIDS system went to Qatar with SRC kit. Won a $500M-ceiling JIATF-401 "Domestic Shield" IDIQ in Oct 2026, starting with Gryphon radars. An unusual employer: no equity, no exit.',
    'https://www.srcinc.com/news-and-events/press/2020/20201204-us-army-awards-src-idiq-contract-for-counter-uas-technology.html'],
   ['Dedrone','dtech',['cuas'],[],['diu','af'],'Sterling, VA','Acquired',
-   'Airspace security: detects unauthorised drones over airports, stadiums, prisons and bases. Bought by Axon (body cameras, Tasers) in Oct 2024 and still runs as its own entity. The closest node on this map to civil aviation safety. Military sales are small and old: DIUx bought its sensors for base experiments (2018) and F.E. Warren AFB renewed its licence (2019). Axon\'s board lists Product Operations roles inside Dedrone.',
+   'Airspace security: detects unauthorised drones over airports, stadiums, prisons and bases. Bought by Axon (body cameras, Tasers) in Oct 2024 and still runs as its own entity. The closest node on this map to civil aviation safety. Military sales are small and old: DIUx bought its sensors for base experiments (2018) and F.E. Warren AFB renewed its licence (2019). Axon says DHS chose the Dedrone platform under an IDIQ for critical-infrastructure protection (Oct 2026). Axon\'s board lists Product Operations roles inside Dedrone.',
    'https://www.axon.com/blog/axon-completes-acquisition-of-dedrone'],
 
   /* ── UAS, eVTOL and remote sensing (added 2026-11-12; see docs/07).
@@ -182,7 +182,7 @@ const ORGS = [
        Dedrone  https://job-boards.greenhouse.io/axon/jobs/7724018003
      ── */
   ['Zipline','dtech',['uas','autonomy'],['a16z','sq'],['diu'],'South San Francisco, CA','Late',
-   'Autonomous delivery drones, designed and built at its HQ. Raised $1.5B at a $21.5B valuation (Nov 2026) alongside a Walmart deal for 300 more sites. Its defense tie is a DIU agreement (from 2018) to prototype battlefield medical resupply. Strategic and business operations roles show up on job aggregators; not confirmed on its own board.',
+   'Autonomous delivery drones, designed and built at its HQ. Raised $1.5B at a $21.5B valuation (Nov 2026) alongside a Walmart deal for 300 more sites. Its defense tie is a DIU agreement (from 2018) to prototype battlefield medical resupply. Strategic and business operations roles show up on job aggregators; not confirmed on its own board. Part 108, the FAA rule meant to make BVLOS drone flights routine, was proposed in Aug 2025 and was still not final on 27 Nov 2026.',
    'https://techcrunch.com/2026/11/05/zipline-hits-21-5b-valuation-as-walmart-expands-bet-on-drone-delivery/'],
   ['Wing','dtech',['uas','autonomy'],[],[],'Palo Alto, CA','Subsidiary',
    'Alphabet\'s drone delivery company. Says it made more than 1M US home deliveries in 2026, and plans up to $125M on a Fort Worth drone factory (Nov 2026). No defense work found. Business operations, strategy and product manager roles show up on job aggregators; not confirmed on wing.com.',
@@ -196,11 +196,47 @@ const ORGS = [
   ['Freefly Systems','dtech',['uas'],[],[],'Woodinville, WA','Private',
    'Heavy-lift and mapping drones. Its Astro is on DIU\'s Blue UAS list, which clears it for government buyers but is not a contract. Postings on its careers page were technician and support roles; no MBA-type role found.',
    'https://www.diu.mil/latest/blue-uas-refresh-list-and-framework-platforms-and-capabilities-selected'],
+
+  /* ── drone software and counter-drone sensing (added 2026-11-27; see docs/07).
+     Extra evidence for claims in rows changed on 2026-11-27, all read that day:
+       Shield AI   Series G  https://techcrunch.com/2026/03/26/defense-startup-shield-ai-lands-12-7b-valuation-up-140-after-u-s-air-force-deal/
+       Skydio      Axon      https://investor.axon.com/2026-11-05-Axon-Invests-1-2-Billion-in-Skydio-to-Build-the-Future-of-Drone-as-First-Responder
+       AeroVironment $186M   https://www.avinc.com/2026/02/26/av-receives-186-million-u-s-army-delivery-order-for-next-generation-switchblade-systems/
+       AeroVironment LASSO   https://www.avinc.com/2026/05/04/u-s-army-selects-avs-switchblade-400-for-lasso-program/
+       Red Cat     Q3 2026   https://www.globenewswire.com/news-release/2026/11/16/3404120/0/en/red-cat-reports-q3-2026-revenue-growth-of-22-y-y-ytd-q3-2026-revenue-growth-of-227-y-y-announced-public-purchase-to-acquire-steyr-motors-ag-and-advancement-to-dow-swarm-forge-cruci.html
+       Red Cat     guidance  https://www.fool.com/earnings/call-transcripts/2026/11/19/red-cat-holdings-rcat-q3-2026-earnings-call-transcript/
+       Neros       Gauntlet  https://www.neros.tech/articles/neros-awarded-100-million-order-through-drone-dominance-gauntlet-ii
+       Neros       ranking   https://defensescoop.com/2026/09/18/drone-dominance-program-gauntlet-2-results/
+       Auterion    SkyFall   https://auterion.com/auterion-and-skyfall-to-ship-50000-shrike-strike-drones-to-ukraines-front-lines/
+       Auterion    raise     https://resiliencemedia.co/auterion-the-drone-software-startup-plans-to-raise-200m-at-a-1-2b-valuation/
+       Dedrone     DHS       https://investor.axon.com/2026-10-15-Axon-Reports-Significant-Momentum-Across-Federal-Sector-as-U-S-Government-Fiscal-Year-Closes
+       Archer      HSR       https://investors.archer.com/news/news-details/2026/Archer-Announces-Expiration-of-Hart-Scott-Rodino-Waiting-Period-for-its-Acquisition-of-Boeings-Wisk-Aero-Insitu-and-SkyGrid-Subsidiaries/default.aspx
+       Part 108    NPRM      https://www.federalregister.gov/documents/2025/08/07/2025-14992/normalizing-unmanned-aircraft-systems-beyond-visual-line-of-sight-operations
+       Part 108    reopened  https://www.federalregister.gov/documents/2026/01/28/2026-01644/normalizing-unmanned-aircraft-systems-beyond-visual-line-of-sight-operations-reopening-of-comment
+       Hidden Level Series C https://www.hiddenlevel.com/press/hidden-level-secures-100m-to-advance-national-security
+       Picogrid    AF award  https://breakingdefense.com/2026/02/picogrid-wins-9m-air-force-contract-for-counter-drone-software-written-by-ai/
+       DroneDeploy closing   https://www.sec.gov/Archives/edgar/data/1611052/000119312526386428/d59216d8k.htm
+     ── */
+  ['Echodyne','dtech',['cuas'],[],['jiatf'],'Kirkland, WA','Late',
+   'Software-defined radar that detects and tracks drones. Its radars sit inside hundreds of counter-drone and security systems in more than 40 countries, and it holds a $250M-ceiling JIATF-401 counter-UAS IDIQ. Shield AI agreed to buy it for up to $5.3B (Nov 2026; expected to close early 2027). Sells to civilian buyers as well as the military, which is rare on this map.',
+   'https://www.echodyne.com/newsroom/shield-to-acquire-echodyne'],
+  ['Hidden Level','dtech',['cuas'],[],[],'Syracuse, NY','Growth',
+   'Passive RF sensing: detects drones, including radio-silent ones, without transmitting anything, and sells hardware plus an Airspace Monitoring Service. Won a $100M Pentagon OTA (Jul 2026) to field sensors at bases, test ranges and the border, after a $65M Series C (Feb 2025). Designs and builds in Syracuse. A service model, so the P&L looks more like a subscription business than most counter-drone firms.',
+   'https://www.hiddenlevel.com/press/department-of-war-awards-hidden-level-100-million-ota-to-scale-passive-sensing-technology'],
+  ['Picogrid','dtech',['cuas','c2'],[],['af'],'El Segundo, CA','Growth',
+   'Middleware, not hardware: its Legion platform connects sensors, drones and counter-drone systems from different vendors into one picture. $45M Series A led by Bessemer (Jun 2026); a $9.3M Air Force SBIR Phase III (Feb 2026) to link counter-drone systems at selected bases. Making other companies\' kit work together is the product, which makes it a product-manager problem more than a hardware one.',
+   'https://picogrid.com/newsroom/picogrid-raises-usd45m-series-a-to-build-the-open-integration-layer-for-modern-defense'],
+  ['DroneDeploy','dtech',['uas'],[],[],'','Acquired',
+   'Drone-data software: turns drone and ground imagery into maps and 3D records of jobsites. Procore, the construction software company, bought it for $845M in cash; the deal closed Sep 2026. No defense work found. The clearest exit on this map for drone software sold to a buyer that is not a drone company.',
+   'https://www.procore.com/press/procore-to-acquire-dronedeploy-creating-next-generation-platform-that-sees-understands-and-acts-on-the-jobsite'],
+  ['Aloft','dtech',['uas'],[],[],'','Acquired',
+   'Drone airspace software (UTM), formerly Kittyhawk.io. An FAA-approved UAS Service Supplier whose platform handles most LAANC flight authorisations in the US. Bought by public-safety software firm Versaterm (Feb 2026) to fold into its DroneSense fleet platform. Part 108, if finalised as proposed, would also set rules for third-party UTM services like this.',
+   'https://uasweekly.com/2026/02/19/versaterm-acquires-aloft-to-advance-drone-integration-for-public-safety/'],
   ['Joby Aviation','dtech',['autonomy'],[],['af'],'Santa Cruz, CA','Public',
    'Electric air taxi. Its AFWERX Agility Prime contract reached a potential $131M (Apr 2023) for up to nine aircraft, and Air Force autonomy funding reached about $37M (Nov 2026). Its own board has posted an Associate, Corporate Strategy role.',
    'https://www.jobyaviation.com/news/joby-expands-autonomous-flight-contracts-with-us-air-force-to-nearly-37-million-following-record-coast-to-coast-tour'],
   ['Archer Aviation','dtech',['autonomy'],[],['af'],'San Jose, CA','Public',
-   'Electric air taxi turning toward defense. Air Force contracts worth up to $142M (Jul 2023); with Anduril it unveiled Thunder, an autonomous hybrid VTOL for defense (Jul 2026). Agreed in Aug 2026 to buy Boeing\'s Wisk, Insitu and SkyGrid; not closed as of Q3 2026 results. Its own board has posted a Corporate Development Director (M&A) role.',
+   'Electric air taxi turning toward defense. Air Force contracts worth up to $142M (Jul 2023); with Anduril it unveiled Thunder, an autonomous hybrid VTOL for defense (Jul 2026). Agreed in Aug 2026 to buy Boeing\'s Wisk, Insitu and SkyGrid; the antitrust waiting period expired in Sep 2026, and no closing had been announced by 27 Nov 2026. Its own board has posted a Corporate Development Director (M&A) role.',
    'https://investors.archer.com/news/news-details/2026/Anduril-and-Archer-Unveil-Jointly-Developed-Autonomous-VTOL-Platform-For-Commercial-and-Defense-Applications/default.aspx'],
   ['Beta Technologies','dtech',[],[],['af','army'],'South Burlington, VT','Public',
    'Electric aircraft (ALIA) and electric propulsion. Got the Air Force\'s first airworthiness approval for a crewed electric aircraft (2021); IPO on the NYSE raised over $1B (Nov 2025). Fits no cluster here: it is an aircraft, not an autonomy or drone play. A business development role selling its propulsion to other makers was seen on an aggregator; none confirmed on its own board.',
@@ -481,6 +517,9 @@ const EDGE_SRC = {
   'Planet Labs>nasa': 'https://www.businesswire.com/news/home/20240909654906/en/Planet-Selected-for-NASA-Commercial-SmallSat-Data-Acquisition-CSDA-Contract-to-Continue-Providing-Earth-Observation-Data',
   'Planet Labs>navy': 'https://www.businesswire.com/news/home/20240305304407/en/Planet-Awarded-Contract-for-Vessel-Detection-and-Monitoring-by-Naval-Information-Warfare-Center-NIWC-Pacific',
   'Planet Labs>diu': 'https://defensescoop.com/2025/05/12/diu-hybrid-space-architecture-hsa-pilot-vendors/',
+  // drone software and counter-drone sensing, checked 2026-11-27
+  'Echodyne>jiatf': 'https://www.echodyne.com/newsroom/echodyne-awarded-250-million-jiatf-401-counter-uas-contract',
+  'Picogrid>af': 'https://breakingdefense.com/2026/02/picogrid-wins-9m-air-force-contract-for-counter-drone-software-written-by-ai/',
 };
 
 /* Rows checked on a later date than the 2026-10-03 pass. */
@@ -489,6 +528,9 @@ const CHECKED_ON = Object.fromEntries(['AeroVironment', 'Red Cat', 'Neros', 'Per
   'JIATF-401'].map(n => [n, '2026-11-11']));
 ['Zipline', 'Wing', 'Matternet', 'BRINC', 'Freefly Systems', 'Joby Aviation', 'Archer Aviation',
   'Beta Technologies', 'Planet Labs'].forEach(n => { CHECKED_ON[n] = '2026-11-12'; });
+['Shield AI', 'Skydio', 'AeroVironment', 'Red Cat', 'Neros', 'Auterion', 'Dedrone', 'Archer Aviation',
+  'Zipline', 'Echodyne', 'Hidden Level', 'Picogrid', 'DroneDeploy', 'Aloft']
+  .forEach(n => { CHECKED_ON[n] = '2026-11-27'; });
 
 /* ─── US-PERSON HIRING SIGNAL ──────────────────────────────────────────
    A FACT, not a score: only what an employer's OWN job posting says, with
@@ -1293,6 +1335,11 @@ const GLOSSARY = {
   'JIATF-401': 'Joint Interagency Task Force 401, the Pentagon\'s counter-drone office (since Aug 2025)',
   'IDIQ': 'indefinite delivery, indefinite quantity: a contract with a ceiling, paid out order by order',
   'VTOL': 'vertical take-off and landing',
+  'BVLOS': 'beyond visual line of sight: a drone flight where the pilot cannot see the aircraft',
+  'Part 108': 'the FAA\'s proposed rule to make BVLOS drone operations routine instead of case-by-case waivers',
+  'UTM': 'uncrewed traffic management: software that coordinates drone flights in low-altitude airspace',
+  'LAANC': 'the FAA\'s automated system for approving drone flights in controlled airspace near airports',
+  'Drone Dominance': 'the Pentagon program that buys low-cost attack drones in rounds, ordering from the top performers in flyoffs called Gauntlets',
   'SIPRI': 'Stockholm International Peace Research Institute, which ranks arms companies',
 };
 const GLOSS_RE = new RegExp('(^|[^A-Za-z0-9])(' + Object.keys(GLOSSARY)
